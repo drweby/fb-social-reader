@@ -270,9 +270,6 @@ class FbOgAction_Controller {
 				register_setting( 'fb-og-settings-group', 'fb_og_custom_'.$type );
 			}
 			
-			// Adding custom CSS to the plugin
-			register_setting( 'fb-og-settings-group', 'fb_og_widget_custom_css' );
-			
 			// Mark the sidebar as closed
 			register_setting( 'fb-og-settings-setup', 'fb_og_setup_closed' );	
 			
@@ -298,15 +295,6 @@ class FbOgAction_Controller {
 			
 			// Auto add widget before/after the_content()
 			register_setting( 'fb-og-friends-read-this-widget-group', 'fb_og_friends_read_auto_add_content' );
-			
-			
-		/* Friends activity widget options */
-			
-			// Hide the header or not
-			register_setting( 'fb-og-friends-activity-widget-group', 'fb_og_friends_activity_hide_header' );
-			
-			// Number of reads to show
-			register_setting( 'fb-og-friends-activity-widget-group', 'fb_og_friends_activity_read_count' );
 		
 		
 	}

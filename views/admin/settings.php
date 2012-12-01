@@ -58,11 +58,7 @@
 			</td>
 			</tr>
 		<?php } ?>
-		
-		<tr><td colspan="2"><h3>Custom CSS (advanced users)</h3></td></tr>
-		<tr><td colspan="2"><p>For more advanced users, we've added the possibility of adding custom CSS to the widgets, allowing the option of more advanced customization. Enter any CSS you'd like to add below, and see the widgets on the site for any changes:</p></td></tr>
-		<tr><td colspan="2"><textarea name="fb_og_widget_custom_css" class="fb_og_custom_css"><?php echo get_option('fb_og_widget_custom_css'); ?></textarea></td></tr>
-		
+
 		
 	</table>
 	<p class="submit"> <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
