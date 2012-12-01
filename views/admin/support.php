@@ -1,0 +1,1 @@
+<iframe src="http://support.fbsocialreader.com<?php if (isset($query_url)) echo $query_url; ?>" style="width:100%; height:100%; min-height:1000px;" frameborder="0"></iframe>

@@ -1,0 +1,465 @@
+
+/* 
+	=== Admin === 
+	
+	Used for the design of the admin section. You can edit this if you'd like, but there's no need as it is not public-facing.
+*/
+
+#fb-og-wrap h2 {
+	margin-bottom:15px;
+}
+#fb-og-left {
+	width:77%;
+	float:left;
+}
+#fb-og-right {
+	width:21%;
+	float:right;
+}
+.fb-og-notice {
+	padding:8px 10px;
+	font-weight:bold;
+}
+.fb-og-notice-red {
+	background-color: #FFEBE8;
+	border: 1px solid #C00c00;
+}
+.fb-og-notice-yellow {
+	border: 1px solid #E6DB55;
+	background-color: lightYellow;
+}
+.fb-og-admin-box {
+	border:1px solid #ccc;
+	margin-top:20px;
+	margin-bottom:30px;
+	-webkit-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border-radius: 3px;
+}
+.fb-og-admin-box>h3 {
+	font-size: 18px;
+	font-weight: normal;
+	font-family:georgia;
+	padding: 10px 10px;
+	margin: 0;
+	line-height: 1;
+	background-color: #F1F1F1;
+	background-image: -ms-linear-gradient(top,#F9F9F9,#ECECEC);
+	background-image: -moz-linear-gradient(top,#F9F9F9,#ECECEC);
+	background-image: -o-linear-gradient(top,#F9F9F9,#ECECEC);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#F9F9F9),to(#ECECEC));
+	background-image: -webkit-linear-gradient(top,#F9F9F9,#ECECEC);
+	background-image: linear-gradient(top,#F9F9F9,#ECECEC);
+}
+.fb-og-admin-box .fb-og-inner {
+	padding:10px;
+}
+.fb-og-admin-box .fb-og-inner ul, .fb-og-admin-box .fb-og-inner  ol {
+	padding-left:15px;
+	margin-left: 2em;
+}
+.fb-og-admin-box .fb-og-inner ul {
+	list-style-type:disc;
+}
+.fb-og-admin-box input[type=text] {
+	width:240px;
+}
+textarea.fb_og_custom_css {
+	width:100%;
+	min-height:110px;
+}
+.fb-og-admin-box .fb-og-inner code.block {
+	display:block !important;
+}
+.fb-og-admin-box .fb-og-screenshots {
+	margin:20px 0 40px 0;
+}
+.fb-og-admin-box .fb-og-screenshots a img {
+	padding:2px;
+	border:1px solid #ccc;
+	margin-right:5px;
+	margin-bottom:5px;
+}
+.fb-og-admin-box .fb-og-screenshots a img:hover {
+	border:1px solid #999;
+}
+.fb-og-admin-box .fb-og-inner .fb-og-faq {	
+	margin-bottom:15px;	
+	padding-bottom:15px;	
+	border-bottom:1px solid #eee;
+}
+.fb-og-admin-box .fb-og-inner  a.fb-og-button {
+	background:url(images/probuttongrad.png) repeat-x;
+	display:block;
+	padding:10px 15px;
+	border:1px solid #f5702f;
+	text-decoration:none;
+	color:#fff;
+	text-align:center;
+	font-size:18px;
+	width:120px;
+	margin:20px auto 15px auto;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.fb-og-admin-box .fb-og-inner  a.fb-og-button:hover {
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px#888;
+	box-shadow: 0 0 5px #888;
+}
+.fb-og-admin-box .fb-og-inner .pds-box {
+	width:auto !important;
+}
+.fb-og-admin-box .fb-og-inner  .pds-input-label {
+	width:auto !important;
+	float:none !important;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_support_form  {
+	margin:20px 0;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_support_form input[type=text] {
+	width: 90%;
+	height: 35px;
+	clear: both;
+	margin: 0 0 10px 0;
+	padding: 4px 8px 3px 8px;
+	font: 400 16px/16px "Helvetica Neue","Helvetica","Arial",sans-serif;
+	border-radius: 4px;
+	border: 1px solid #CED3D8;
+	text-shadow: 0 1px 0 white;
+	background: rgba(255, 255, 255, 0.6);
+	box-shadow: inset 0 1px 4px rgba(133, 133, 147, 0.22);
+	resize: none;
+	display: inline-block;
+	color:#777;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_support_form input[type=submit] {
+	border: 1px solid #DEDEDE;
+	cursor:pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #555555;
+	display: inline-block;
+	font: bold 12px/13px 'Helvetica Neue',Helvetica,sans-serif;
+	padding: 6px 11px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+    background: #cae285; /* Old browsers */
+	background: -moz-linear-gradient(top,  #cae285 0%, #9fcb57 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cae285), color-stop(100%,#9fcb57)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* IE10+ */
+	background: linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cae285', endColorstr='#9fcb57',GradientType=0 ); /* IE6-9 */
+	border-color: #adc671 #98b65b #87aa4a;
+	color: #5d7731;
+	text-shadow: 0 1px 0 #cfe5a4;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_support_form input[type=submit]:hover {
+	cursor: pointer;
+	-webkit-box-shadow: 0px 0px 3px #bbb;
+	-moz-box-shadow: 0px 0px 3px #bbb;
+	box-shadow: 0px 0px 3px #bbb;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_feedback_form {
+	margin:15px 0;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_feedback_form textarea {
+	width: 90%;
+	height: 35px;
+	overflow:hidden;
+	clear: both;
+	margin: 0 0 10px 0;
+	padding: 8px 8px 10px 8px;
+	font: 400 16px/16px "Helvetica Neue","Helvetica","Arial",sans-serif;
+	border-radius: 4px;
+	border: 1px solid #CED3D8;
+	text-shadow: 0 1px 0 white;
+	background: rgba(255, 255, 255, 0.6);
+	box-shadow: inset 0 1px 4px rgba(133, 133, 147, 0.22);
+	display: inline-block;
+	color:#777;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_feedback_form input[type=submit] {
+	border: 1px solid #DEDEDE;
+	cursor:pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #555555;
+	display: inline-block;
+	font: bold 12px/13px 'Helvetica Neue',Helvetica,sans-serif;
+	padding: 6px 11px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+    background: #cae285; /* Old browsers */
+	background: -moz-linear-gradient(top,  #cae285 0%, #9fcb57 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cae285), color-stop(100%,#9fcb57)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* IE10+ */
+	background: linear-gradient(top,  #cae285 0%,#9fcb57 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cae285', endColorstr='#9fcb57',GradientType=0 ); /* IE6-9 */
+	border-color: #adc671 #98b65b #87aa4a;
+	color: #5d7731;
+	text-shadow: 0 1px 0 #cfe5a4;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_feedback_form input[type=submit]:hover {
+	cursor: pointer;
+	-webkit-box-shadow: 0px 0px 3px #bbb;
+	-moz-box-shadow: 0px 0px 3px #bbb;
+	box-shadow: 0px 0px 3px #bbb;
+}
+.fb-og-admin-box .fb-og-inner form#fb_og_feedback_form label#feedback_success {
+	display:none;
+	font-size:14px;
+	color:green;
+	margin:10px 0;
+}
+
+/** 
+	Admin widget editor 
+**/
+
+.fb-og-widget-editor-section p {
+	font-size:14px;
+}
+.fb-og-widget-editor {
+	background:#f6f6f6;
+	width:250px;
+	border-top:1px solid #aaa;
+	padding:10px;
+	float:left;
+}
+.fb-og-widget-editor input.regular-text {
+	width:250px;
+}
+.fb-og-widget-editor .fb-og-widget-editor-row {
+	padding:0 0 15px 0;
+	margin-bottom:15px;
+	border-bottom:1px solid #ddd;
+}
+.fb-og-widget-editor .fb-og-widget-editor-row label {
+	font-weight:bold;
+	display:block;
+	margin-bottom:5px;
+}
+.fb-og-widget-editor .fb-og-widget-editor-row input {
+	padding:4px;
+}
+.fb-og-widget-editor .fb-og-widget-editor-row label.input_below {
+	color:red;
+	margin:4px 0 0 0;
+}
+.fb_og_widget_code_preview {
+	display:none;
+	margin-top:15px;
+	border-top:1px solid #ddd;
+}
+.fb_og_widget_code_preview p {
+	font-size:12px;
+}	
+.fb_og_widget_code_preview textarea {
+	width:246px;
+	padding:4px;
+	height:75px;
+	font-family:arial;
+	font-size:12px;
+	margin:-7px 0 0 0;
+}
+	
+.fb-og-widget-preview {
+	float:left;
+	width:350px;
+	margin-left:70px;
+}	
+.fb-og-widget-preview h3 {
+	border-bottom:1px solid #ddd;
+	margin:0px;
+	padding:0px 0 5px 0;
+	margin-bottom:30px;
+}
+.fb_og_widget_code_preview {
+	
+}
+
+
+
+/* Setup guide */
+
+#fb-og-setup  {
+	margin:22px 0 50px 0;
+	position:relative;
+	padding:20px;
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0, 0.5);   
+	-moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+#fb-og-setup .fb-og-setup-box {
+	display:none;
+}
+#fb-og-setup .fb-og-setup-box .fb-og-setup-left {
+	float:left;
+	width:45%;
+	
+}
+#fb-og-setup .fb-og-setup-box .fb-og-setup-right {
+	float:right;
+	width:45%;
+	border-left:1px solid #ddd;
+	padding-left:15px;
+}
+#fb-og-setup .fb-og-setup-box .fb-og-setup-right img {
+	width:100%;
+	height:auto;
+}
+#fb-og-setup #fb-og-setup-box-1 {
+	display:block;
+}
+#fb-og-setup h1 {
+	font-family: 'Quicksand', sans-serif;
+	color: #AAA;
+	font-size: 36px;
+	font-weight: normal;
+	letter-spacing: -0.05em;
+	line-height:110%;
+	margin:0 0 30px 0;
+}
+
+#fb-og-setup p {
+	font-size:18px;
+	line-height:140%;
+}
+#fb-og-setup ol {
+	font-size:18px;
+	line-height:140%;
+}
+#fb-og-setup a.large_button {
+	padding: 10px 15px 10px 15px;
+	font-size: 18px;
+	color: #fff;
+	display: inline-block;
+	text-align: left;
+	text-shadow: 1px 1px  rgba(0,0,0,0.85);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	margin-right: 2px;
+	margin-top:15px;
+}
+#fb-og-setup .large_button:hover {
+	text-decoration:none;
+}
+#fb-og-setup a.large_button_blue {
+	background: #2cbbfd; /* Old browsers */
+	background: -moz-linear-gradient(top,  #2cbbfd 0%, #006b9d 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2cbbfd), color-stop(100%,#006b9d)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #2cbbfd 0%,#006b9d 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #2cbbfd 0%,#006b9d 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #2cbbfd 0%,#006b9d 100%); /* IE10+ */
+	background: linear-gradient(top,  #2cbbfd 0%,#006b9d 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2cbbfd', endColorstr='#006b9d',GradientType=0 ); /* IE6-9 */
+}
+#fb-og-setup a.large_button_blue:hover {
+	background: #4cc6ff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #4cc6ff 0%, #0078b0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4cc6ff), color-stop(100%,#0078b0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #4cc6ff 0%,#0078b0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #4cc6ff 0%,#0078b0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #4cc6ff 0%,#0078b0 100%); /* IE10+ */
+	background: linear-gradient(top,  #4cc6ff 0%,#0078b0 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4cc6ff', endColorstr='#0078b0',GradientType=0 ); /* IE6-9 */
+}
+#fb-og-setup a.large_button_green {
+	background: #98d463; /* Old browsers */
+	background: -moz-linear-gradient(top,  #98d463 0%, #66891d 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#98d463), color-stop(100%,#66891d)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #98d463 0%,#66891d 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #98d463 0%,#66891d 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #98d463 0%,#66891d 100%); /* IE10+ */
+	background: linear-gradient(top,  #98d463 0%,#66891d 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#98d463', endColorstr='#66891d',GradientType=0 ); /* IE6-9 */
+}
+#fb-og-setup a.large_button_green:hover {
+	background: #9dda67; /* Old browsers */
+	background: -moz-linear-gradient(top,  #9dda67 0%, #70971f 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9dda67), color-stop(100%,#70971f)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #9dda67 0%,#70971f 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #9dda67 0%,#70971f 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #9dda67 0%,#70971f 100%); /* IE10+ */
+	background: linear-gradient(top,  #9dda67 0%,#70971f 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9dda67', endColorstr='#70971f',GradientType=0 ); /* IE6-9 */
+}
+#fb-og-setup .fb-og-setup-box form  {
+	margin:30px 0 -5px 0;
+}
+#fb-og-setup .fb-og-setup-box form label {
+	font-size:16px;
+	margin-right:15px;
+	top:-4px;
+	position:relative;
+}
+#fb-og-setup .fb-og-setup-box form label.below {
+	font-size:14px;
+	color:#777;
+	margin-left: 148px;
+	top: -10px;
+	position:relative;
+}
+#fb-og-setup .fb-og-setup-box form label.saving_label {
+	display:none;
+}
+#fb-og-setup .fb-og-setup-box form label.saved_label {
+	color:green;
+	display:none;
+}
+#fb-og-setup .fb-og-setup-box form label.error_label {
+	color:red;
+	display:none;
+}
+#fb-og-setup .fb-og-setup-box form input {
+	width: 400px;
+	height: 35px;
+	clear: both;
+	margin: 0 0 19px 0;
+	padding: 5px 8px 2px 8px;
+	font: 400 18px/18px "Helvetica Neue","Helvetica","Arial",sans-serif;
+	border-radius: 4px;
+	border: 1px solid #CED3D8;
+	text-shadow: 0 1px 0 white;
+	background: rgba(255, 255, 255, 0.6);
+	box-shadow: inset 0 1px 4px rgba(133, 133, 147, 0.22);
+	resize: none;
+	display: inline-block;
+}
+
+div#fb-og-setup-dots {
+	margin:35px 0 10px 0;
+	text-align:center;
+}
+div#fb-og-setup-dots a.dot {
+	height:10px;
+	width:10px;
+	margin:3px;
+	background:url(../images/circle_grey.png) no-repeat;
+	display:inline-block;
+}
+div#fb-og-setup-dots a.dot-active {
+	background:url(../images/circle_blue.png) no-repeat;
+}
+#fb-og-close-setup-img {
+	position:absolute;
+	right:-17px;
+	top:-17px;
+}
+div#fb-og-setup-closed {
+	display:none;
+	margin:20px 0 20px 0;
+}	
