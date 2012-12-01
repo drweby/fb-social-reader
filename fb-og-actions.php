@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: FB Social Reader BETA
+Plugin Name: FB Social Reader Beta
 Plugin URI: http://fbsocialreader.com/
 Description: Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.
 Version: 1.52
@@ -10,7 +10,7 @@ License: Regular
 */
 
 // Set constants
-define( 'FB_OG_PUGIN_NAME', 'FB Social Reader BETA');
+define( 'FB_OG_PUGIN_NAME', 'FB Social Reader Beta');
 define( 'FB_OG_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define( 'FB_OG_CURRENT_VERSION', '1.6' );
 
