@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: FB Social Reader Pro
+Plugin Name: FB Social Reader
 Plugin URI: http://fbsocialreader.com/
 Description: Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.
 Version: 1.52
