@@ -310,7 +310,18 @@ class SR_User_Model
 				@helper.debug("Cookie auto sharing set to false")
 				return false
 
+	# Get my activity
+	get_my_activity: ->
+		@helper.debug('Getting my news.reads from Facebook', 0)
+		FB.api "/me/news.reads", (response) =>	
+		  	@helper.debug('Response received from Facebook')	
+		  	if !response.error
+		  		@params.user.reads = []
+		  		for read in response.data
+		  			@params.user.reads.push(read)
 
+		  	#@helper.debug('Finished')
+		  	#cb() if cb?		
 
 
 # Used for layout manipulations and prettyness
@@ -429,6 +440,8 @@ class SR_User_Controller
 				<h3>Your activity</h3>
 				<a id='sr_close_lightbox'>Close</a>
 			")
+			@User.get_my_activity =>
+
 
 
 

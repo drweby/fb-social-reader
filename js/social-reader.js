@@ -352,6 +352,25 @@
       }
     };
 
+    SR_User_Model.prototype.get_my_activity = function() {
+      var _this = this;
+      this.helper.debug('Getting my news.reads from Facebook', 0);
+      return FB.api("/me/news.reads", function(response) {
+        var read, _i, _len, _ref, _results;
+        _this.helper.debug('Response received from Facebook');
+        if (!response.error) {
+          _this.params.user.reads = [];
+          _ref = response.data;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            read = _ref[_i];
+            _results.push(_this.params.user.reads.push(read));
+          }
+          return _results;
+        }
+      });
+    };
+
     return SR_User_Model;
 
   })();
@@ -448,7 +467,8 @@
       this.helper.debug('Fading in lightbox');
       return $('#sr_lightbox').fadeIn('fast', function() {
         _this.helper.debug('Fade finished, setting html');
-        return $('#sr_lightbox_inner').html("				<h3>Your activity</h3>				<a id='sr_close_lightbox'>Close</a>			");
+        $('#sr_lightbox_inner').html("				<h3>Your activity</h3>				<a id='sr_close_lightbox'>Close</a>			");
+        return _this.User.get_my_activity(function() {});
       });
     };
 
