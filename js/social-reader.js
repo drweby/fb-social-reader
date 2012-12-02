@@ -356,17 +356,22 @@
       var _this = this;
       this.helper.debug('Getting my news.reads from Facebook', 0);
       return FB.api("/me/news.reads", function(response) {
-        var read, _i, _len, _ref, _results;
-        _this.helper.debug('Response received from Facebook');
+        var read, _i, _len, _ref;
         if (!response.error) {
+          _this.helper.debug('Response received from Facebook: SUCCESS');
           _this.params.user.reads = [];
           _ref = response.data;
-          _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             read = _ref[_i];
-            _results.push(_this.params.user.reads.push(read));
+            _this.params.user.reads.push(read);
           }
-          return _results;
+          _this.helper.debug('Added reads to user param');
+        } else {
+          _this.helper.debug('Response received from Facebook: FAILURE');
+        }
+        _this.helper.debug('Finished');
+        if (typeof cb !== "undefined" && cb !== null) {
+          return cb();
         }
       });
     };

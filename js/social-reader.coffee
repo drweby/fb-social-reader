@@ -148,7 +148,7 @@ class SR_User_Model
 		window.fbAsyncInit = =>
 
 			# init the FB JS SDK\
-			@helper.debug('Loading the SDK asynchronously')
+			@helper.debug("Loading the SDK asynchronously with app id: #{@params.site.fb_app_id}")
 			FB.init
 			    appId: "#{@params.site.fb_app_id}" # App ID from the App Dashboard
 			    channelUrl: "//localhost:8888/wordpress/channel.html" # Channel File for x-domain communication
@@ -244,8 +244,8 @@ class SR_User_Model
 		@helper.debug('Querying Facebook')
 		FB.api '/me/friends?fields=name,installed', (response) =>
 			@helper.debug('Response received, finding friend users')
-			for friend in response
-				if friend.installed is true
+			for friend in response.data
+				if friend.installed is "true"
 					delete friend.installed
 					@params.friends.push(friend)
 			@helper.debug("#{@params.friends.length} friends found")
@@ -314,14 +314,16 @@ class SR_User_Model
 	get_my_activity: ->
 		@helper.debug('Getting my news.reads from Facebook', 0)
 		FB.api "/me/news.reads", (response) =>	
-		  	@helper.debug('Response received from Facebook')	
 		  	if !response.error
+		  		@helper.debug('Response received from Facebook: SUCCESS')	
 		  		@params.user.reads = []
 		  		for read in response.data
 		  			@params.user.reads.push(read)
-
-		  	#@helper.debug('Finished')
-		  	#cb() if cb?		
+		  		@helper.debug('Added reads to user param')	
+		  	else 
+		  		@helper.debug('Response received from Facebook: FAILURE')	
+		  	@helper.debug('Finished')
+		  	cb() if cb?		
 
 
 # Used for layout manipulations and prettyness
