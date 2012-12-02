@@ -245,7 +245,7 @@ class SR_User_Model
 		FB.api '/me/friends?fields=name,installed', (response) =>
 			@helper.debug('Response received, finding friend users')
 			for friend in response.data
-				if friend.installed is "true"
+				if friend.installed is true
 					delete friend.installed
 					@params.friends.push(friend)
 			@helper.debug("#{@params.friends.length} friends found")

@@ -274,7 +274,7 @@
         _ref = response.data;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           friend = _ref[_i];
-          if (friend.installed === "true") {
+          if (friend.installed === true) {
             delete friend.installed;
             _this.params.friends.push(friend);
           }
