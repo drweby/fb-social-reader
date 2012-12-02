@@ -230,6 +230,7 @@ class SR_User_Model
 
 	# Get your friends who use the app
 	fb_get_friend_users: (cb) =>
+		alert('test')
 		@helper.debug('Get Facebook friends using the app', 0)
 		if @helper.check_cookie('sr_friends')
 			@helper.debug('Friends cookie is set, read from that')
