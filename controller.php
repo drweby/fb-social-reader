@@ -105,7 +105,7 @@ class FbOgAction_Controller {
 			?><script type="text/javascript">		
 			jQuery(document).ready(function() {
 				setTimeout(function() {
-					window._sr.User.add_read(); 
+					window._sr.User.fb_add_read(); 
 				}, 2000);		
 			});	
 			</script>
@@ -121,7 +121,8 @@ class FbOgAction_Controller {
 			'login_promo' => get_option('fb_og_login_promo', "Log in and see what your friends are reading"),
 			'auto_sharing_on' => get_option('fb_og_sidebar_publishing_on', "Auto sharing on"),
 			'auto_sharing_off' => get_option('fb_og_sidebar_publishing_off', "Auto sharing off"),
-			'activity' => get_option('fb_og_sidebar_activity', 'Activity')
+			'activity' => get_option('fb_og_sidebar_activity', 'Activity'),
+			'plugin_url' => FB_OG_PLUGIN_URL
 		);
 		echo json_encode($options);
 	}
