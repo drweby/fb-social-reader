@@ -9,13 +9,18 @@ Author URI: http://fbsocialreader.com/
 License: Regular
 */
 
+
 // Set constants
 define( 'FB_OG_PUGIN_NAME', 'FB Social Reader Beta');
 define( 'FB_OG_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define( 'FB_OG_CURRENT_VERSION', '1.6' );
+define( 'FB_OG_PLUGIN_PATH', plugin_dir_path(__FILE__ ));
 
 // Include the functions file for functions that don't belong in classes
 include_once ('functions.php');
+
+// Include all libs
+include('libs/simplecache.php');
 
 // Include the model 
 include_once ('model.php');
@@ -23,11 +28,10 @@ include_once ('model.php');
 // Include the controller
 include_once ('controller.php');
 
-// Include formatter
-include('views/helpers/format.php');
-
 // Include widget
 include('widget.php');
+
+
 
 // Create the controller - this is what runs everything else
 $fbOgAction = new FbOgAction_Controller;

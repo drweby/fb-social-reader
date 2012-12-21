@@ -13,7 +13,6 @@ class FbOgAction_Controller {
 	// Kick things off with a bang
 	function __construct() {
 		
-		
 		// Add the model in as a variable within the controller
 		$this->FbOgAction = new FbOgAction_Model;
 			
@@ -24,11 +23,8 @@ class FbOgAction_Controller {
 		add_action( 'wp_head', array($this, 'add_head_meta'));
 		add_action( 'wp_head', array($this, 'add_read_code'));
 
-		// Load our script and css
-		wp_register_style( 'social-reader-style', plugins_url('css/style.css', __FILE__) );
-		wp_enqueue_style( 'social-reader-style' );
-		wp_enqueue_script('social-reader', FB_OG_PLUGIN_URL . 'js/social-reader.js', array('jquery'));
-		wp_localize_script( 'social-reader', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		// Enqueue scripts and css
+		add_action('wp_enqueue_scripts', array($this, 'add_sr_scripts'));
 
 		// Get ajax to work front end
 		add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
@@ -65,6 +61,14 @@ class FbOgAction_Controller {
 	// Adds the doctype to the html
 	function add_doctype( $output ) {
 		return $output . ' xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"';
+	}
+
+	// Enqueue scripts front-end
+	function add_sr_scripts() {
+		wp_enqueue_script('social-reader', FB_OG_PLUGIN_URL . 'js/social-reader.js', array('jquery'));
+		wp_localize_script( 'social-reader', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		wp_register_style( 'social-reader-style', plugins_url('css/style.css', __FILE__) );
+		wp_enqueue_style( 'social-reader-style' );
 	}
 
 	// Setup auto read
@@ -105,7 +109,7 @@ class FbOgAction_Controller {
 			?><script type="text/javascript">		
 			jQuery(document).ready(function() {
 				setTimeout(function() {
-					window._sr.User.fb_add_read(); 
+					window._sr.model.fb_add_read(); 
 				}, 2000);		
 			});	
 			</script>
@@ -127,10 +131,56 @@ class FbOgAction_Controller {
 		echo json_encode($options);
 	}
 
+	// See if we're auto sharing (echo 1/0)
+	function is_auto_sharing($data) {
+		$result = $this->FbOgAction->is_auto_sharing(array(
+			'fb_id' => $data['fb_id']
+		));
+		echo $result;
+	}
 
+	// Set auto sharing (echo 1/0)
+	function set_auto_sharing($data) {
+		if ($data['is_auto_sharing'] == 'true') {
+			$data['is_auto_sharing'] = 1;
+		} elseif ($data['is_auto_sharing'] == 'false') {
+			$data['is_auto_sharing'] = 0;
+		}
+		$result = $this->FbOgAction->set_auto_sharing(array(
+			'fb_id' => $data['fb_id'],
+			'is_auto_sharing' => $data['is_auto_sharing']
+		));
+		if ($result == true) {
+			echo 1;
+		} else {
+			echo 0;
+		}
+	}
+
+	// Save the user to the database cache
+	function save_cache($data) {
+		if ($this->FbOgAction->save_cache($data)) {
+			echo 1;
+		} else {
+			echo 0;
+		}
+	}
+
+	// Get the user cache data
+	function get_cache($data) {
+		$result = $this->FbOgAction->get_cache(array(
+			'fb_id' => $data['fb_id'],
+			'field' => $data['field']
+		));
+		if ($result == true) {
+			echo $this->FbOgAction->$data['field'];
+		} else {
+			echo 0;
+		}
+	}
 	
 	// Add the fb meta into the head
-// 	function add_head_meta() {
+ 	function add_head_meta() {
 // 		if (get_option('fb_og_meta_disable') != 'on') {
 // 			global $post;
 // 			setup_postdata($post);
@@ -151,7 +201,7 @@ class FbOgAction_Controller {
 // 			echo '<!-- End of tags added by FB Social Reader -->'."\n";
 // 			echo "\n";
 // 		}
-// 	}
+ 	}
 	
 	
 		

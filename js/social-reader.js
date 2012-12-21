@@ -108,11 +108,11 @@
       } else if (elapsed < msPerDay) {
         return Math.round(elapsed / msPerHour) + " hours ago";
       } else if (elapsed < msPerMonth) {
-        return "About " + Math.round(elapsed / msPerDay) + " days ago";
+        return Math.round(elapsed / msPerDay) + " days ago";
       } else if (elapsed < msPerYear) {
-        return "About " + Math.round(elapsed / msPerMonth) + " months ago";
+        return Math.round(elapsed / msPerMonth) + " months ago";
       } else {
-        return "About " + Math.round(elapsed / msPerYear) + " years ago";
+        return Math.round(elapsed / msPerYear) + " years ago";
       }
     };
 
@@ -125,23 +125,30 @@
 
     $ = jQuery;
 
-    function SR_User_Model(cb) {
-      this.fb_get_friend_users = __bind(this.fb_get_friend_users, this);
-
-      this.fb_init = __bind(this.fb_init, this);
-
+    function SR_User_Model(cb1, cb2) {
       var _this = this;
       this.helper = new SR_Helper;
-      this.params = {
-        site: {},
-        user: {},
-        friends: [],
-        activity: []
-      };
+      this.site = {},
+      this.user = {},
+      this.friends = [],
+      this.activity = {}
+
       this.get_client_details(function() {
-        _this.helper.debug('Finished');
-        return _this.fb_init(function() {
-          return cb();
+        _this.fb_init(function() {
+          if (_this.user.logged_in === true) {
+            _this.fb_get_user(function() {
+              cb1();
+              if (_this.helper.check_cookie('sr_data_cached') === false) {
+                _this.fb_get_friend_users(function() {
+                  _this.fb_get_activity(function() {
+                    cb2();
+                  });
+                });
+              }
+            });
+          } else {
+            return cb1();
+          }
         });
       });
     }
@@ -149,36 +156,20 @@
     SR_User_Model.prototype.get_client_details = function(cb) {
       var _this = this;
       this.helper.debug('Getting client site details', 0);
-      if (this.helper.check_cookie('sr_site')) {
-        this.helper.debug('sr_site cookie exists, read details');
-        this.params.site = JSON.parse(this.helper.get_cookie('sr_site'));
-        if (this.params.site.fb_app_id) {
-          this.helper.debug('Read from sr_site cookie: SUCCESS');
+      return $.post(_sr_ajax.ajaxurl, {
+        action: "_sr_ajax_hook",
+        type: "get_client_details"
+      }, function(data) {
+        _this.helper.debug('Ajax request complete');
+        _this.site = JSON.parse(data);
+        if (_this.site) {
+          _this.helper.debug('Read from ajax request data: SUCCESS');
         } else {
-          this.helper.debug('Read from sr_site cookie: FAILURE');
+          _this.helper.debug('Read from ajax request data: FAILURE');
         }
+        _this.helper.debug('Finished');
         return cb();
-      } else {
-        this.helper.debug('sr_site cookie does not exist, get details from server via ajax');
-        return $.post(_sr_ajax.ajaxurl, {
-          action: "_sr_ajax_hook",
-          type: "get_client_details"
-        }, function(data) {
-          _this.helper.debug('Ajax request successful');
-          _this.params.site = JSON.parse(data);
-          if (_this.params.site) {
-            _this.helper.debug('Read from ajax request data: SUCCESS');
-          } else {
-            _this.helper.debug('Read from ajax request data: FAILURE');
-          }
-          if (_this.helper.set_cookie('sr_site', JSON.stringify(_this.params.site), 1)) {
-            _this.helper.debug('Setting site session cookie: SUCCESS');
-          } else {
-            _this.helper.debug('Setting site session cookie: FAILURE');
-          }
-          return cb();
-        });
-      }
+      });  
     };
 
     SR_User_Model.prototype.fb_init = function(cb) {
@@ -187,9 +178,9 @@
       $('body').prepend('<div id="fb-root"></div>');
       this.helper.debug('Prepended div fb-root to body');
       window.fbAsyncInit = function() {
-        _this.helper.debug("Loading the SDK asynchronously with app id: " + _this.params.site.fb_app_id);
+        _this.helper.debug("Loading the SDK asynchronously with app id: " + _this.site.fb_app_id);
         FB.init({
-          appId: "" + _this.params.site.fb_app_id,
+          appId: "" + _this.site.fb_app_id,
           channelUrl: "//localhost:8888/wordpress/channel.html",
           status: true,
           cookie: true,
@@ -198,15 +189,7 @@
         _this.helper.debug('SDK loaded');
         _this.helper.debug('Finished');
         return _this.fb_is_logged_in(function() {
-          if (_this.params.user.logged_in === true) {
-            return _this.fb_get_user(function() {
-              return _this.fb_get_friend_users(function() {
-                return cb();
-              });
-            });
-          } else {
-            return cb();
-          }
+          cb();
         });
       };
       return (function(d, debug) {
@@ -227,18 +210,18 @@
 
     SR_User_Model.prototype.fb_is_logged_in = function(cb) {
       var _this = this;
-      this.helper.debug('See if user is logged in', 0);
+      this.helper.debug('See if user is logged in to Facebook and the app', 0);
       this.helper.debug('Query Facebook');
       return FB.getLoginStatus(function(response) {
         _this.helper.debug('Response from Facebook received');
         if (response.status === 'connected') {
           _this.helper.debug('User is logged in');
-          _this.params.user.logged_in = true;
+          _this.user.logged_in = true;
           _this.helper.debug('Finished');
           return cb();
         } else {
           _this.helper.debug('User is not logged in');
-          _this.params.user.logged_in = false;
+          _this.user.logged_in = false;
           _this.helper.debug('Finished');
           return cb();
         }
@@ -248,65 +231,62 @@
     SR_User_Model.prototype.fb_get_user = function(cb) {
       var _this = this;
       this.helper.debug('Get Facebook user', 0);
-      if (this.helper.check_cookie('sr_user')) {
-        this.helper.debug('User cookie is set, read from that');
-        this.params.user = JSON.parse(this.helper.get_cookie('sr_user'));
-        if (this.params.user.id) {
-          this.helper.debug('Read from sr_user cookie: SUCCESS');
-          this.helper.debug('Finished');
-          cb();
-          return;
-        } else {
-          this.helper.debug('Read from cookie error, query Facebook again');
-        }
-      }
       this.helper.debug('Querying Facebook');
       return FB.api('/me', function(me) {
         _this.helper.debug('Response received, setting values');
-        _this.params.user.id = me.id;
-        _this.params.user.name = me.name;
-        _this.params.user.link = me.link;
-        _this.params.user.picture = "//graph.facebook.com/" + me.id + "/picture";
-        _this.params.user.auto_sharing = _this.is_auto_sharing();
-        _this.helper.debug('Setting cookie');
-        _this.helper.set_cookie('sr_user', JSON.stringify(_this.params.user), 1);
-        _this.helper.debug('Finished');
-        return cb();
+        _this.user.id = me.id;
+        _this.user.name = me.name;
+        _this.user.link = me.link;
+        _this.user.picture = "//graph.facebook.com/" + me.id + "/picture";
+        _this.is_auto_sharing(function() {
+          _this.helper.debug('Finished');
+          return cb();
+        });
       });
     };
 
-    SR_User_Model.prototype.fb_get_friend_users = function(cb) {
+    SR_User_Model.prototype.is_auto_sharing = function(cb) {
       var _this = this;
-      this.helper.debug('Get Facebook friends using the app', 0);
-      if (this.helper.check_cookie('sr_friends')) {
-        this.helper.debug('Friends cookie is set, read from that');
-        this.params.friends = JSON.parse(this.helper.get_cookie('sr_friends'));
-        if (this.params.friends.count !== "undefined") {
-          this.helper.debug('Read friends from cookie: SUCCESS');
-          this.helper.debug('Finished');
-          cb();
-          return;
-        } else {
-          this.helper.debug('Read from cookie error, query Facebook again');
-        }
-      }
-      this.helper.debug('Querying Facebook');
-      return FB.api('/me/friends?fields=name,installed', function(response) {
-        var friend, _i, _len, _ref;
-        _this.helper.debug('Response received, finding friend users');
-        _ref = response.data;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          friend = _ref[_i];
-          if (friend.installed === true) {
-            delete friend.installed;
-            _this.params.friends.push(friend);
+      this.helper.debug("See if we're auto sharing");
+      return $.post(_sr_ajax.ajaxurl, {
+        action: "_sr_ajax_hook",
+        type: "is_auto_sharing",
+        fb_id: this.user.id
+      }, function(data) {
+        _this.helper.debug('Ajax request complete');
+        if (data == 1 || data == 0) {
+          _this.helper.debug('SUCCESS, set param');
+          if (data == 1) {
+            data = true;
+          } else {
+            data = false;
           }
+          _this.user.auto_sharing = data;
+        } else {
+          _this.helper.debug('Data format is incorrect. FAILURE')
         }
-        _this.helper.debug("" + _this.params.friends.length + " friends found");
-        _this.helper.debug('Setting cookie');
-        _this.helper.set_cookie('sr_friends', JSON.stringify(_this.params.friends), 1);
-        _this.helper.debug('Finished');
         return cb();
+      });
+    }; 
+
+    SR_User_Model.prototype.set_auto_sharing = function(bool, cb) {
+      var _this = this;
+      this.helper.debug('Setting auto sharing', 0);
+      this.helper.debug("Changing auto sharing to " + bool);
+      return $.post(_sr_ajax.ajaxurl, {
+        action: "_sr_ajax_hook",
+        type: "set_auto_sharing",
+        fb_id: this.user.id,
+        is_auto_sharing: bool
+      }, function(data) {
+        _this.helper.debug('Ajax request complete');
+        if (data == 1) {
+          _this.helper.debug('Auto sharing change: SUCCESS');
+        } else {
+          _this.helper.debug('Auto sharing change: FAILURE');
+        }
+        _this.helper.debug('Finished');
+        if (cb != null) cb();
       });
     };
 
@@ -331,10 +311,7 @@
       this.helper.debug('Logging the user out of Facebook', 0);
       return FB.logout(function(response) {
         _this.helper.debug('Logout successful');
-        _this.helper.debug('Removing cookies');
-        _this.helper.remove_cookie('sr_user');
-        _this.helper.remove_cookie('sr_site');
-        _this.helper.remove_cookie('sr_friends');
+        _this.helper.debug('Removing cached coookie NEED TO DO THIS');
         _this.helper.debug('Reloading the page');
         return window.parent.location.reload();
       });
@@ -372,59 +349,59 @@
         return cb();
       });
     };
-
-    SR_User_Model.prototype.set_auto_sharing = function(bool) {
-      this.helper.debug('Setting auto sharing', 0);
-      this.helper.debug("Changing auto sharing to " + bool);
-      this.params.user.auto_sharing = bool;
-      this.helper.set_cookie('sr_user', JSON.stringify(this.params.user), 1);
-      this.helper.set_cookie('sr_auto_sharing', bool, 30);
-      if (this.is_auto_sharing() === bool) {
-        this.helper.debug('Cookie set: SUCCESS');
-        this.helper.debug('Finished');
-        return true;
+  
+    SR_User_Model.prototype.fb_get_friend_users = function(cb) {
+      var _this = this;
+      this.helper.debug('Get Facebook friends using the app', 0);
+      if (this.helper.check_cookie('sr_friends_cache')) {
+        this.helper.debug('Friends in cache, get from server');
+        this.get_cache('friends_cache', function(response) {
+          _this.friends = response;
+          if (cb != null) cb();
+        });
       } else {
-        this.helper.debug('Cookie set: FAILURE');
-        this.helper.debug('Finished');
-        return false;
-      }
-    };
-
-    SR_User_Model.prototype.is_auto_sharing = function() {
-      this.helper.debug("See if we're auto sharing");
-      if (this.helper.check_cookie('sr_auto_sharing') === false) {
-        this.helper.debug("No cookie set, assume we are auto-sharing");
-        return true;
-      } else {
-        this.helper.debug("Cookie is set");
-        if (this.helper.get_cookie('sr_auto_sharing') === 'true') {
-          this.helper.debug("Cookie auto sharing set to true");
-          return true;
-        } else {
-          this.helper.debug("Cookie auto sharing set to false");
-          return false;
-        }
+        this.helper.debug('Friends not in cache, querying Facebook');
+        return FB.api('/me/friends?fields=name,installed', function(response) {
+          var friend, _i, _len, _ref;
+          _this.helper.debug('Response received, finding friend users');
+          _ref = response.data;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            friend = _ref[_i];
+            if (friend.installed === true) {
+              delete friend.installed;
+              _this.friends.push(friend);
+            }
+          }
+          _this.helper.debug("" + _this.friends.length + " friends found");
+          _this.helper.debug('Finished');
+          cb();
+          _this.save_cache('friends_cache', _this.friends);
+        });
       }
     };
 
     SR_User_Model.prototype.fb_get_activity = function(cb) {
       var batch_arr, user, _i, _len, _ref,
-        _this = this;
+      _this = this;
       this.helper.debug('Getting activity of you and friends', 0);
-      if (this.params.activity.reads) {
-        this.helper.debug('Activity reads parameter already exists, use that');
-        this.helper.debug('Finished');
-        cb();
+      if (this.helper.check_cookie('sr_activity_cache')) {
+        this.helper.debug('Activity in cache, get from server');
+        this.get_cache('activity_cache', function(response) {
+
+          _this.activity = response;
+          _this.helper.debug('Finished');
+          if (cb != null) cb();
+        });
       } else {
         this.helper.debug('Activity reads does not exist, create and fetch from Facebook');
-        this.params.activity.reads = [];
+        this.activity.reads = [];
         this.helper.debug('Creating batch array');
         batch_arr = [];
         batch_arr.push({
           method: "GET",
           relative_url: "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
         });
-        _ref = this.params.friends;
+        _ref = this.friends;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           user = _ref[_i];
           batch_arr.push({
@@ -432,7 +409,7 @@
             relative_url: "" + user.id + "/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
           });
         }
-        this.helper.debug("Starting batch requests for the " + this.params.friends.length + " friends using this app");
+        this.helper.debug("Starting batch requests for the " + this.friends.length + " friends using this app");
         return FB.api("/", "POST", {
           batch: batch_arr
         }, function(responses) {
@@ -441,18 +418,80 @@
           _this.helper.debug('Added reads to reads param array');
           for (_j = 0, _len1 = responses.length; _j < _len1; _j++) {
             response = responses[_j];
+            if (!response || !response.body) continue;
             body = JSON.parse(response.body);
             _ref1 = body.data;
             for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
               read = _ref1[_k];
-              _this.params.activity.reads.push(read);
+              _this.activity.reads.push(read);
             }
           }
+          _this.helper.debug('Sorting the reads by publish_time descending')
+          _this.activity.reads = _this.activity.reads.sort(function(a, b) {
+            a = new Date(a.publish_time);
+            b = new Date(b.publish_time);
+            return a>b ? -1 : a<b ? 1 : 0;
+          });
           _this.helper.debug('Finished');
-          return cb();
+          cb();
+          _this.save_cache('activity_cache', _this.activity);
         });
       }
     };
+
+
+    SR_User_Model.prototype.save_cache = function(field, data, cb) {
+      this.helper.debug('Saving '+field+' to the database cache', 0);
+      var _this = this;
+      var json = JSON.stringify(data);
+      return $.post(_sr_ajax.ajaxurl, {
+        action: "_sr_ajax_hook",
+        type: "save_cache",
+        fb_id: _this.user.id,
+        field: field,
+        data: json
+      }, function(data) {
+        _this.helper.debug('Ajax request complete');
+        if (data == '1') {
+          _this.helper.debug(field+' saved successfully');
+          _this.helper.set_cookie('sr_'+field, 'true', null);
+          _this.helper.debug('Set cookie marking '+field+' as saved this session');
+          _this.helper.debug('Finished')
+          if (cb != null) cb();
+        } else {
+          _this.helper.debug('Data failed to save');
+          _this.helper.debug('Finished');
+          if (cb != null) cb();
+        }
+      }); 
+    };
+
+    SR_User_Model.prototype.get_cache = function(field, cb) {
+      var _this = this;
+      this.helper.debug('Getting the '+field);
+      return $.post(_sr_ajax.ajaxurl, {
+        action: "_sr_ajax_hook",
+        type: "get_cache",
+        fb_id: _this.user.id,
+        field: field,
+      }, function(data) {
+        _this.helper.debug('Ajax request complete');
+        _this.helper.debug('Converting data to json object');
+        try {
+          var parsed = JSON.parse(data);
+          _this.helper.debug('JSON parsed: SUCCESS');
+          _this.helper.debug('Finished');
+          if (cb != null) cb(parsed);
+        }
+        catch(e) {
+          _this.helper.debug('JSON parsed: FAILURE');
+          _this.helper.debug('Finished');
+          if (cb != null) cb();
+        }  
+      });
+    };
+
+
 
     return SR_User_Model;
 
@@ -463,11 +502,13 @@
 
     $ = jQuery;
 
-    function SR_User_Controller(cb) {
+    function SR_User_Controller(cb1, cb2) {
       var _this = this;
-      this.User = new SR_User_Model(function() {
-        _this.helper = _this.User.helper;
-        return cb();
+      this.model = new SR_User_Model(function() {
+        _this.helper = _this.model.helper;
+        return cb1();
+      }, function() {
+        return cb2();
       });
     }
 
@@ -480,16 +521,16 @@
       }
       _this = this;
       this.helper.debug("Loading the sidebar", 0);
-      if (window._sr.User.params.user.logged_in === true) {
+      if (window._sr.model.user.logged_in === true) {
         this.helper.debug("User is logged in");
-        if (this.User.params.user.auto_sharing === true) {
+        if (this.model.user.auto_sharing === true) {
           toggled_class = 'sr_sidebar_toggled_on';
         } else {
           toggled_class = 'sr_sidebar_toggled_off';
         }
-        this.helper.debug("User auto-sharing is set to: " + this.User.params.user.auto_sharing);
+        this.helper.debug("User auto-sharing is set to: " + this.model.user.auto_sharing);
         this.helper.debug('Putting html');
-        $('#sr_sidebar_box').html("				<div id='sr_sidebar_logged_in'>								<a target='blank' href='" + this.User.params.user.link + "'>						<img src='" + this.User.params.user.picture + "' width='50' height='50' alt='" + this.User.params.user.name + "' />					</a>					<div id='sr_sidebar_right'>						<div id='sr_sidebar_name'><a target='blank' href='" + this.User.params.user.link + "'>" + this.User.params.user.name + "</a></div>						<div id='sr_sidebar_promo'>" + this.User.params.site.login_meta + "</div>						<div id='sr_sidebar_logout'><a>Logout</a></div>					</div>					<div class='clear'></div>					<div id='sr_sidebar_bottom'>						<div class='sr_sidebar_toggle " + toggled_class + "'>							<a title='Auto sharing to Facebook is enabled'>" + this.User.params.site.auto_sharing_on + "</a> 						</div>						<div id='sr_sidebar_activity'><a>" + this.User.params.site.activity + "</a></div>					</div>				</div>			");
+        $('#sr_sidebar_box').html("				<div id='sr_sidebar_logged_in'>								<a target='blank' href='" + this.model.user.link + "'>						<img src='" + this.model.user.picture + "' width='50' height='50' alt='" + this.model.user.name + "' />					</a>					<div id='sr_sidebar_right'>						<div id='sr_sidebar_name'><a target='blank' href='" + this.model.user.link + "'>" + this.model.user.name + "</a></div>						<div id='sr_sidebar_promo'>" + this.model.site.login_meta + "</div>						<div id='sr_sidebar_logout'><a>Logout</a></div>					</div>					<div class='clear'></div>					<div id='sr_sidebar_bottom'>						<div class='sr_sidebar_toggle " + toggled_class + "'>							<a title='Auto sharing to Facebook is enabled'>" + this.model.site.auto_sharing_on + "</a> 						</div>						<div id='sr_sidebar_activity'><a>" + this.model.site.activity + "</a></div>					</div>				</div>			");
         if ($('#sr_sidebar_box').html() !== '') {
           this.helper.debug("Html put: SUCCESS");
         } else {
@@ -500,11 +541,11 @@
           if ($(this).attr('class').match(/sr_sidebar_toggled_on/)) {
             $(this).removeClass('sr_sidebar_toggled_on');
             $(this).addClass('sr_sidebar_toggled_off');
-            return _this.User.set_auto_sharing(false);
+            return _this.model.set_auto_sharing(false);
           } else if ($(this).attr('class').match(/sr_sidebar_toggled_off/)) {
             $(this).removeClass('sr_sidebar_toggled_off');
             $(this).addClass('sr_sidebar_toggled_on');
-            return _this.User.set_auto_sharing(true);
+            return _this.model.set_auto_sharing(true);
           }
         });
         this.helper.debug("Setup jQuery listener activity link click");
@@ -513,13 +554,13 @@
         });
         this.helper.debug('Setup jQuery listener for logout link click');
         $('#sr_sidebar_box #sr_sidebar_logout').on("click", function() {
-          return _this.User.fb_logout();
+          return _this.model.fb_logout();
         });
         return this.helper.debug('Finished');
       } else {
         this.helper.debug('User is not logged in, show login button');
         this.helper.debug('Putting html');
-        $('#sr_sidebar_box').html("				<div id='sr_sidebar_logged_out'>								Login and read with your friends					<a id='sr_sidebar_login'><img src='" + this.User.params.site.plugin_url + "/images/facebooklogin.jpg' width='180' height='40' /></a>				</div>			");
+        $('#sr_sidebar_box').html("				<div id='sr_sidebar_logged_out'>								Login and read with your friends					<a id='sr_sidebar_login'><img src='" + this.model.site.plugin_url + "/images/facebooklogin.jpg' width='180' height='40' /></a>				</div>			");
         if ($('#sr_sidebar_box').html() !== '') {
           this.helper.debug("Html put: SUCCESS");
         } else {
@@ -528,7 +569,7 @@
         this.helper.debug('Adding jQuery listener for login button click');
         return $('#sr_sidebar_box #sr_sidebar_login').on("click", function() {
           $(this).css('opacity', 0.7);
-          return _this.User.fb_login();
+          return _this.model.fb_login();
         });
       }
     };
@@ -540,13 +581,13 @@
         this.helper.debug('#sr_friends_single is not found, cannot load friends who read this widget.');
         return false;
       }
-      return this.User.fb_get_activity(function() {});
+      return this.model.fb_get_activity(function() {});
     };
 
     SR_User_Controller.prototype.load_lightbox = function() {
       var _this = this;
       this.helper.debug('Loading the lightbox', 0);
-      if (window._sr.User.params.user.logged_in === false) {
+      if (window._sr.model.user.logged_in === false) {
         this.helper.debug("User is not logged in, don't load it");
         this.helper.debug('Finished');
         return false;
@@ -591,22 +632,25 @@
 
     SR_User_Controller.prototype.show_activity = function(type) {
       var _this = this;
-      $('#sr_lightbox_inner').html("			<h3>Recent activity</h3>			<a id='sr_close_lightbox'>Close</a>			<div id='sr_loading'><img src='" + this.User.params.site.plugin_url + "/images/ajax-loader.gif' alt='Loading...'></div>			<ul id='sr_activity_tabs'>				<li id='sr_lightbox_everyone' class='sr_active_tab'><a>Everyone</a></li>				<li id='sr_lightbox_me'><a>Just you</a></li>			</ul>			<div id='sr_reads_list'><ul></ul></div>		");
-      return this.User.fb_get_activity(function() {
+      $('#sr_lightbox_inner').html("			<h3>Recent activity</h3>			<a id='sr_close_lightbox'>Close</a>			<div id='sr_loading'><img src='" + this.model.site.plugin_url + "/images/ajax-loader.gif' alt='Loading...'></div>			<ul id='sr_activity_tabs'>				<li id='sr_lightbox_everyone' class='sr_active_tab'><a>Everyone</a></li>				<li id='sr_lightbox_me'><a>Just you</a></li>			</ul>			<div id='sr_reads_list'><ul></ul></div>		");
+      return this.model.fb_get_activity(function() {
         var html, read, story_type, _i, _len, _ref;
         _this.helper.debug("Putting reads into the lightbox", 0);
         $('#sr_loading').hide();
-        _this.helper.debug("Found " + _this.User.params.activity.reads.length + " reads");
+        _this.helper.debug("Found " + _this.model.activity.reads.length + " reads");
         html = '';
-        _ref = _this.User.params.activity.reads;
+        _ref = _this.model.activity.reads;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           read = _ref[_i];
-          if (read.from.id === _this.User.params.user.id) {
+          if (read.from.id === _this.model.user.id) {
             story_type = 'sr_me_story';
           } else {
             story_type = 'sr_friend_story';
           }
-          html += "					<li id='sr_read_" + read.id + "' class='" + story_type + "'>						<a class='name' href='//facebook.com/" + read.from.id + "' target='blank'>							<img class='story-img' src='https://graph.facebook.com/" + read.from.id + "/picture' width='50' height='50' alt='" + read.from.name + "' />						</a>						<div class='story-inner'>							<div class='story-title'>								<a class='name' href='//facebook.com/profile.php?id=" + read.from.id + "' target='blank'>									" + read.from.name + "								</a> read 								<a class='article' href='" + read.data.article.url + "' target='blank'>" + read.data.article.title + "</a>							</div>							<div class='story-meta'>								" + (_this.helper.relative_time(read.publish_time)) + "								<span>&middot; <a class='sr_story_delete'>Delete</a></span>							</div>						</div>						<div class='sr_clear'></div>					</li>";
+          if (!read.data || !read.data.article) {
+            continue;
+          }
+          html += "<li id='sr_read_" + read.id + "' class='" + story_type + "'>						<a class='name' href='//facebook.com/" + read.from.id + "' target='blank'>							<img class='story-img' src='https://graph.facebook.com/" + read.from.id + "/picture' width='50' height='50' alt='" + read.from.name + "' />						</a>						<div class='story-inner'>							<div class='story-title'>								<a class='name' href='//facebook.com/profile.php?id=" + read.from.id + "' target='blank'>									" + read.from.name + "								</a> read 								<a class='article' href='" + read.data.article.url + "' target='blank'>" + read.data.article.title + "</a>							</div>							<div class='story-meta'>								" + (_this.helper.relative_time(read.publish_time)) + "								<span>&middot; <a class='sr_story_delete'>Delete</a></span>							</div>						</div>						<div class='sr_clear'></div>					</li>";
         }
         $('#sr_reads_list ul').html(html);
         _this.helper.debug('Html put: SUCCESS');
@@ -633,7 +677,7 @@
         $('.sr_story_delete').on("click", function() {
           var read_id;
           read_id = $(this).closest('li').attr('id').replace('sr_read_', '');
-          return _this.User.fb_delete_read(read_id, function(cb) {
+          return _this.model.fb_delete_read(read_id, function(cb) {
             return $("#sr_read_{read_id}").fadeOut(function() {
               return $("#sr_read_{read_id}").remove();
             });
@@ -651,8 +695,9 @@
     var _this = this;
     return window._sr = new SR_User_Controller(function() {
       window._sr.load_sidebar();
+    }, function() {
       window._sr.load_lightbox();
-      return window._sr.load_friends_read_single();
+      window._sr.load_friends_read_single();
     });
   });
 

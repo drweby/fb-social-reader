@@ -556,6 +556,7 @@ class SR_User_Controller
 					story_type = 'sr_me_story'
 				else 
 					story_type = 'sr_friend_story'
+				continue if !read.data or !read.data.article
 				html += "
 					<li id='sr_read_#{read.id}' class='#{story_type}'>
 						<a class='name' href='//facebook.com/#{read.from.id}' target='blank'>
