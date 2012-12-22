@@ -67,29 +67,22 @@ class FbOgAction_Controller {
 
 	// Enqueue scripts front-end
 	function add_sr_scripts() {
-		if (isset($_GET['sr_debug'])) {
-			$appDir = 'dev';
-		} else {
-			$appDir = 'build';
-		}
-		wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/'.$appDir.'/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
+		wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
 		wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 		wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
 		wp_enqueue_style( 'social-reader-style' );
 	}
 
 	function fix_requirejs_script( $url ) {
-	    if ( strpos ($url, '/lib/require.js') ) { 
+	    if ( strpos ($url, 'js/lib/require.js') ) { 
 	    	if (isset($_GET['sr_debug'])) {
-				return "$url' data-main='".FB_OG_PLUGIN_URL."js/dev/app";
+				return "$url' data-main='".FB_OG_PLUGIN_URL."js/app";
 	    	} else {
-	    		return "$url' data-main='".FB_OG_PLUGIN_URL."js/build/app";
+	    		return "$url' data-main='".FB_OG_PLUGIN_URL."js/sr.min.js";
 	    	}
 	    } else {
 	    	return $url;
 	    }
-	    // Must be a ', not "!
-	    return "$url' defer='defer";
 	}
 
 	// Setup auto read

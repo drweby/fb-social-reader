@@ -1,1 +1,0 @@
-define([],function(){var e={};return e.relative=function(e){var t,n,r,i,s,o,u;return u=(new Date(fb_time)).getTime(),i=6e4,r=i*60,n=r*24,s=n*30,o=n*365,t=(new Date).getTime()-u,t<i?Math.round(t/1e3)+" seconds ago":t<r?Math.round(t/i)+" minutes ago":t<n?Math.round(t/r)+" hours ago":t<s?Math.round(t/n)+" days ago":t<o?Math.round(t/s)+" months ago":Math.round(t/o)+" years ago"},e});

@@ -1,15 +1,23 @@
 ({
+
+	// TO RUN THE BUILD, GET TO THIS DIR AND RUN: node r.js -o app.build.js
+
     
 	// The path of the dev files (main shouild be directly underneath this)
-    baseUrl: './dev',
+    baseUrl: '.',
 
-    // Where we're moving the build files to
-	dir: "build",
+    // Set a directory to move the build files to
+	//dir: "build",
+
+	// Output everything to one minified file
+	out: 'sr.min.js',
 
 	// Comment out the below line to minify using UglifyJS
-    //optimize: "none",
+    optimize: "none",
 
-    // The file we're going to relative to the baseUrl
-    name: 'app/main'
+    // Build from app - everything gets included from this file now
+    name: 'app'
 
 })
+
+
