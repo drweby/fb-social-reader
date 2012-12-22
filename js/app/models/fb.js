@@ -104,7 +104,7 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
     });
   };
 
-  Fb.add_read = function(cb) {
+  Fb.add_read = function() {
     var _this = this;
     Debugger.log('Adding user read', 0);
     return FB.api("/me/news.reads?article=" + document.URL, "post", function(response) {
@@ -116,9 +116,6 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
         Debugger.log("Error message from Facebook: " + response.error.message + " ");
       }
       Debugger.log('Finished');
-      if (cb !== null) {
-        return cb();
-      }
     });
   };
 

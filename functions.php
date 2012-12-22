@@ -10,8 +10,8 @@
 	}
 	
 	// Puts the html in the single page, where "Chris and X others read this" is shown (gets modded by jquery)
-	function fb_og_put_read_friends($echo=true) { 
-
+	function fb_og_put_read_friends() {
+ 	
 	}	
 	
 	// Put the html for the activity widget

@@ -15,7 +15,6 @@ function fb_og_sidebar_widget() {
 		return;
 
 	register_widget('Fb_Og_Sidebar_Widget');
-	register_widget('Fb_Og_Activity_Widget');
 
 }
 
@@ -31,21 +30,6 @@ class Fb_Og_Sidebar_Widget extends WP_Widget {
 	function widget() { ?>
 		<div id="sr_sidebar_box"></div>
 	<?php }
-	
-}
-
-// The FB friend activity
-class Fb_Og_Activity_Widget extends WP_Widget {
-	
-	
-	function __construct() {
-		$widget_ops = array('classname' => 'widget_fb_og_activity', 'description' => __('Put this in your sidebar instead of pasting the function fb_og_get_friends_activity() into your sidebar.php', 'fb-og-activity-widget'));
-		parent::__construct('fb-og-activity', __('FB Social Reader Friend Activity', 'fb-og-activity-widget'), $widget_ops);
-	}
-	
-	function widget() {
-		fb_og_get_friends_activity();
-	}
 	
 }
 

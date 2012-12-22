@@ -21,7 +21,6 @@ class FbOgAction_Controller {
 		
 		// Add the fb meta into the head
 		add_action( 'wp_head', array($this, 'add_head_meta'));
-		add_action( 'wp_head', array($this, 'add_read_code'));
 
 		// Enqueue scripts and css
 		add_action('wp_enqueue_scripts', array($this, 'add_sr_scripts'));
@@ -86,18 +85,21 @@ class FbOgAction_Controller {
 	}
 
 	// Setup auto read
-	function add_read_code() {
+	function is_readable($data) {
 
 		// Get the app id the user has specified
 		$app_id = get_option('fb_og_app_id');
-		
+
 		// Get post id
-		$post_id = get_the_ID();
+		$post_id = url_to_postid($data['url']);
+		if ($post_id == 0) {
+			echo 0;
+			return false;
+		}
 
 		// Do checks
 		if ((!$post_id) 
 			|| $app_id == ''
-			|| !is_single()
 			|| get_post_status($post_id) != 'publish'
 		) return false;
 
@@ -120,14 +122,10 @@ class FbOgAction_Controller {
 
 		// Add code if we're publishing to this type
 		if (in_array(get_post_type($post_id), $types_publishing)) { 
-			?><script type="text/javascript">		
-			jQuery(document).ready(function() {
-				setTimeout(function() {
-					window._sr.model.fb_add_read(); 
-				}, 2000);		
-			});	
-			</script>
-			<?php }		
+			echo 1;	
+		} else {
+			echo 0;
+		}
 
 	}
 

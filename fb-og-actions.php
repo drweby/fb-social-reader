@@ -16,9 +16,6 @@ define( 'FB_OG_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define( 'FB_OG_CURRENT_VERSION', '1.6' );
 define( 'FB_OG_PLUGIN_PATH', plugin_dir_path(__FILE__ ));
 
-// Include the functions file for functions that don't belong in classes
-include_once ('functions.php');
-
 // Include all libs
 include('libs/simplecache.php');
 

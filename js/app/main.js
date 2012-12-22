@@ -1,5 +1,16 @@
-define(['require', 'app/models/user', 'app/controllers/sidebar', 'app/controllers/lightbox'],
-	function (require, User, Sidebar, Lightbox) {
+define([
+	'require',
+	'app/models/user',
+	'app/controllers/sidebar',
+	'app/controllers/lightbox',
+	'app/controllers/single'
+	], function (
+		require,
+		User,
+		Sidebar,
+		Lightbox,
+		Single
+	) {
 
 	$ = window.jQuery;
 
@@ -11,7 +22,7 @@ define(['require', 'app/models/user', 'app/controllers/sidebar', 'app/controller
 			Sidebar.load(User.user, User.site);
 		}, function() {
 			Lightbox.load(User.user, User.site);
-			//window._sr.load_friends_read_single();
+			Single.load(User.user, User.activity);
 		});
 
 	});

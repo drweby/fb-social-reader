@@ -11,6 +11,7 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
     this.friends = [];
     this.activity = {};
 
+    // Get everything we need to load stuff
     this.get_client_details(function() {
       Fb.init(_this.site.fb_app_id, function() {
         Fb.is_logged_in(function(bool) {
@@ -24,7 +25,9 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
                   _this.friends = friends;
                   Fb.get_activity(function(activity) {
                     _this.activity = activity;
-                    cb2();
+                    _this.queue_read(function() {
+                      cb2();
+                    });
                   });
                 });
               });
@@ -34,6 +37,32 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
           }
         });
       });
+    });
+  };
+
+  User.queue_read = function(cb) {
+    Debugger.log('Queuing auto-read to Facebook', 0);
+    return $.post(_sr_ajax.ajaxurl, {
+      action: "_sr_ajax_hook",
+      type: "is_readable",
+      url: window.location.href
+    }, function(data) {
+      Debugger.log('Ajax request complete');
+      if (data == '1' || data == '0') {
+        Debugger.log('Format correct?: SUCCESS');
+        if (data == '1') {
+          Debugger.log('Auto-sharing for this page is: ON');
+          setTimeout(function() {
+            Fb.add_read();
+          }, 10000);
+        } else {
+          Debugger.log('Auto-sharing for this page is: OFF');
+        }
+        Debugger.log('Finished');
+        return cb();
+      } else {
+        Debugger.log('Format correct?: FAILURE');
+      }
     });
   };
 
@@ -66,7 +95,7 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
       fb_id: this.user.id
     }, function(data) {
       Debugger.log('Ajax request complete');
-      if (data == 1 || data == 0) {
+      if (data == '1' || data == '0') {
         Debugger.log('SUCCESS, set param');
         if (data == 1) {
           data = true;
