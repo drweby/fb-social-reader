@@ -46,7 +46,7 @@ class FbOgAction_Model {
 		(
 		fb_id bigint(30) NOT NULL,
 		added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		is_auto_sharing tinyint(1) NOT NULL DEFAULT 1,
+		data TEXT,
 		PRIMARY KEY  (fb_id)
 		);";
 		dbDelta($sql);
@@ -99,7 +99,9 @@ class FbOgAction_Model {
 				$this->app_table, 
 				array(
 					'fb_id' => $data['fb_id'],
-					'is_auto_sharing' => $data['is_auto_sharing']
+					'is_auto_sharing' => $data['is_auto_sharing'],
+					'friends_cache' => '',
+					'activity_cache' => ''
 				)			
 			);			
 		}
