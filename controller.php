@@ -25,6 +25,7 @@ class FbOgAction_Controller {
 
 		// Enqueue scripts and css
 		add_action('wp_enqueue_scripts', array($this, 'add_sr_scripts'));
+		add_filter( 'clean_url', array($this, 'fix_requirejs_script'), 11, 1 );
 
 		// Get ajax to work front end
 		add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
@@ -56,6 +57,7 @@ class FbOgAction_Controller {
 	}
 
 		
+
 	/** Header stuff **/
 
 	// Adds the doctype to the html
@@ -65,10 +67,22 @@ class FbOgAction_Controller {
 
 	// Enqueue scripts front-end
 	function add_sr_scripts() {
-		wp_enqueue_script('social-reader', FB_OG_PLUGIN_URL . 'js/social-reader.js', array('jquery'));
-		wp_localize_script( 'social-reader', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		// wp_enqueue_script('social-reader', FB_OG_PLUGIN_URL . 'js/social-reader.js', array('jquery'));
+		// wp_localize_script( 'social-reader', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );		
+		wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'));
+		wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 		wp_register_style( 'social-reader-style', plugins_url('css/style.css', __FILE__) );
 		wp_enqueue_style( 'social-reader-style' );
+	}
+
+	function fix_requirejs_script( $url ) {
+	    if ( strpos ($url, 'js/lib/require.js') ) { 
+	    	return "$url' data-main='".FB_OG_PLUGIN_URL."js/app";
+	    } else {
+	    	return $url;
+	    }
+	    // Must be a ', not "!
+	    return "$url' defer='defer";
 	}
 
 	// Setup auto read
