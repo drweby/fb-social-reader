@@ -1,18 +1,15 @@
 ({
-    appDir: "../",
-    baseUrl: "js/",
-    dir: "build",
-    //Comment out the optimize line if you want
-    //the code minified by UglifyJS.
-    optimize: "none",
+    
+	// The path of the dev files (main shouild be directly underneath this)
+    baseUrl: './dev',
 
-    // paths: {
-    //     //"jquery": "require-jquery"
-    // },
+    // Where we're moving the build files to
+	dir: "build",
 
-    modules: [
-        {
-            name: "app"
-        }
-    ]
+	// Comment out the below line to minify using UglifyJS
+    //optimize: "none",
+
+    // The file we're going to relative to the baseUrl
+    name: 'app/main'
+
 })

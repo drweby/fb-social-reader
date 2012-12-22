@@ -1,0 +1,1 @@
+define(["require","app/helpers/debugger"],function(e,t){var n={};return n.load=function(){var e=this;return t.log("Loading friends who read this widget",0),$("#sr_friends_single").length===0?(t.log("#sr_friends_single is not found, cannot load friends who read this widget."),!1):this.model.fb_get_activity(function(){})},n});

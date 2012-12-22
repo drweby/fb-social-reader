@@ -1,0 +1,1 @@
+var appUrl=require.toUrl("app"),arr=appUrl.split("/");arr.pop();var dir=arr.join("/");requirejs.config({baseUrl:dir+"/lib",paths:{app:dir+"/app"}}),requirejs(["app/main"]);

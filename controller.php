@@ -67,17 +67,24 @@ class FbOgAction_Controller {
 
 	// Enqueue scripts front-end
 	function add_sr_scripts() {
-		// wp_enqueue_script('social-reader', FB_OG_PLUGIN_URL . 'js/social-reader.js', array('jquery'));
-		// wp_localize_script( 'social-reader', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );		
-		wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'));
+		if (isset($_GET['sr_debug'])) {
+			$appDir = 'dev';
+		} else {
+			$appDir = 'build';
+		}
+		wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/'.$appDir.'/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
 		wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-		wp_register_style( 'social-reader-style', plugins_url('css/style.css', __FILE__) );
+		wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
 		wp_enqueue_style( 'social-reader-style' );
 	}
 
 	function fix_requirejs_script( $url ) {
-	    if ( strpos ($url, 'js/lib/require.js') ) { 
-	    	return "$url' data-main='".FB_OG_PLUGIN_URL."js/app";
+	    if ( strpos ($url, '/lib/require.js') ) { 
+	    	if (isset($_GET['sr_debug'])) {
+				return "$url' data-main='".FB_OG_PLUGIN_URL."js/dev/app";
+	    	} else {
+	    		return "$url' data-main='".FB_OG_PLUGIN_URL."js/build/app";
+	    	}
 	    } else {
 	    	return $url;
 	    }
@@ -297,10 +304,10 @@ class FbOgAction_Controller {
 		include('views/admin/widgets.php');
 	}
 	function admin_enqueue_widget_scripts() {
-		wp_enqueue_script('fb-og-admin', plugins_url('/js/fb-og-actions-admin.js', __FILE__));
-		wp_localize_script( 'fb-og-admin', 'fb_og_actions', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-		wp_enqueue_script('fb-og-admin-widgets-mousewheel', plugins_url('/js/jquery.mousewheel.js', __FILE__));
-		wp_enqueue_script('fb-og-admin-widgets-scrollpane', plugins_url('/js/jquery.jscrollpane.js', __FILE__));
+		//wp_enqueue_script('fb-og-admin', plugins_url('/js/fb-og-actions-admin.js', __FILE__));
+		//wp_localize_script( 'fb-og-admin', 'fb_og_actions', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		// wp_enqueue_script('fb-og-admin-widgets-mousewheel', plugins_url('/js/jquery.mousewheel.js', __FILE__));
+		// wp_enqueue_script('fb-og-admin-widgets-scrollpane', plugins_url('/js/jquery.jscrollpane.js', __FILE__));
 	}
 	
 	// Admin support page
