@@ -40,12 +40,12 @@ define(function() {
 
 	Listeners.frs_single = [
 		{
-			selector: '#sr_read_names a',
+			selector: '.sr_read_names a',
 			actions: ['click', 'mouseenter'],
 			label: 'Name'
 		},
 		{
-			selector: '#sr_read_thumbs a',
+			selector: '.sr_read_thumbs a',
 			actions: ['click', 'mouseenter'],
 			label: 'Thumb'
 		}

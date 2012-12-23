@@ -5,19 +5,19 @@
 */
 
 
-class FbOgAction_Controller {
+class SR_Controller {
 
-	public $FbOgAction;
+	public $SR;
 
 	
 	// Kick things off with a bang
 	function __construct() {
 		
 		// Add the model in as a variable within the controller
-		$this->FbOgAction = new FbOgAction_Model;
-			
+		$this->SR = new SR_Model;
+		
 		// Adds the doctype to the html
-		add_filter('language_attributes', array('FbOgAction_Controller', 'add_doctype'));
+		add_filter('language_attributes', array($this, 'add_doctype'));
 		
 		// Add the fb meta into the head
 		add_action( 'wp_head', array($this, 'add_head_meta'));
@@ -72,12 +72,17 @@ class FbOgAction_Controller {
 		wp_enqueue_style( 'social-reader-style' );
 	}
 
+	// Add on 'data-main' to load the main file asynchronously
 	function fix_requirejs_script( $url ) {
 	    if ( strpos ($url, 'js/lib/require.js') ) { 
-	    	if (isset($_GET['sr_debug'])) {
-				return "$url' data-main='".FB_OG_PLUGIN_URL."js/app";
+	    	if (is_admin()) {
+	    		return "$url' data-main='".FB_OG_PLUGIN_URL."js/app.admin";
 	    	} else {
-	    		return "$url' data-main='".FB_OG_PLUGIN_URL."js/sr.min.js";
+		    	if (isset($_GET['sr_debug'])) {
+					return "$url' data-main='".FB_OG_PLUGIN_URL."js/app";
+		    	} else {
+		    		return "$url' data-main='".FB_OG_PLUGIN_URL."js/sr.min";
+		    	}	    		
 	    	}
 	    } else {
 	    	return $url;
@@ -147,7 +152,7 @@ class FbOgAction_Controller {
 
 	// See if we're auto sharing (echo 1/0)
 	function is_auto_sharing($data) {
-		$result = $this->FbOgAction->is_auto_sharing(array(
+		$result = $this->SR->is_auto_sharing(array(
 			'fb_id' => $data['fb_id']
 		));
 		echo $result;
@@ -160,7 +165,7 @@ class FbOgAction_Controller {
 		} elseif ($data['is_auto_sharing'] == 'false') {
 			$data['is_auto_sharing'] = 0;
 		}
-		$result = $this->FbOgAction->set_auto_sharing(array(
+		$result = $this->SR->set_auto_sharing(array(
 			'fb_id' => $data['fb_id'],
 			'is_auto_sharing' => $data['is_auto_sharing']
 		));
@@ -173,7 +178,7 @@ class FbOgAction_Controller {
 
 	// Save the user to the database cache
 	function save_cache($data) {
-		if ($this->FbOgAction->save_cache($data)) {
+		if ($this->SR->save_cache($data)) {
 			echo 1;
 		} else {
 			echo 0;
@@ -182,12 +187,12 @@ class FbOgAction_Controller {
 
 	// Get the user cache data
 	function get_cache($data) {
-		$result = $this->FbOgAction->get_cache(array(
+		$result = $this->SR->get_cache(array(
 			'fb_id' => $data['fb_id'],
 			'field' => $data['field']
 		));
 		if ($result == true) {
-			echo $this->FbOgAction->$data['field'];
+			echo $this->SR->$data['field'];
 		} else {
 			echo 0;
 		}
@@ -311,25 +316,25 @@ class FbOgAction_Controller {
 	function friends_read_auto_add_content($content)  {
 		
 		// Get custom post types we're publishing, and if we're not publishing this type, don't add.
-		// $custom_posts = get_post_types(array(
-		// 	'public' => true
-		// ));	
-		// $types_publishing = array();
-		// foreach ($custom_posts as $type) {
-		// 	if (get_option('fb_og_custom_'.$type ) == 'on') {
-		// 		$types_publishing[] = $type;
-		// 	}
-		// }
-		// $post_id = get_the_ID();
-		// if (in_array(get_post_type($post_id), $types_publishing) and get_post_status($post_id) == 'publish') {		
-		// 	// Add before or after content
-		// 	if (get_option('fb_og_friends_read_auto_add_content') == 'before') {
-		// 		$content = fb_og_put_read_friends(false). $content;
-		// 	} elseif (get_option('fb_og_friends_read_auto_add_content') == 'after') {
-		// 		$content = $content . fb_og_put_read_friends(false);
-		// 	}
-		// }
-		// return $content;
+		$custom_posts = get_post_types(array(
+			'public' => true
+		));	
+		$types_publishing = array();
+		foreach ($custom_posts as $type) {
+			if (get_option('fb_og_custom_'.$type ) == 'on') {
+				$types_publishing[] = $type;
+			}
+		}
+		$post_id = get_the_ID();
+		if (in_array(get_post_type($post_id), $types_publishing) and get_post_status($post_id) == 'publish') {		
+			// Add before or after content
+			if (get_option('fb_og_friends_read_auto_add_content') == 'before') {
+				$content = '<div id="sr_friends_single"></div>'. $content;
+			} elseif (get_option('fb_og_friends_read_auto_add_content') == 'after') {
+				$content = $content . '<div id="sr_friends_single"></div>';
+			}
+		}
+		return $content;
 	}
 	
 	
@@ -344,13 +349,16 @@ class FbOgAction_Controller {
 		// Options
 		add_submenu_page( 'fb-social-reader', 'Settings', 'Settings', "administrator", 'fb-social-reader', array($this, 'admin_settings'));
 		add_submenu_page( 'fb-social-reader', 'Widgets', 'Widgets', "administrator", 'fb-social-reader-widgets', array($this, 'admin_widgets'));
-		add_submenu_page( 'fb-social-reader', 'Support', 'Support', "administrator", 'fb-social-reader-support', array($this, 'admin_support'));
 		
 	}
 	
 	// Set an app id option
 	function save_app_id($data) {
-		update_option( 'fb_og_app_id', $data['app_id'] );
+		if (update_option( 'fb_og_app_id', $data['app_id'] )) {
+			echo 1;
+		} else {
+			echo 0;
+		}
 	}
 	
 	// Close the setup guide
@@ -370,34 +378,24 @@ class FbOgAction_Controller {
 		));	
 		global $current_user;
 		get_currentuserinfo();
-		include('views/admin/settings.php');		
+		include(FB_OG_PLUGIN_PATH.'/views/admin/settings.php');
 	}
 	
 	// The admin widgets page 
 	function admin_widgets() {
-		$update = $this->FbOgAction->get_latest_version();
 		global $current_user;
 		get_currentuserinfo();
-		include('views/admin/widgets.php');
+		$logged_in = get_option('fb_og_login_meta', 'You are logged in');
+		$auto_sharing_on =  get_option('fb_og_sidebar_publishing_on', 'Publishing on'); 
+		$auto_sharing_off = get_option('fb_og_sidebar_publishing_off', 'Publishing off');
+		$activity = get_option('fb_og_sidebar_activity', 'Your activity');
+		$login_promo =  get_option('fb_og_login_promo', 'Login with Facebook');
+		$logout =  get_option('fb_og_logout', 'Logout');
+		include(FB_OG_PLUGIN_PATH.'/views/admin/widgets.php');
 	}
 	function admin_enqueue_widget_scripts() {
-		//wp_enqueue_script('fb-og-admin', plugins_url('/js/fb-og-actions-admin.js', __FILE__));
-		//wp_localize_script( 'fb-og-admin', 'fb_og_actions', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-		// wp_enqueue_script('fb-og-admin-widgets-mousewheel', plugins_url('/js/jquery.mousewheel.js', __FILE__));
-		// wp_enqueue_script('fb-og-admin-widgets-scrollpane', plugins_url('/js/jquery.jscrollpane.js', __FILE__));
-	}
-	
-	// Admin support page
-	function admin_support() {
-		if (isset($_POST['fb_og_support_query'])) {
-			$query_url = '/customer/portal/articles/search?q='.$_POST['fb_og_support_query'];
-		}
-		include('views/admin/support.php');
-	}
-
-	// Send feedback 
-	function send_feedback($data) {
-		$this->FbOgAction->send_feedback($data);
+		wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
+		wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 	}
 	
 	// Register admin settings
@@ -442,7 +440,9 @@ class FbOgAction_Controller {
 			// The text shown for "your activity"
 			register_setting( 'fb-og-sidebar-widget-group', 'fb_og_sidebar_activity' );
 			
-			
+			// Logout link
+			register_setting( 'fb-og-sidebar-widget-group', 'fb_og_logout' );
+
 		/* Friends who read this widget options */
 			
 			// Auto add widget before/after the_content()

@@ -16,12 +16,11 @@ define([
 
   Sidebar.load = function(user, site) {
     var toggled_class,
-      _this = this;
+    _this = this;
     if ($('#sr_sidebar_box').length === 0) {
       Debugger.log('#sr_sidebar_box is not found, cannot load sidebar.');
       return false;
     }
-    _this = this;
     Debugger.log("Loading the sidebar", 0);
     if (user.logged_in === true) {
       Debugger.log("User is logged in");
@@ -46,12 +45,12 @@ define([
     } else {
       Debugger.log('User is not logged in, show login button');
       Debugger.log('Putting html');
-      $('#sr_sidebar_box').html("       <div id='sr_sidebar_logged_out'>                Login and read with your friends          <a id='sr_sidebar_login'><img src='" + site.plugin_url + "/images/facebooklogin.jpg' width='180' height='40' /></a>        </div>      ");
+      $('#sr_sidebar_box').html("       <div id='sr_sidebar_logged_out'>                <p>Login and read with your friends</p>          <a id='sr_sidebar_login'><img src='" + site.plugin_url + "/images/facebooklogin.jpg' width='180' height='40' /></a>        </div>      ");
       if ($('#sr_sidebar_box').html() !== '') {
         Debugger.log("Html put: SUCCESS");
         $('#sr_sidebar_box').fadeIn(function() {
           Debugger.log('Adding jQuery listener for login button click');
-          this.setup_logged_out_listeners();
+          _this.setup_logged_out_listeners();
           Analytics.setup_listeners('sidebar_logged_out');
           Debugger.log('Finished');
         });

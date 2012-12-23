@@ -33,7 +33,8 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
               });
             });
           } else {
-            return cb1();
+            cb1();
+            cb2();
           }
         });
       });

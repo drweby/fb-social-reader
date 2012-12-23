@@ -5,6 +5,9 @@
 	Used for the design of the admin section. You can edit this if you'd like, but there's no need as it is not public-facing.
 */
 
+a {
+	cursor:pointer;
+}
 #fb-og-wrap h2 {
 	margin-bottom:15px;
 }
@@ -135,7 +138,8 @@ textarea.fb_og_custom_css {
 	display: inline-block;
 	color:#777;
 }
-.fb-og-admin-box .fb-og-inner form#fb_og_support_form input[type=submit] {
+.fb-og-admin-box .fb-og-inner form#fb_og_support_form input[type=submit],
+.fb-og-admin-box .fb-og-inner a.button {
 	border: 1px solid #DEDEDE;
 	cursor:pointer;
 	-webkit-border-radius: 3px;
@@ -159,6 +163,9 @@ textarea.fb_og_custom_css {
 	border-color: #adc671 #98b65b #87aa4a;
 	color: #5d7731;
 	text-shadow: 0 1px 0 #cfe5a4;
+}
+.fb-og-admin-box .fb-og-inner a.button {
+	padding-bottom: 19px;
 }
 .fb-og-admin-box .fb-og-inner form#fb_og_support_form input[type=submit]:hover {
 	cursor: pointer;

@@ -5,7 +5,7 @@
 */
 
 
-class FbOgAction_Model {
+class SR_Model {
 	
 	// The global wordpress database variable. Needed for querying.
 	private $wpdb;

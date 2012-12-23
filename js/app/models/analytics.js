@@ -43,8 +43,6 @@ define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-l
 		if (this.site.analytics_disabled == 'on') {
 			Debugger.log('Analytics has been disabled on this site: STOP');
 			return false;
-		} else {
-			Debugger.log('Analytics is enabled for this site, track the event');
 		}
 		window._gaq.push(['_trackEvent', category, action, label]);
 	};

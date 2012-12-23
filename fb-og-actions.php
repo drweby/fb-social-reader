@@ -10,6 +10,7 @@ License: Regular
 */
 
 
+
 // Set constants
 define( 'FB_OG_PUGIN_NAME', 'FB Social Reader Beta');
 define( 'FB_OG_PLUGIN_URL', plugin_dir_url( __FILE__ ));
@@ -20,18 +21,17 @@ define( 'FB_OG_PLUGIN_PATH', plugin_dir_path(__FILE__ ));
 include('libs/simplecache.php');
 
 // Include the model 
-include_once ('model.php');
+include_once ('app_model.php');
 
-// Include the controller
-include_once ('controller.php');
+// Include the controllers
+include_once ('app_controller.php');
 
 // Include widget
 include('widget.php');
 
 
-
 // Create the controller - this is what runs everything else
-$fbOgAction = new FbOgAction_Controller;
+$fbOgAction = new SR_Controller;
 
 // Activation hooks (can't go in the model construct for some reason - I think they run before the model is created)
 register_activation_hook( __FILE__, array('FbOgAction_Model', 'install'));

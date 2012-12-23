@@ -1,10 +1,19 @@
-define(function() {
+define(['require', 'app/helpers/debugger'], function(require, Debugger) {
 	 
+  // add 'sr_sample_data' as a query param to enable
+
   var SampleData = {};
 
-  SampleData.reads = function() {
+  SampleData.is_on = function() {
+    if (Debugger.check_parameter_exists('sr_sample_data')) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
-    var response = { "data": [
+  SampleData.reads = { 
+    "data": [
        {
         "id": "10152353237580383", 
         "from": {
@@ -22,7 +31,7 @@ define(function() {
         "data": {
           "article": {
             "id": "304735542977218", 
-            "url": "http://sotontab.co.uk/degree-break/2012/12/15/hartley-gets-its-own-dating-service/", 
+            "url": "http://localhost:8888/wordpress/rewarw/", 
             "type": "article", 
             "title": "Hartley gets its own Dating Service"
           }
@@ -56,7 +65,7 @@ define(function() {
         "data": {
           "article": {
             "id": "378252925592550", 
-            "url": "http://sotontab.co.uk/degree-break/2012/12/09/comments-of-the-week-2/", 
+            "url": "http://localhost:8888/wordpress/rewarw/", 
             "type": "article", 
             "title": "Comments of the Week #2"
           }
@@ -76,8 +85,8 @@ define(function() {
       {
         "id": "10152325332405383", 
         "from": {
-          "name": "Chris Houghton", 
-          "id": "578040382"
+          "name": "Jenna Brown", 
+          "id": "513449780"
         }, 
         "start_time": "2012-12-04T20:10:08+0000", 
         "end_time": "2012-12-04T20:10:08+0000", 
@@ -90,7 +99,7 @@ define(function() {
         "data": {
           "article": {
             "id": "394572300623745", 
-            "url": "http://sotontab.co.uk/degree-break/2012/12/04/how-to-pull-at-jesters/", 
+            "url": "http://localhost:8888/wordpress/rewarw/", 
             "type": "article", 
             "title": "How To Pull at Jesters"
           }
@@ -791,12 +800,9 @@ define(function() {
     "paging": {
       "next": "https://graph.facebook.com/578040382/news.reads?limit=25&offset=25&__after_id=10152207624260383"
     }
-    };
-
-    return response.data;
 
   };	
 
-  return SampleReads;
+  return SampleData;
 
 });

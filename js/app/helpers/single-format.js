@@ -37,7 +37,7 @@ define(['require', 'underscore'], function(require, _) {
 		if (read.from.id == this.user.id) {
 			return 'You';
 		} else {
-			return '<a href="//facebook.com/'+read.from.id+'">'+read.from.name+'</a>';
+			return '<a target="blank" href="//facebook.com/'+read.from.id+'">'+read.from.name+'</a>';
 		}
 	};
 
@@ -46,7 +46,7 @@ define(['require', 'underscore'], function(require, _) {
 		var html = '';
 		html += '<div class="sr_read_thumbs">';
 		_.each(reads, function(read) {	
-			html += '<a href="//facebook.com/'+read.from.id+'" title="'+read.from.name+'">';
+			html += '<a target="blank" href="//facebook.com/'+read.from.id+'" title="'+read.from.name+'">';
 			html += "<img src='//graph.facebook.com/" + read.from.id + "/picture' width='35' height='35' alt='"+read.from.name+"' />";
 			html += '</a>';
 		});
