@@ -2,7 +2,6 @@
 <h2>Settings: <?php echo FB_OG_PUGIN_NAME; ?> - v<?php echo FB_OG_CURRENT_VERSION; ?></h2>
 
 <?php if (isset($error)) { ?><div class="fb-og-notice fb-og-notice-red">Error: <?php echo $error; ?>. Please contact support.</div><?php } ?>
-<?php if ($update != false) { ?><div class="fb-og-notice fb-og-notice-yellow">A new update is available! You can download the latest update for free at: <a href="<?php echo $update['download_link']; ?>" target="blank"><?php echo $update['download_link']; ?></a>.</div><?php } ?>
 
 
 <div id="fb-og-left">

@@ -191,35 +191,119 @@ class FbOgAction_Controller {
 		}
 	}
 	
-	// Add the fb meta into the head
- 	function add_head_meta() {
-// 		if (get_option('fb_og_meta_disable') != 'on') {
-// 			global $post;
-// 			setup_postdata($post);
-// 			if ( !is_singular()) return; //if it is not a post or a page, return
-// 				echo "\n".'<!-- Facebook meta tags added by FB Social Reader -->'."\n";
-// 				echo '<meta property="og:title" content="' . strip_tags( get_the_title() ). '"/>'."\n";
-// 				echo '<meta property="og:description" content="' . strip_tags ( get_the_excerpt() ) . '"/>'."\n";
-// 				echo '<meta property="og:type" content="article"/>'."\n";
-// 				echo '<meta property="og:url" content="' . get_permalink() . '"/>'."\n";
-// 				echo '<meta property="og:site_name" content="'.get_bloginfo('name').'"/>'."\n";
-// 			if(!has_post_thumbnail( $post->ID )) { //the post does not have featured image, use a default image
-// 				echo '<meta property="og:image" content="' . FB_OG_PLUGIN_URL.'images/fbdefaultarticle.png' . '"/>'."\n";
-// 			}
-// 			else{
-// 				$thumbnail_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'fb_og_img' );
-// 				echo '<meta property="og:image" content="' . esc_attr( $thumbnail_src[0] ) . '"/>'."\n";
-// 			}
-// 			echo '<!-- End of tags added by FB Social Reader -->'."\n";
-// 			echo "\n";
-// 		}
- 	}
-	
-	
-		
-	/** Sidebar widget **/
-	
+	// Add the fb meta into the head. Major kudos to Facebook Meta Tags plugin author Matt Say (shailan.com)
+ 	function add_head_meta(){
+ 		if (get_option('fb_og_meta_disable') == 'on') {
+ 			return false;
+ 		}
 
+		global $wp_query;
+		global $post;
+		
+		$thePostID = $wp_query->post->ID;
+		
+		$additional_tags = array();
+		
+		if(is_single() || is_page()){
+			$the_post = get_post($thePostID); 
+			// The title
+			$title = apply_filters('the_title', $the_post->post_title);
+			
+			// Description
+			if($the_post->post_excerpt){
+				$desc = trim(esc_html(strip_tags(do_shortcode( apply_filters('the_excerpt', $the_post->post_excerpt) ))));
+			} else {
+	                $text = strip_shortcodes( $the_post->post_content );
+	                $text = apply_filters('the_content', $text);
+	                $text = str_replace(']]>', ']]&gt;', $text);
+	                $text = addslashes( strip_tags($text) );
+	                $excerpt_length = apply_filters('excerpt_length', 55);
+	               
+	                $words = preg_split("/[\n\r\t ]+/", $text, $excerpt_length + 1, PREG_SPLIT_NO_EMPTY);
+	                if ( count($words) > $excerpt_length ) {
+	                        array_pop($words);
+	                        $text = implode(' ', $words);
+	                        $text = $text . "...";
+	                } else {
+	                        $text = implode(' ', $words);
+	                }
+			
+				$desc =  $text;
+			} 
+			
+			$url = get_permalink( $the_post );
+			
+			// Tags
+			$tags = get_the_tags();
+			$tag_list = array();
+			if($tags){
+				foreach ($tags as $tag){
+					$tag_list[] = $tag->name;
+				}
+			}
+			$tags = implode( ",", $tag_list );
+			
+			if( 'video' == get_post_format() ){ // Video post
+			
+				$type = "video.other";
+				
+				$additional_tags[] = "\n\t<meta property=\"video:tag\" content=\"$tags\" />"; 			
+			
+			} else { // Default post
+			
+				$type = "article";
+				
+				// Author
+				/*$author = get_the_author();
+				$additional_tags[] = "\n\t<meta property=\"article:author\" content=\"$author\" />"; */
+				
+				// Category
+				$category = get_the_category(); 
+				$section =  $category[0]->cat_name;
+				$additional_tags[] = "\n\t<meta property=\"article:section\" content=\"$section\" />"; 
+				$additional_tags[] = "\n\t<meta property=\"article:tag\" content=\"$tags\" />"; 
+			}
+			
+			// Post thumbnail
+			if( has_post_thumbnail( $thePostID )){
+				$thumb_id = get_post_thumbnail_id( $thePostID );
+				$image = wp_get_attachment_image_src( $thumb_id, array(100,100) );
+				$thumbnail = $image[0];
+			} else {
+				$thumbnail = '';
+			}
+			
+		} else {
+			$title = get_bloginfo('name');
+			$desc = get_bloginfo('description');
+			$type = "blog";
+			$url = get_home_url();
+			$thumbnail = '';
+		}
+		
+		$site_name = get_bloginfo();
+			
+		echo "\n<!-- Facebook meta tags by Social Reader --> ";
+		echo "\n\t<meta property=\"og:title\" content=\"$title\" />";
+	    echo "\n\t<meta property=\"og:type\" content=\"$type\" />";
+	    echo "\n\t<meta property=\"og:url\" content=\"$url\" />";
+	    if ($thumbnail) echo "\n\t<meta property=\"og:image\" content=\"$thumbnail\" />";
+	    echo "\n\t<meta property=\"og:site_name\" content=\"$site_name\" />";
+		
+		// Application ID
+		$app_id = get_option('fb_og_app_id');
+		if( '' !=  $app_id ){
+			echo "\n\t<meta property=\"fb:app_id\" content=\"".$app_id."\"/>";
+		}
+
+	    echo "\n\t<meta property=\"og:description\"
+	          content=\"$desc\" />";
+			  
+		echo implode($additional_tags);
+					   
+		echo "\n<!-- End of Facebook Meta Tags -->\n";
+		
+	}
 	
 	// Auto add before/after the_content()
 	function friends_read_auto_add_content($content)  {
