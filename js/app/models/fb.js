@@ -177,7 +177,7 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
       });
     } else {
       Debugger.log('Activity reads does not exist, create and fetch from Facebook');
-      this.activity.reads = [];
+      
       Debugger.log('Creating batch array');
       batch_arr = [];
       batch_arr.push({
@@ -198,7 +198,8 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
       }, function(responses) {
         var body, read, response, _j, _k, _len1, _len2, _ref1;
         Debugger.log('Response received from Facebook');
-        Debugger.log('Added reads to reads param array');
+        _this.activity.reads = [];
+        Debugger.log('Adding reads to reads param array');
         for (_j = 0, _len1 = responses.length; _j < _len1; _j++) {
           response = responses[_j];
           if (!response || !response.body) continue;
@@ -217,7 +218,7 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
         });
         Debugger.log('Finished');
         Cache.save(_this.user.id, 'activity_cache', _this.activity, function() {
-          cb();
+          cb(_this.activity);
         });
       });
     }

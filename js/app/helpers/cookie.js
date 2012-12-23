@@ -28,7 +28,7 @@ define(['require'], function() {
 
   Cookie.exists = function(c_name) {
     var cookie = this.get(c_name);
-    if (cookie !== null) {
+    if (cookie != null) {
       return true;
     } else {
       return false;

@@ -12,7 +12,8 @@ var dir = arr.join('/');
 requirejs.config({
     baseUrl: dir+'/lib',
     paths: {
-        app: dir+'/app'
+        app: dir+'/app',
+        underscore: dir+'/lib/underscore.min'
     }
 });
 

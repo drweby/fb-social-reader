@@ -21,7 +21,8 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie'], function(requi
         Debugger.log('Finished');
         if (cb !== null) cb();
       } else {
-        Debugger.log('Data failed to save');
+        Debugger.log('Data failed to save:');
+        console.log(data);
         Debugger.log('Finished');
         if (cb !== null) cb();
       }
