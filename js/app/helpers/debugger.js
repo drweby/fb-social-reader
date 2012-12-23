@@ -18,12 +18,12 @@ define(function() {
     if (this.debug_mode === true) {
       if (indent === 1) {
         return console.log("  * " + message);
+      } else if (indent === 2) {
+        return console.log("    - "+message);
       } else if (indent === 0) {
         return console.log("\n" + message + ":");
       }
-    } else {
-
-    }
+    } 
   };
 
   Debugger.check_parameter_exists = function(parameter) {

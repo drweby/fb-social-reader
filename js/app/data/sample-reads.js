@@ -1,8 +1,8 @@
 define(function() {
 	 
-  var SampleReads = {}; 
+  var SampleData = {};
 
-  SampleReads.my_reads = function() {
+  SampleData.reads = function() {
 
     var response = { "data": [
        {

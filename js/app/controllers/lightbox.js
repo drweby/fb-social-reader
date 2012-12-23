@@ -1,4 +1,16 @@
-define(['require', 'app/helpers/debugger', 'app/models/user', 'app/helpers/time'], function(require, Debugger, Fb, Time) {
+define([
+  'require',
+  'app/helpers/debugger',
+  'app/models/user',
+  'app/helpers/time',
+  'app/models/analytics'
+  ], function(
+    require,
+    Debugger,
+    Fb,
+    Time,
+    Analytics
+  ) {
 
 	var Lightbox = {};
 
@@ -22,7 +34,6 @@ define(['require', 'app/helpers/debugger', 'app/models/user', 'app/helpers/time'
     } else {
       Debugger.log("Lightbox added: FAILURE");
     }
-    this.setup_listeners();
     return Debugger.log('Finished');
   };
 
@@ -40,7 +51,9 @@ define(['require', 'app/helpers/debugger', 'app/models/user', 'app/helpers/time'
     Debugger.log('Fading');
     return $('#sr_lightbox').fadeIn('fast', function() {
       Debugger.log('Finished');
-      return _this.show_activity(type, User);
+      _this.show_activity(type, User);
+      _this.setup_listeners();
+      Analytics.setup_listeners('lightbox');
     });
   };
 

@@ -31,7 +31,15 @@
 		<th scope="row">Disable loading Facebook meta tags?</th>
 		<td>
 			<input type="checkbox" name="fb_og_meta_disable" <?php if (get_option('fb_og_meta_disable')) { ?>checked="checked"<?php } ?> />
-			<span class="description">This plugin loads Facebook meta tags automatically behind the scenes. Check this to disable that (you'll only do this if you're adding them yourself or with another plugin).</span>
+			<span class="description">This plugin loads Facebook Meta Tags automatically behind the scenes. Check this to disable that (you'll only do this if you're adding them yourself or with another plugin).</span>
+		</td>
+		</tr>		
+
+		<tr valign="top">
+		<th scope="row">Disable usage tracking</th>
+		<td>
+			<input type="checkbox" name="fb_og_analytics_disable" <?php if (get_option('fb_og_analytics_disable')) { ?>checked="checked"<?php } ?> />
+			<span class="description">We track how your readers use Social Reader on your site so we know what to improve on. Check to disable this.</span>
 		</td>
 		</tr>		
 		

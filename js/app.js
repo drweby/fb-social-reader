@@ -13,7 +13,8 @@ requirejs.config({
     baseUrl: dir+'/lib',
     paths: {
         app: dir+'/app',
-        underscore: dir+'/lib/underscore.min'
+        underscore: dir+'/lib/underscore.min',
+        ga: 'https://google-analytics.com/ga'
     }
 });
 

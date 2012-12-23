@@ -2,12 +2,14 @@ define([
   'require',
   'underscore',
   'app/helpers/debugger',
-  'app/helpers/single-format'
+  'app/helpers/single-format',
+  'app/models/analytics'
   ], function(
     require,
     _,
     Debugger,
-    Format
+    Format,
+    Analytics
   ) {
 
 	var Single = {};
@@ -32,6 +34,7 @@ define([
       var html = names_str + images_str;
       Debugger.log('Fading in');
       $('#sr_friends_single').html(html).fadeIn(function() {
+        Analytics.setup_listeners('frs_single');
         Debugger.log('Finished');
       });
     }

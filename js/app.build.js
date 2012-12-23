@@ -2,7 +2,6 @@
 
 	// TO RUN THE BUILD, GET TO THIS DIR AND RUN: node r.js -o app.build.js
 
-    
 	// The path of the dev files (main shouild be directly underneath this)
     baseUrl: '.',
 
@@ -15,8 +14,14 @@
 	// Comment out the below line to minify using UglifyJS
     optimize: "none",
 
-    // Build from app - everything gets included from this file now
-    name: 'app'
+    // Build from the app folder (relative to baseUrl)
+    name: 'app',
+
+    // Set paths for libs
+    paths: {
+		underscore: 'lib/underscore.min',
+		ga: 'empty:'
+    }
 
 })
 

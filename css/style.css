@@ -17,6 +17,9 @@
 	=== Sidebar (not logged in) === 
 */
 
+#sr_sidebar_box {
+	display:none;
+}
 #sr_sidebar_logged_out {
 	text-align:center;
 	margin-top:10px;
@@ -24,7 +27,7 @@
 	color:#333;
 	font-weight:bold;
 	margin-bottom:15px;
-	font-size:14px
+	font-size:14px;
 }
 #sr_sidebar_logged_out #sr_sidebar_login a {
 	

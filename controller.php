@@ -138,7 +138,9 @@ class FbOgAction_Controller {
 			'auto_sharing_on' => get_option('fb_og_sidebar_publishing_on', "Auto sharing on"),
 			'auto_sharing_off' => get_option('fb_og_sidebar_publishing_off', "Auto sharing off"),
 			'activity' => get_option('fb_og_sidebar_activity', 'Activity'),
-			'plugin_url' => FB_OG_PLUGIN_URL
+			'plugin_url' => FB_OG_PLUGIN_URL,
+			'plugin_version' => FB_OG_CURRENT_VERSION,
+			'analytics_disabled' => get_option('fb_og_analytics_disable')
 		);
 		echo json_encode($options);
 	}
@@ -408,6 +410,9 @@ class FbOgAction_Controller {
 			
 			// If the user wants to add in the meta tags himself
 			register_setting( 'fb-og-settings-group', 'fb_og_meta_disable' );
+
+			// If the user wants to disable our analytics
+			register_setting( 'fb-og-settings-group', 'fb_og_analytics_disable' );
 			
 			// Register custom post types options
 			$custom_posts = get_post_types(array(
