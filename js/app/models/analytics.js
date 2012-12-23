@@ -1,4 +1,4 @@
-define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-listeners'], 
+define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-listeners'],
 		function(require, Debugger, _, Listeners) {
 
 	var Analytics = {
@@ -19,13 +19,13 @@ define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-l
 		}
 	
 		window._gaq = window._gaq || [];
-		window._gaq.push(['socialreader._setAccount', 'UA-37231887-1']);
+		window._gaq.push(['sr._setAccount', 'UA-37231887-1']);
 		Debugger.log('Setting custom variables');
-		window._gaq.push(['setCustomVar', 1, 'logged_in', this.user.logged_in, 2]);
-		window._gaq.push(['setCustomVar', 2, 'plugin_version', this.site.plugin_version, 2]);
-		window._gaq.push(['_setDomainName', window.location.host]);
+		window._gaq.push(['sr.setCustomVar', 1, 'logged_in', this.user.logged_in, 2]);
+		window._gaq.push(['sr.setCustomVar', 2, 'plugin_version', this.site.plugin_version, 2]);
+		window._gaq.push(['sr._setDomainName', window.location.host]);
 		Debugger.log('Tracking pageview');
-		window._gaq.push(['socialreader._trackPageview']);
+		window._gaq.push(['sr._trackPageview']);
 
 		// Load script in after setting variables
 		Debugger.log('Loading ga.js script');
@@ -44,7 +44,7 @@ define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-l
 			Debugger.log('Analytics has been disabled on this site: STOP');
 			return false;
 		}
-		window._gaq.push(['_trackEvent', category, action, label]);
+		window._gaq.push(['sr._trackEvent', category, action, label]);
 	};
 
 	Analytics.setup_listeners = function(type) {
@@ -70,9 +70,9 @@ define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-l
 					Debugger.log("selector: '"+listener.selector+"'", 2);
 					$(listener.selector).on(action, function() {
 						_this.track_event(type, action, listener.label);
-					});	
+					});
 				});
-			});			
+			});
 		}
 
 	};
