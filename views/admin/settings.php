@@ -24,7 +24,7 @@
 		<table class="form-table">
 		
 			<tr><td><h3>General settings</h3></td></tr>
-		
+
 			<tr valign="top">
 			<th scope="row">Facebook App ID</th>
 			<td>
@@ -47,11 +47,16 @@
 				<span class="description">We track how your readers use Social Reader on your site so we know what to improve on. Check to disable this.</span>
 			</td>
 			</tr>		
-			
-			<tr valign="top">
-			<th scope="row"><a style="font-weight:bold;" id="fb-og-setup-restart">Restart setup guide</a></th>
-			
-			</tr>		
+
+			<?php // Restart setup guide link
+			if (get_option('fb_og_setup_closed', false)) { ?>
+				<tr valign="top">
+				<th scope="row"><a style="font-weight:bold;" id="fb-og-setup-restart">Restart setup guide</a></th>
+				</tr>	
+			<?php } ?>
+		
+
+				
 			
 			
 			<tr><td><h3>Custom post types</h3></td></tr>
@@ -70,6 +75,12 @@
 				</td>
 				</tr>
 			<?php } ?>
+
+			<tr><td><h3>Custom CSS</h3></td></tr>
+
+			<tr><td colspan="2"><p>If you'd like to customize the layout and design of the widgets, please enter your CSS code below:</p></td></tr>
+
+			<tr><td colspan="2"><textarea class='fb_og_custom' name='fb_og_custom_css'><?php echo get_option('fb_og_custom_css'); ?></textarea></td></tr>
 
 			
 		</table>

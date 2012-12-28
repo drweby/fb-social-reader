@@ -6,8 +6,7 @@
 		<div class="fb-og-setup-right"><img class="setup-right" src="<?php echo FB_OG_PLUGIN_URL; ?>images/screenshots/setup-1.png" /></div>
 		<div class="fb-og-setup-left">
 		<h1>Setup Guide</h1>
-		<p>Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and see what their friends read too.</p>
-		<p>To find our more about this plugin, please visit <a href="http://fbsocialreader.com" target="blank">our website</a>.</p>
+		<p>Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.</p>
 		<a id="next_setup_1" class="large_button large_button_green next_setup">Click here to begin setup</a>
 		</div>
 		<div class="clear"></div>
@@ -68,7 +67,7 @@
 		<p>Go to the <a class="fb_og_insert_fb_app_id fb_og_summary" href="https://developers.facebook.com/apps/<?php echo get_option('fb_og_app_id'); ?>/summary" target="blank" >settings</a> of your app page on Facebook and ensure that:</p>
 		<ol>
 			<li>Your domain is included in "App Domains".</li>
-			<li>You have checked the "Website with Facebook Login" box, and added your "Site URL".</li>
+			<li>You have checked the "Website with Facebook Login" box, and added your domain to "Site URL".</li>
 		</ol>
 		<a id="prev_setup_5" class="large_button large_button_blue prev_setup">&laquo; Previous step</a>
 		<a id="next_setup_5" class="large_button large_button_green next_setup">Next step &raquo;</a>
@@ -112,7 +111,7 @@
 			<li>Customize the <a class="fb_og_insert_fb_app_id fb_og_appdetails" href="https://developers.facebook.com/apps/<?php echo get_option('fb_og_app_id'); ?>/appdetails" target="blank" >app details</a> for your application.</li>
 			<li>Test your app to make sure it's doing what it should be. Facebook allows you to add others help you test on their <a class="fb_og_insert_fb_app_id fb_og_roles" href="https://developers.facebook.com/apps/<?php echo get_option('fb_og_app_id'); ?>/roles" target="blank" >roles page</a>. When you read an article, it should take 10 seconds of waiting before a read is published to your timeline.</li>
 		</ol>
-		<p>If you're having difficulty publishing a read to Facebook, see <a href="http://support.fbsocialreader.com/customer/portal/articles/616021-reads-aren-t-being-published-to-facebook" target="blank">this support article</a>.</p>
+		<p>If you're having difficulty publishing a read to Facebook, see <a href="https://getsatisfaction.com/fbsocialreader/topics/reads_arent_appearing_on_my_facebook_timeline_why_not" target="blank">this support article</a>.</p>
 		<a id="prev_setup_8" class="large_button large_button_blue prev_setup">&laquo; Previous step</a>
 		<a id="next_setup_8" class="large_button large_button_green next_setup">Next step &raquo;</a>
 		</div>
@@ -133,7 +132,7 @@
 2. Click on any article to read it
 3. After 10 seconds the read will be automatically posted to your Facebook timeline
 
-To view or delete any reads published, click "Recent activity" on the sidebar. To toggle auto-publishing reads to Facebook, click "Publishing to Facebook" on the sidebar.
+To view or delete any reads published, click "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>" on the sidebar. To toggle auto-publishing reads to Facebook, click "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto-sharing on'); ?>" on the sidebar.
 </textarea>
 		
 		<p>Once they've approved it, you're done! The app will work publicly for all users on your site.</p>
@@ -158,5 +157,5 @@ To view or delete any reads published, click "Recent activity" on the sidebar. T
 </div>
 
 <div id="fb-og-setup-closed" class="fb-og-notice fb-og-notice-yellow">
-	You have closed the setup guide. To open the guide again, please click "restart setup guide" in the plugin <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=fb-social-reader" >settings page</a>.
+	You have closed the setup guide. To open the guide again, please click "restart setup guide"</a>.
 </div>

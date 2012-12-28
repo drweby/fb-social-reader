@@ -25,6 +25,7 @@ class SR_Controller {
 		// Enqueue scripts and css
 		add_action('wp_enqueue_scripts', array($this, 'add_sr_scripts'));
 		add_filter( 'clean_url', array($this, 'fix_requirejs_script'), 11, 1 );
+		add_action( 'wp_head', array($this, 'add_custom_css'));
 
 		// Get ajax to work front end
 		add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
@@ -87,6 +88,15 @@ class SR_Controller {
 	    } else {
 	    	return $url;
 	    }
+	}
+
+	// Inject custom css 
+	function add_custom_css() {
+		if (get_option('fb_og_custom_css') != '') {
+			echo "<style type='text/css'>";
+			echo get_option('fb_og_custom_css');
+			echo "</style>";
+		}
 	}
 
 	// Setup auto read
@@ -423,7 +433,9 @@ class SR_Controller {
 			// Mark the sidebar as closed
 			register_setting( 'fb-og-settings-setup', 'fb_og_setup_closed' );	
 			
-				
+			// Custom css for the widgets
+			register_setting( 'fb-og-settings-group', 'fb_og_custom_css' );
+
 			
 		/* Sidebar widget options */
 			

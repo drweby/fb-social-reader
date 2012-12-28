@@ -23,13 +23,27 @@ class Fb_Og_Sidebar_Widget extends WP_Widget {
 	
 	
 	function __construct() {
-		$widget_ops = array('classname' => 'widget_fb_og_sidebar', 'description' => __('Put this in your sidebar instead of pasting the function fb_og_put_sidebar() into your sidebar.php', 'fb-og-sidebar-widget'));
-		parent::__construct('fb-og-sidebar', __('FB Social Reader Sidebar', 'fb-og-sidebar-widget'), $widget_ops);
+		parent::__construct(
+			'fb-og-sidebar', 
+			__('FB Social Reader Sidebar', 
+			'fb-og-sidebar-widget'), 
+			array(
+				'classname' => 'widget_fb_og_sidebar', 
+				'description' => __('The sidebar widget for Social Reader', 'fb-og-sidebar-widget')
+			)
+		);
 	}
 	
-	function widget() { ?>
-		<div id="sr_sidebar_box"></div>
-	<?php }
+	function widget() { 
+		?><div id="sr_sidebar_box"></div><?php 
+	}
+
+	function form( $instance ) {
+		echo 'This widget can be configured in your ';
+		echo '<a href="'.get_bloginfo('url').'/wp-admin/admin.php?page=fb-social-reader-widgets" target="blank">';
+		echo 'Social Reader widgets page';
+		echo '</a>';
+	}
 	
 }
 
