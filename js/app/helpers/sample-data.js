@@ -1,11 +1,11 @@
-define(['require', 'app/helpers/debugger'], function(require, Debugger) {
+define(['require', 'app/helpers/debugger', 'app/helpers/url-param'], function(require, Debugger, Param) {
 	 
   // add 'sr_sample_data' as a query param to enable
 
   var SampleData = {};
 
   SampleData.is_on = function() {
-    if (Debugger.check_parameter_exists('sr_sample_data')) {
+    if (Param.exists('sr_sample_data')) {
       return true;
     } else {
       return false;

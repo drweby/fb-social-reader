@@ -24,11 +24,11 @@ define(['require'], function() {
       }
       i++;
     }
+    return false;
   };
 
   Cookie.exists = function(c_name) {
-    var cookie = this.get(c_name);
-    if (cookie != null) {
+    if (this.get(c_name)) {
       return true;
     } else {
       return false;

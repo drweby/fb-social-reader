@@ -71,6 +71,11 @@ class SR_Controller {
 		wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 		wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
 		wp_enqueue_style( 'social-reader-style' );
+		if (isset($_GET['sr_tests'])) {
+			wp_register_style( 'qunit-css', 'http://code.jquery.com/qunit/qunit-1.10.0.css');
+			wp_enqueue_style( 'qunit-css' );
+			wp_enqueue_script('qunit-js', 'http://code.jquery.com/qunit/qunit-1.10.0.js', array('jquery'), FB_OG_CURRENT_VERSION);
+		}
 	}
 
 	// Add on 'data-main' to load the main file asynchronously
@@ -148,6 +153,8 @@ class SR_Controller {
 	function get_client_details() {
 		$options = array(
 			'fb_app_id' => get_option('fb_og_app_id'),
+			'fb_channel_url' => FB_OG_PLUGIN_URL.'channel.html',
+			'fb_sdk_disable' => get_option('fb_og_sdk_disable'),
 			'login_meta' => get_option('fb_og_login_meta', "Logged in"),
 			'login_promo' => get_option('fb_og_login_promo', "Log in and see what your friends are reading"),
 			'auto_sharing_on' => get_option('fb_og_sidebar_publishing_on', "Auto sharing on"),
@@ -418,6 +425,9 @@ class SR_Controller {
 			
 			// If the user wants to add in the meta tags himself
 			register_setting( 'fb-og-settings-group', 'fb_og_meta_disable' );
+
+			// If the client wants to disable the Facebook javascript sdk (they're loading it themselves)
+			register_setting( 'fb-og-settings-group', 'fb_og_sdk_disable' );
 
 			// If the user wants to disable our analytics
 			register_setting( 'fb-og-settings-group', 'fb_og_analytics_disable' );

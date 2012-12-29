@@ -13,7 +13,7 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
 
     // Get everything we need to load stuff
     this.get_client_details(function() {
-      Fb.init(_this.site.fb_app_id, function() {
+      Fb.init(_this.site,  function() {
         Fb.is_logged_in(function(bool) {
           if (bool === true) {
             Fb.get_user(function(user) {

@@ -20,7 +20,8 @@
     // Set paths for libs
     paths: {
 		underscore: 'lib/underscore.min',
-		ga: 'empty:'
+		ga: 'empty:',
+		qunit: 'empty:'
     }
 
 })

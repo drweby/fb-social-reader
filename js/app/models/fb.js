@@ -6,39 +6,75 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
 		activity: {}
 	};
 
-  Fb.init = function(app_id, cb) {
-
+  Fb.init = function(site, cb) {
     var _this = this;
+    var app_id = site.fb_app_id;
+    var channel_url = site.fb_channel_url;
+    var sdk_disabled = site.fb_sdk_disable;
     Debugger.log('Initiliazing Facebook', 0);
-    $('body').prepend('<div id="fb-root"></div>');
-    Debugger.log('Prepended div fb-root to body');
-    window.fbAsyncInit = function() {
-      Debugger.log("Loading the SDK asynchronously with app id: " + app_id);
-      FB.init({
-        appId: app_id,
-        channelUrl: "//localhost:8888/wordpress/channel.html",
-        status: true,
-        cookie: true,
-        xfbml: true
+    if (sdk_disabled == 'on') {
+      Debugger.log('SDK loading disabled, wait for it to exist');
+      this.sdk_check_count = 0;
+      this.wait_for_fb(function() {
+        console.log('loaded');
       });
-      Debugger.log('SDK loaded');
-      Debugger.log('Finished');
-      return cb();
-    };
-    return (function(d, debug) {
-      var id, js, ref;
-      js = void 0;
-      id = "facebook-jssdk";
-      ref = d.getElementsByTagName("script")[0];
-      if (d.getElementById(id)) {
-        return;
+    } else {
+      $('body').prepend('<div id="fb-root"></div>');
+      Debugger.log('Prepended div fb-root to body');
+      window.fbAsyncInit = function() {
+        Debugger.log("Loading the SDK asynchronously with app id: " + app_id+ ', channel url: '+channel_url);
+        FB.init({
+          appId: app_id,
+          channelUrl: channel_url,
+          status: true,
+          cookie: true,
+          xfbml: true
+        });
+        Debugger.log('SDK loaded');
+        Debugger.log('Finished');
+        return cb();
+      };
+      return (function(d, debug) {
+        var id, js, ref;
+        js = void 0;
+        id = "facebook-jssdk";
+        ref = d.getElementsByTagName("script")[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement("script");
+        js.id = id;
+        js.async = true;
+        js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+        return ref.parentNode.insertBefore(js, ref);
+      })(window.document, false);
+    }
+  };
+
+  Fb.wait_for_fb = function (cb) {
+    this.sdk_check_count++;
+    if (this.sdk_check_count > 10) {
+      Debugger.log('Facebook SDK loading: FAILURE');
+      return;
+    }
+    var _this = this;
+    if (window.FB) {
+      Debugger.log(_this.sdk_check_count+': window.FB exists: SUCCESS');
+       if ($('#fb-root').length === 1) {
+        Debugger.log('<div id="fb-root"></div> exists: SUCCESS');
+        cb();
+      } else {
+        Debugger.log(_this.sdk_check_count+': <div id="fb-root"></div> does not exist, try again in 100ms');
+        setTimeout(function() {
+          _this.wait_for_fb();
+        }, 100);
       }
-      js = d.createElement("script");
-      js.id = id;
-      js.async = true;
-      js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-      return ref.parentNode.insertBefore(js, ref);
-    })(window.document, false);
+    } else {
+      Debugger.log(_this.sdk_check_count+': window.FB does not exist, try again in 100ms');
+      setTimeout(function() {
+        _this.wait_for_fb();
+      }, 100);
+    }
   };
 
 	Fb.is_logged_in = function(cb) {

@@ -1,5 +1,6 @@
 define([
 	'require',
+	'app/tests/main',
 	'app/models/user',
 	'app/models/analytics',
 	'app/controllers/sidebar',
@@ -7,6 +8,7 @@ define([
 	'app/controllers/single'
 	], function (
 		require,
+		Tests,
 		User,
 		Analytics,
 		Sidebar,
@@ -18,16 +20,16 @@ define([
 
 	// jQuery should be in as a WP dependency already
 	$(document).ready(function() {
-
-		// Initialise the user and load stuff
-		User.init(function() {
-			Sidebar.load(User.user, User.site);
-		}, function() {
-			Lightbox.load(User.user, User.site);
-			Single.load(User.user, User.activity);
-			Analytics.init(User.user, User.site);
-		});
-
+		if (Tests.are_on()) {
+			Tests.start();
+		} else {
+			User.init(function() {
+				Sidebar.load(User.user, User.site);
+			}, function() {
+				Lightbox.load(User.user, User.site);
+				Single.load(User.user, User.activity);
+				Analytics.init(User.user, User.site);
+			});
+		}
 	});
-
 });
