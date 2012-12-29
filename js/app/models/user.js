@@ -43,28 +43,36 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
 
   User.queue_read = function(cb) {
     Debugger.log('Queuing auto-read to Facebook', 0);
-    return $.post(_sr_ajax.ajaxurl, {
-      action: "_sr_ajax_hook",
-      type: "is_readable",
-      url: window.location.href
-    }, function(data) {
-      Debugger.log('Ajax request complete');
-      if (data == '1' || data == '0') {
-        Debugger.log('Format correct?: SUCCESS');
-        if (data == '1') {
-          Debugger.log('Auto-sharing for this page is: ON');
-          setTimeout(function() {
-            Fb.add_read();
-          }, 10000);
+    if (this.user.auto_sharing === true) {
+      Debugger.log('Is auto sharing?: TRUE');
+      return $.post(_sr_ajax.ajaxurl, {
+        action: "_sr_ajax_hook",
+        type: "is_readable",
+        url: window.location.href
+      }, function(data) {
+        Debugger.log('Ajax request complete');
+        if (data == '1' || data == '0') {
+          Debugger.log('Format correct?: SUCCESS');
+          if (data == '1') {
+            Debugger.log('Auto-sharing for this page is: ON');
+            setTimeout(function() {
+              Fb.add_read();
+            }, 10000);
+          } else {
+            Debugger.log('Auto-sharing for this page is: OFF');
+          }
+          Debugger.log('Finished');
+          return cb();
         } else {
-          Debugger.log('Auto-sharing for this page is: OFF');
+          Debugger.log('Format correct?: FAILURE');
         }
-        Debugger.log('Finished');
-        return cb();
-      } else {
-        Debugger.log('Format correct?: FAILURE');
-      }
-    });
+      });
+    } else {
+      Debugger.log('Is auto sharing?: FALSE');
+      Debugger.log('Finished');
+      return cb();
+    }
+
   };
 
   User.get_client_details = function(cb) {

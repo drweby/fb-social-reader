@@ -34,10 +34,10 @@ include('widget.php');
 $fbOgAction = new SR_Controller;
 
 // Activation hooks (can't go in the model construct for some reason - I think they run before the model is created)
-register_activation_hook( __FILE__, array('FbOgAction_Model', 'install'));
-register_activation_hook( __FILE__, array('FbOgAction_Model', 'activate'));
-register_deactivation_hook( __FILE__, array('FbOgAction_Model', 'deactivate'));
-register_uninstall_hook( __FILE__, array('FbOgAction_Model', 'uninstall'));	
+register_activation_hook( __FILE__, array('SR_Model', 'install'));
+register_activation_hook( __FILE__, array('SR_Model', 'activate'));
+register_deactivation_hook( __FILE__, array('SR_Model', 'deactivate'));
+register_uninstall_hook( __FILE__, array('SR_Model', 'uninstall'));	
 
 
 

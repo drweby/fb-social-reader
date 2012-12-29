@@ -30,7 +30,6 @@ class SR_Model {
 		// Set the cache 
 		$cachePath = FB_OG_PLUGIN_PATH.'cache';
 		$this->cache = new SimpleCache($cachePath);
-
 		
 	}
 
@@ -40,15 +39,16 @@ class SR_Model {
 		// We are forced to use $wpdb here becuase $this doesn't work in the activation hook for some reason
 		global $wpdb;
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		
+
 		// Create users table
 		$sql = "CREATE TABLE ".$wpdb->prefix."fb_social_reader
 		(
 		fb_id bigint(30) NOT NULL,
+		is_auto_sharing tinyint(1),
 		added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		data TEXT,
 		PRIMARY KEY  (fb_id)
 		);";
+		update_option('sr_activation_sql', $sql);
 		dbDelta($sql);
 	
 	}
@@ -99,9 +99,7 @@ class SR_Model {
 				$this->app_table, 
 				array(
 					'fb_id' => $data['fb_id'],
-					'is_auto_sharing' => $data['is_auto_sharing'],
-					'friends_cache' => '',
-					'activity_cache' => ''
+					'is_auto_sharing' => $data['is_auto_sharing']
 				)			
 			);			
 		}
@@ -131,49 +129,6 @@ class SR_Model {
 		} else {
 			return false;
 		}
-	}
-
-	// Send feedback back to central server
-	function send_feedback($data) {
-	
-		// Replace this with your own email address
-		$to="feedback@fbsocialreader.com";
-
-		// Extract form contents
-		$name = $data['name'];
-		$email = $data['email'];
-		$website = get_bloginfo('url');
-		$message = $data['content'];
-								
-		// Validate email address
-		function valid_email($str) {
-			return ( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? FALSE : TRUE;
-		}
-		
-		// Return errors if present
-		$errors = "";
-		
-		if($name =='') { $errors .= "name,"; }
-		if(valid_email($email)==FALSE) { $errors .= "email,"; }
-		if($message =='') { $errors .= "message,"; }
-		
-		// Send email
-		if($errors == '') {
-
-			$headers =  'From: Admin Feedback <no-reply@'.$_SERVER['HTTP_HOST'].'>'. "\r\n" .
-						'Reply-To: '.$email.'' . "\r\n" .
-						'X-Mailer: PHP/' . phpversion();
-			$email_subject = "Website Feedback Form: $email";
-			$message="Name: $name \nEmail: $email \nWebsite: $website \n\nMessage:\n\n $message";
-		
-			mail($to, $email_subject, $message, $headers);
-			echo "true";
-		
-		} else {
-			echo "false";
-		}
-				
-		
 	}
 	
 	// Sees if we publish a certain post type

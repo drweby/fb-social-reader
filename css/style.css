@@ -50,7 +50,7 @@
 #sr_sidebar_right {
 	margin-left:62px;
 }
-#sr_sidebar_logged_in .sr_sidebar_name {
+#sr_sidebar_logged_in #sr_sidebar_name {
 	font-weight:bold;
 	margin-bottom:4px;
 	font-size:14px;
@@ -192,6 +192,9 @@ a#sr_close_lightbox {
 	width:24px;
 	height:24px;
 	position:relative;
+}
+#sr_lightbox #sr_lightbox_inner #sr_reads_empty {
+	padding:5px 10px;
 }
 ul#sr_activity_tabs {
 	list-style-type:none;

@@ -31,7 +31,7 @@ define(['require', 'app/helpers/debugger'], function(require, Debugger) {
         "data": {
           "article": {
             "id": "304735542977218", 
-            "url": "http://localhost:8888/wordpress/rewarw/", 
+            "url": "http://localhost:8888/wordpress/hello-world/", 
             "type": "article", 
             "title": "Hartley gets its own Dating Service"
           }
