@@ -36,9 +36,7 @@ define([
 			_.each(_this.modules, function(module) {
 				require(['app/tests/'+module], function(obj) {
 					Debugger.log('Loaded '+'app/tests/'+module+', now run it');
-					_.each(obj.queue, function(method) {
-						method();
-					});
+					obj.run();
 				});
 			});
 		
