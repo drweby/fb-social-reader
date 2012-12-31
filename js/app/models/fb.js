@@ -147,6 +147,7 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
       Debugger.log('Response received from Facebook');
       if (response.id) {
         Debugger.log("Read " + response.id + " posted to Facebook: SUCCESS");
+        Cache.refresh();
       } else {
         Debugger.log("Read posted to Facebook: FAILURE");
         Debugger.log("Error message from Facebook: " + response.error.message + " ");
@@ -162,9 +163,10 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
       Debugger.log('Response received from Facebook');
       if (response === true) {
         Debugger.log('Read deleted from Facebook: SUCCESS');
+        Cache.refresh();
       } else {
         Debugger.log('Read deleted from Facebook: FAILURE');
-        Debugger.log('Error message from Facebook: #{response.error.message}');
+        Debugger.log('Error message from Facebook: '+response.error.message);
       }
       return cb();
     });

@@ -1,7 +1,7 @@
 define([
   'require',
   'app/helpers/debugger',
-  'app/models/user',
+  'app/models/fb',
   'app/helpers/time',
   'app/models/analytics',
   'app/helpers/sample-data'
@@ -136,9 +136,9 @@ define([
         $('.sr_story_delete').on("click", function() {
           var read_id;
           read_id = $(this).closest('li').attr('id').replace('sr_read_', '');
-          return _this.model.fb_delete_read(read_id, function(cb) {
-            return $("#sr_read_{read_id}").fadeOut(function() {
-              return $("#sr_read_{read_id}").remove();
+          return Fb.delete_read(read_id, function(cb) {
+            return $("#sr_read_"+read_id).fadeOut(function() {
+              return $("#sr_read_"+read_id).remove();
             });
           });
         });

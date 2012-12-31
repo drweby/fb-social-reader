@@ -55,9 +55,7 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie'], function(requi
   };
 
   Cache.refresh = function() {
-    Debugger.log('Refreshing cache by deleting cookies', 0);
-    Cookie.remove('sr_activity_cache');
-    Cookie.remove('sr_friends_cache');
+        
   };
 
   return Cache;
