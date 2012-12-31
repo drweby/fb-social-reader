@@ -263,6 +263,9 @@ ul#sr_activity_tabs li.active_tab a:hover {
 #sr_reads_list ul li .story-inner .story-meta a.story-time {
 	color:#777;
 }
+#sr_reads_list ul li.sr_friend_story .story-inner .story-meta .sr_story_delete {
+	display:none;
+}
 #sr_reads_list  ul li .story-inner .story-like-arrow {
 	display:block;
 	height:5px;
