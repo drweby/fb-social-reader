@@ -61,5 +61,6 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie'], function(requi
   };
 
   return Cache;
+  
 
 });
