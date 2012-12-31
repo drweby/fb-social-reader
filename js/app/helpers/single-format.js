@@ -46,7 +46,6 @@ define(['require', 'underscore'], function(require, _) {
 
 	Format.thumbs_list = function(user, reads) {
 		reads = this.check(reads, user);
-		if (reads.length === 0) return false;
 		var html = '';
 		html += '<div class="sr_read_thumbs">';
 		_.each(reads, function(read) {
