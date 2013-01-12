@@ -1,8 +1,11 @@
 <div id="fb-og-wrap" class="wrap">
 <h2>Widgets: <?php echo FB_OG_PUGIN_NAME; ?> - v<?php echo FB_OG_CURRENT_VERSION; ?></h2>
 
-<?php if (isset($error)) { ?><div class="fb-og-notice fb-og-notice-red">Error: <?php echo $error; ?>.</div><?php } ?>
-
+<?php if (!empty($errors)) { 
+	foreach ($errors as $error) { ?>
+		<div class="fb-og-notice fb-og-notice-red">Error: <?php echo $error; ?></div>
+	<?php }
+} ?>
 
 <div id="fb-og-left">
 

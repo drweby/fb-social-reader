@@ -447,6 +447,18 @@ class SR_Controller {
     update_option( 'fb_og_setup_closed', false );
   } 
   
+  // Do a couple of checks to make sure everything is all wonderful and rosy for the plugin to work
+  function admin_do_checks() {
+    $errors = array();
+    if (!is_writable(FB_OG_PLUGIN_PATH.'/cache')) {
+      $errors[] = FB_OG_PLUGIN_URL.'cache is not writable. Please set folder permissions to 777 to use this plugin.';
+    }
+    if (phpversion() < 5.2) {
+      $errors[] = 'Your PHP version is '.phpversion().'. This plugin requires at least version 5.2.0 to run. Please update your PHP version.';
+    }
+    return $errors;
+  }
+
   // The admin settings page - all about editing options
   function admin_settings() {
     $custom_posts = get_post_types(array(
@@ -454,6 +466,7 @@ class SR_Controller {
     )); 
     global $current_user;
     get_currentuserinfo();
+    $errors = $this->admin_do_checks();
     include(FB_OG_PLUGIN_PATH.'/views/admin/settings.php');
   }
   
@@ -461,6 +474,7 @@ class SR_Controller {
   function admin_widgets() {
     global $current_user;
     get_currentuserinfo();
+    $errors = $this->admin_do_checks();
     $logged_in = get_option('fb_og_login_meta', 'You are logged in');
     $auto_sharing_on =  get_option('fb_og_sidebar_publishing_on', 'Publishing on'); 
     $auto_sharing_off = get_option('fb_og_sidebar_publishing_off', 'Publishing off');
