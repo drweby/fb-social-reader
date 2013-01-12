@@ -108,7 +108,7 @@
 				<div id="sr_sidebar_logged_out">
 					<p><?php echo $login_promo; ?></p>
 					<a id="sr_sidebar_login">
-						<img src="http://localhost:8888/wordpress/wp-content/plugins/social-reader//images/facebooklogin.jpg" width="180" height="40">
+						<img src="<?php echo FB_OG_PLUGIN_URL; ?>images/facebooklogin.jpg" width="180" height="40">
 					</a>        
 				</div>      
 			</div>

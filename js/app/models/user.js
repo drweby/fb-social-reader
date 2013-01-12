@@ -1,144 +1,120 @@
-define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'], function(require, Fb, Cookie, Debugger) {
+define(function(require) {
+
+  var Fb = require('app/models/fb');
+  var Cookie = require('app/helpers/cookie');
+  var Debugger = require('app/helpers/debugger');
+  var Cache = require('app/models/cache');
+
 
   var $ = jQuery;
 
   var User = {};
 
   User.init = function(cb1, cb2) {
-    var _this = this;
-    this.site = {};
-    this.user = {};
-    this.friends = [];
-    this.activity = {};
 
-    // Get everything we need to load stuff
-    this.get_client_details(function() {
-      Fb.init(_this.site,  function() {
-        Fb.is_logged_in(function(bool) {
-          if (bool === true) {
-            Fb.get_user(function(user) {
-              _this.user = user;
-              _this.user.logged_in = bool;
-              _this.is_auto_sharing(function() {
-                cb1();
-                Fb.get_friend_users(function(friends) {
-                  _this.friends = friends;
-                  Fb.get_activity(function(activity) {
-                    _this.activity = activity;
-                    _this.queue_read(function() {
-                      cb2();
-                    });
-                  });
-                });
+    // window._sr should be populated already
+    var _sr = window._sr;
+    var _this = this;
+
+    Fb.init(_sr.site,  function() {
+      Fb.is_logged_in(function(is_logged_in) {
+        if (is_logged_in === true) {
+          _this.get_user(function() {
+            _this.queue_read();
+            cb1();
+            _this.get_friends(function() {
+              _this.get_activity(function() {
+                cb2();
               });
             });
-          } else {
-            cb1();
-            cb2();
-          }
-        });
-      });
-    });
-  };
-
-  User.queue_read = function(cb) {
-    Debugger.log('Queuing auto-read to Facebook', 0);
-    if (this.user.auto_sharing === true) {
-      Debugger.log('Is auto sharing?: TRUE');
-      return $.post(_sr_ajax.ajaxurl, {
-        action: "_sr_ajax_hook",
-        type: "is_readable",
-        url: window.location.href
-      }, function(data) {
-        Debugger.log('Ajax request complete');
-        if (data == '1' || data == '0') {
-          Debugger.log('Format correct?: SUCCESS');
-          if (data == '1') {
-            Debugger.log('Auto-sharing for this page is: ON');
-            setTimeout(function() {
-              Fb.add_read();
-            }, 10000);
-          } else {
-            Debugger.log('Auto-sharing for this page is: OFF');
-          }
-          Debugger.log('Finished');
-          return cb();
+          });
         } else {
-          Debugger.log('Format correct?: FAILURE');
+          Cache.clear_all();
+          cb1();
+          //cb2();
         }
       });
-    } else {
-      Debugger.log('Is auto sharing?: FALSE');
+    });
+  
+  };
+
+  User.get_user = function(cb) {
+    var _this = this;
+    Debugger.log('Getting user', 0);
+
+    // If user already exists in cache for this session
+    if (window._sr && window._sr.user) {
+      Debugger.log('Already in cache, get from the window._sr.user variable');
       Debugger.log('Finished');
       return cb();
     }
 
+    // Get user from Facebook and ave the cache, updating auto sharing back end
+    Fb.get_user(function(user) {
+      Cache.save_user(user, function() {
+        cb();
+      });
+    });
+
   };
 
-  User.get_client_details = function(cb) {
-    var _this = this;
-    Debugger.log('Getting client site details', 0);
-    return $.post(_sr_ajax.ajaxurl, {
-      action: "_sr_ajax_hook",
-      type: "get_client_details"
-    }, function(data) {
-      Debugger.log('Ajax request complete');
-      _this.site = JSON.parse(data);
-      if (_this.site) {
-        Debugger.log('Read from ajax request data: SUCCESS');
-      } else {
-        Debugger.log('Read from ajax request data: FAILURE');
-      }
+  User.get_friends = function(cb) {
+    Debugger.log('Getting friends', 0);
+    // If friends already exists in cache for this session
+    if (window._sr && window._sr.friends !== undefined) {
+      Debugger.log('Already in cache, get from the window._sr.friends variable');
       Debugger.log('Finished');
       return cb();
+    }
+    // Get friends from Facebook and save to cache
+    Fb.get_friend_users(function(friends) {
+      window._sr.friends = friends;
+      cb();
+      // Cache saving should not slow down current page
+      Cache.save(window._sr.user.id, 'friends_cache', friends);
     });
   };
 
-
-  User.is_auto_sharing = function(cb) {
-    var _this = this;
-    Debugger.log("See if we're auto sharing");
-    return $.post(_sr_ajax.ajaxurl, {
-      action: "_sr_ajax_hook",
-      type: "is_auto_sharing",
-      fb_id: this.user.id
-    }, function(data) {
-      Debugger.log('Ajax request complete');
-      if (data == '1' || data == '0') {
-        Debugger.log('SUCCESS, set param');
-        if (data == 1) {
-          data = true;
-        } else {
-          data = false;
-        }
-        _this.user.auto_sharing = data;
-        Debugger.log('Finished');
-      } else {
-        Debugger.log('Data format is incorrect. FAILURE');
-        console.log(data);
-      }
+  User.get_activity = function(cb) {
+    Debugger.log('Getting you and your and friends activity', 0);
+    // If activity already exists in cache for this session
+    if (window._sr && window._sr.activity !== undefined) {
+      Debugger.log('Already in cache, get from the window._sr.activity variable');
+      Debugger.log('Finished');
       return cb();
+    }
+    // Get activity from Facebook and save to cache
+    Fb.get_activity(function(activity) {
+      window._sr.activity = activity;
+      cb();
+      Cache.save(window._sr.user.id, 'activity_cache', activity);
     });
+  };
+
+  // Queues read to Facebook. Returns true if queued, false if not.
+  User.queue_read = function(cb) {
+    Debugger.log('Queuing auto-read to Facebook', 0);
+    if (window._sr.user.is_auto_sharing === true && window._sr.page.is_readable === true) {
+      Debugger.log('Auto-sharing on, page is readable, queue the read');
+      setTimeout(function() {
+        Fb.add_read();
+      }, 10000);
+      Debugger.log('Finished');
+      return true;
+    } else {
+      Debugger.log('Either auto-sharing is off or this page is not readable');
+      Debugger.log('Finished');
+      return false;
+    }
   };
 
   User.set_auto_sharing = function(bool) {
     var _this = this;
     Debugger.log('Setting auto sharing', 0);
     Debugger.log("Changing auto sharing to " + bool);
-    return $.post(_sr_ajax.ajaxurl, {
-      action: "_sr_ajax_hook",
-      type: "set_auto_sharing",
-      fb_id: this.user.id,
-      is_auto_sharing: bool
-    }, function(data) {
-      Debugger.log('Ajax request complete');
-      if (data == 1) {
-        Debugger.log('Auto sharing change: SUCCESS');
-      } else {
-        Debugger.log('Auto sharing change: FAILURE');
-      }
-      Debugger.log('Finished');
-    });
+    window._sr.user.is_auto_sharing = bool;
+    var user = window._sr.user;
+    Cache.save(user.id, 'user_cache', user);
   };
 
   User.login = function() {
@@ -149,8 +125,7 @@ define(['require', 'app/models/fb', 'app/helpers/cookie', 'app/helpers/debugger'
 
   User.logout = function() {
     Fb.logout(function() {
-      Cookie.remove('sr_activity_cache');
-      Cookie.remove('sr_friends_cache');
+      Cache.clear_all();
       window.location.reload();
     });
   };

@@ -1,24 +1,17 @@
-define([
-  'require',
-  'underscore',
-  'app/helpers/debugger',
-  'app/helpers/single-format',
-  'app/models/analytics',
-  'app/helpers/sample-data'
-  ], function(
-    require,
-    _,
-    Debugger,
-    Format,
-    Analytics,
-    SampleData
-  ) {
+define(function(require) {
+
+  var _          = require('underscore');
+  var Debugger   = require('app/helpers/debugger');
+  var Format     = require('app/helpers/single-format');
+  var Analytics  = require('app/models/analytics');
+  var SampleData = require('app/helpers/sample-data');
+
 
 	var Single = {};
 
-  Single.load = function(user, activity) {
-    var _this = this;
-    if (user.logged_in !== true) return;
+  Single.load = function() {
+    var user = window._sr.user, activity = window._sr.activity;
+    if (!user) return;
     Debugger.log('Loading friends who read this widget', 0);
     if ($('#sr_friends_single').length === 0) {
       Debugger.log('#sr_friends_single not found, cannot load');
@@ -28,6 +21,11 @@ define([
       if (SampleData.is_on()) {
         reads = SampleData.reads.data;
       } else {
+        if (!activity.reads) {
+          Debugger.log('No reads found');
+          Debugger.log('Finished');
+          return;
+        }
         reads = activity.reads;
       }
       var single_reads = _.filter(reads, function(read) {

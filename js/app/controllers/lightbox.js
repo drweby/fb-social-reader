@@ -1,28 +1,22 @@
-define([
-  'require',
-  'app/helpers/debugger',
-  'app/models/fb',
-  'app/helpers/time',
-  'app/models/analytics',
-  'app/helpers/sample-data'
-  ], function(
-    require,
-    Debugger,
-    Fb,
-    Time,
-    Analytics,
-    SampleData
-  ) {
+define(function(require) {
+
+  var Debugger         = require('app/helpers/debugger');
+  var Fb               = require('app/models/fb');
+  var Time             = require('app/helpers/time');
+  var Analytics        = require('app/models/analytics');
+  var SampleData       = require('app/helpers/sample-data');
+  var _                = require('underscore');
+
+  var LightboxHtml     = require('text!app/html/lightbox.html');
+  var LightboxReadHtml = require('text!app/html/lightbox-read.html');
+
 
 	var Lightbox = {};
 
-  Lightbox.load = function(user, site) {
-    if (user.logged_in !== true) return;
-    this.user = user;
-    this.site = site;
-    var _this = this;
+  Lightbox.load = function() {
+    var user = window._sr.user, site = window._sr.site, friends = window._sr.friends, activity = window._sr.activity;
     Debugger.log('Loading the lightbox', 0);
-    if (user.logged_in === false) {
+    if (!user) {
       Debugger.log("User is not logged in, don't load it");
       Debugger.log('Finished');
       return false;
@@ -73,17 +67,17 @@ define([
     });
   };
 
-  Lightbox.show_activity = function(type, User) {
+  Lightbox.show_activity = function() {
     var _this = this;
-    $('#sr_lightbox_inner').html("<h3>Recent activity</h3><a id='sr_close_lightbox'>Close</a><div id='sr_loading'><img src='" + this.site.plugin_url + "/images/ajax-loader.gif' alt='Loading...'></div>			<ul id='sr_activity_tabs'>				<li id='sr_lightbox_everyone' class='sr_active_tab'><a>Everyone</a></li>				<li id='sr_lightbox_me'><a>Just you</a></li>			</ul>			<div id='sr_reads_list'><ul></ul><div id='sr_reads_empty'>None of your friends have read anything on this site yet.</div></div>		");
-      var html, read, story_type, _i, _len, _ref;
+    var lightbox_template = _.template(LightboxHtml);
+    var lightbox_html = lightbox_template(window._sr);
+    $('#sr_lightbox_inner').html(lightbox_html);
       Debugger.log("Putting reads into the lightbox", 0);
       var reads;
       if (SampleData.is_on()) {
-        console.log(SampleData);
         reads = SampleData.reads;
       } else {
-        reads = User.activity.reads;
+        reads = window._sr.activity.reads;
       }
       $('#sr_loading').hide();
       if (!reads || !reads.length) {
@@ -91,26 +85,16 @@ define([
         $('#sr_reads_list').show();
         $('#sr_reads_list #sr_reads_empty').show();
       } else {
-        Debugger.log("Found " + User.activity.reads.length + " reads");
-        html = '';
-        if (SampleData.is_on()) {
-          _ref = SampleData.reads.data;
-        } else {
-          _ref = User.activity.reads;
-        }
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          read = _ref[_i];
-          if (read.from.id === User.user.id) {
-            story_type = 'sr_me_story';
-          } else {
-            story_type = 'sr_friend_story';
+        Debugger.log("Found " + reads.length + " reads");
+        var html = '';
+        var read_template = _.template(LightboxReadHtml);
+        _.each(reads, function(read) {
+          if (!read.data || !read.data.article || !read.publish_time) {
+            return;
           }
-          if (!read.data || !read.data.article) {
-            continue;
-          }
-          html += "<li id='sr_read_" + read.id + "' class='" + story_type + "'>           <a class='name' href='//facebook.com/" + read.from.id + "' target='blank'>              <img class='story-img' src='https://graph.facebook.com/" + read.from.id + "/picture' width='50' height='50' alt='" + read.from.name + "' />           </a>            <div class='story-inner'>             <div class='story-title'>               <a class='name' href='//facebook.com/profile.php?id=" + read.from.id + "' target='blank'>                 " + read.from.name + "                </a> read                 <a class='article' href='" + read.data.article.url + "' target='blank'>" + read.data.article.title + "</a>              </div>              <div class='story-meta'>                " + Time.relative(read.publish_time) + "                <span class='sr_story_delete_text'>&middot; <a class='sr_story_delete'>Delete</a></span>             </div>            </div>            <div class='sr_clear'></div>          </li>";
-        }
-
+          read.relative_time = Time.relative(read.publish_time);
+          html += read_template(read);
+        });
         $('#sr_reads_list ul').html(html);
         Debugger.log('Html put: SUCCESS');
         Debugger.log('Showing stuff');

@@ -1,37 +1,35 @@
-define([
-    'require',
-    'app/helpers/debugger',
-    'app/models/user',
-    'app/controllers/lightbox',
-    'app/models/analytics'
-    ], function(
-      require,
-      Debugger,
-      User,
-      Lightbox,
-      Analytics
-    ) {
+define(function(require) {
+
+  var Debugger    = require('app/helpers/debugger');
+  var User        = require('app/models/user');
+  var Lightbox    = require('app/controllers/lightbox');
+  var Analytics   = require('app/models/analytics');
+  var _           = require('underscore');
+
+  var SidebarHtmlLoggedIn = require('text!app/html/sidebar-logged-in.html');
+  var SidebarHtmlLoggedOut = require('text!app/html/sidebar-logged-out.html');
+
 
 	var Sidebar = {};
 
-  Sidebar.load = function(user, site) {
-    var toggled_class,
-    _this = this;
+  Sidebar.load = function() {
+    var toggled_class, _this = this, user = window._sr.user, site = window._sr.site;
     if ($('#sr_sidebar_box').length === 0) {
       Debugger.log('#sr_sidebar_box is not found, cannot load sidebar.');
       return false;
     }
     Debugger.log("Loading the sidebar", 0);
-    if (user.logged_in === true) {
-      Debugger.log("User is logged in");
-      if (user.auto_sharing === true) {
+    if (user) {
+      if (user.is_auto_sharing === true) {
         toggled_class = 'sr_sidebar_toggled_on';
       } else {
         toggled_class = 'sr_sidebar_toggled_off';
       }
-      Debugger.log("User auto-sharing is set to: " + user.auto_sharing);
+      Debugger.log("User auto-sharing is set to: " + user.is_auto_sharing);
       Debugger.log('Putting html');
-      $('#sr_sidebar_box').html("       <div id='sr_sidebar_logged_in'>               <a id='sr_sidebar_img' target='blank' href='" + user.link + "'>            <img src='" + user.picture + "' width='50' height='50' alt='" + user.name + "' />         </a>          <div id='sr_sidebar_right'>           <div id='sr_sidebar_name'><a target='blank' href='" + user.link + "'>" + user.name + "</a></div>            <div id='sr_sidebar_promo'>" + site.login_meta + "</div>           <div id='sr_sidebar_logout'><a>Logout</a></div>         </div>          <div class='clear'></div>         <div id='sr_sidebar_bottom'>            <div class='sr_sidebar_toggle " + toggled_class + "'>             <a title='Auto sharing to Facebook is enabled'>" + site.auto_sharing_on + "</a>            </div>            <div id='sr_sidebar_activity'><a>" + site.activity + "</a></div>         </div>        </div>      ");
+      var logged_in_template = _.template(SidebarHtmlLoggedIn);
+      var html = logged_in_template(window._sr);
+      $('#sr_sidebar_box').html(html);
       if ($('#sr_sidebar_box').html() !== '') {
         Debugger.log("Html put: SUCCESS");
         $('#sr_sidebar_box').fadeIn(function() {
@@ -45,7 +43,9 @@ define([
     } else {
       Debugger.log('User is not logged in, show login button');
       Debugger.log('Putting html');
-      $('#sr_sidebar_box').html("       <div id='sr_sidebar_logged_out'>                <p>Login and read with your friends</p>          <a id='sr_sidebar_login'><img src='" + site.plugin_url + "/images/facebooklogin.jpg' width='180' height='40' /></a>        </div>      ");
+      var logged_out_template = _.template(SidebarHtmlLoggedOut);
+      var logged_out_html = logged_out_template(window._sr);
+      $('#sr_sidebar_box').html(logged_out_html);
       if ($('#sr_sidebar_box').html() !== '') {
         Debugger.log("Html put: SUCCESS");
         $('#sr_sidebar_box').fadeIn(function() {

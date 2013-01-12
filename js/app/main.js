@@ -1,34 +1,25 @@
-define([
-	'require',
-	'app/tests/main',
-	'app/models/user',
-	'app/models/analytics',
-	'app/controllers/sidebar',
-	'app/controllers/lightbox',
-	'app/controllers/single'
-	], function (
-		require,
-		Tests,
-		User,
-		Analytics,
-		Sidebar,
-		Lightbox,
-		Single
-	) {
+define(function (require) {
 
-	$ = window.jQuery;
+	var Tests = require('app/tests/main');
+	var User = require('app/models/user');
+	var Analytics = require('app/models/analytics');
+	var Sidebar = require('app/controllers/sidebar');
+	var Lightbox = require('app/controllers/lightbox');
+	var Single = require('app/controllers/single');
+
+	window.$ = window.jQuery;
 
 	// jQuery should be in as a WP dependency already
-	$(document).ready(function() {
+	window.$(document).ready(function() {
 		if (Tests.are_on()) {
 			Tests.start();
 		} else {
 			User.init(function() {
-				Sidebar.load(User.user, User.site);
+				Sidebar.load();
 			}, function() {
-				Lightbox.load(User.user, User.site);
-				Single.load(User.user, User.activity);
-				Analytics.init(User.user, User.site);
+				Lightbox.load();
+				Single.load();
+				Analytics.init();
 			});
 		}
 	});

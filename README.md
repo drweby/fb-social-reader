@@ -1,4 +1,4 @@
-# FB Social Reader version 1.6
+# FB Social Reader version 1.6.0.1
 
 Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.
 
@@ -13,7 +13,7 @@ Transform your Wordpress into a social reading experience. With Social Reader, y
 
 Social Reader uses a widget-based implementation, using JavaScript to request data from Facebook using their SDK, communicate with the server, and populate divs with the appropriate views.
 
-## Libraries used 
+### Libraries used 
 
 1. jQuery - set as a dependency within WordPress
 2. Underscore.js - compiled within the minified file

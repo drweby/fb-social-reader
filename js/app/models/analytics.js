@@ -1,17 +1,19 @@
-define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-listeners'],
-		function(require, Debugger, _, Listeners) {
+define(function(require) {
+
+	var Debugger = require('app/helpers/debugger');
+	var _ = require('underscore');
+	var Listeners = require('app/models/analytics-listeners');
+
 
 	var Analytics = {
 		initialized: false,
 		queue: []
 	};
 
-	Analytics.init = function(user, site) {
-		var _this = this;
-		this.user = user;
-		this.site = site;
+	Analytics.init = function() {
+		var _this = this, user = window._sr.user, site = window._sr.site;
 		Debugger.log('Starting analytics', 0);
-		if (this.site.analytics_disabled == 'on') {
+		if (site.analytics_disabled === true) {
 			Debugger.log('Analytics has been disabled on this site: STOP');
 			return false;
 		} else {
@@ -21,8 +23,8 @@ define(['require', 'app/helpers/debugger', 'underscore', 'app/models/analytics-l
 		window._gaq = window._gaq || [];
 		window._gaq.push(['sr._setAccount', 'UA-37231887-1']);
 		Debugger.log('Setting custom variables');
-		window._gaq.push(['sr.setCustomVar', 1, 'logged_in', this.user.logged_in, 2]);
-		window._gaq.push(['sr.setCustomVar', 2, 'plugin_version', this.site.plugin_version, 2]);
+		window._gaq.push(['sr.setCustomVar', 1, 'logged_in', user.logged_in, 2]);
+		window._gaq.push(['sr.setCustomVar', 2, 'plugin_version', site.plugin_version, 2]);
 		window._gaq.push(['sr._setDomainName', window.location.host]);
 		Debugger.log('Tracking pageview');
 		window._gaq.push(['sr._trackPageview']);

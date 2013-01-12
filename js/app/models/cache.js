@@ -1,30 +1,57 @@
-define(['require', 'app/helpers/debugger', 'app/helpers/cookie'], function(require, Debugger, Cookie) {
+define(function(require) {
+
+  var Debugger  = require('app/helpers/debugger');
+  var Cookie    = require('app/helpers/cookie');
+
 
   var Cache = {};
 
   Cache.save = function(user_id, field, data, cb) {
-    Debugger.log('Saving '+field+' to the database cache', 0);
+    Debugger.log('Saving '+field+' to the cache');
     var _this = this;
-    var json = JSON.stringify(data);
     return $.post(_sr_ajax.ajaxurl, {
       action: "_sr_ajax_hook",
       type: "save_cache",
       fb_id: user_id,
       field: field,
-      data: json
+      data: data
     }, function(data) {
-      Debugger.log('Ajax request complete');
-      if (data == '1') {
+      if (data != '0') {
         Debugger.log(field+' saved successfully');
-        Cookie.set('sr_'+field, 'true', null);
-        Debugger.log('Set cookie marking '+field+' as saved this session');
+        Cookie.set('sr_'+field+'d', 'true', null);
         Debugger.log('Finished');
-        if (cb !== null) cb();
+        if (cb !== undefined) cb();
       } else {
         Debugger.log('Data failed to save:');
-        console.log(data);
         Debugger.log('Finished');
-        if (cb !== null) cb();
+        if (cb !== undefined) cb();
+      }
+    });
+  };
+
+  // We make our own custom method for saving the user because we need to deal with auto sharing in the user object.
+  // Other saving just uses the Cache model.
+  Cache.save_user = function(user, cb) {
+    var _this = this;
+    Debugger.log('Saving user', 0);
+    return $.post(_sr_ajax.ajaxurl, {
+      action: "_sr_ajax_hook",
+      type: "save_user",
+      user: user
+    }, function(data) {
+      try {
+        var obj = JSON.parse(data);
+        if (obj) {
+          Cookie.set('sr_user_id', user.id, null);
+          Cookie.set('sr_user_cached', 'true', null);
+          Debugger.log('user_cache saved successfully');
+          Debugger.log('Finished');
+        }
+        window._sr.user = obj;
+        cb();
+      } catch(e) {
+        Debugger.log('Failed to parse JSON');
+        console.log(data);
       }
     });
   };
@@ -52,6 +79,17 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie'], function(requi
         if (cb !== null) cb();
       }
     });
+  };
+
+  // Ensures all window cached variables are gone, and all cookies referencing to the cache are gone.
+  Cache.clear_all = function() {
+    delete window._sr.user;
+    delete window._sr.activity;
+    delete window._sr.friends;
+    Cookie.remove('sr_user_id');
+    Cookie.remove('sr_user_cached');
+    Cookie.remove('sr_activity_cached');
+    Cookie.remove('sr_friends_cached');
   };
 
   Cache.refresh = function() {

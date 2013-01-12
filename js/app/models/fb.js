@@ -1,4 +1,10 @@
-define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cache'], function(require, Debugger, Cookie, Cache) {
+define(function(require) {
+
+  var Debugger = require('app/helpers/debugger');
+  var Cookie   = require('app/helpers/cookie');
+  var Cache    = require('app/models/cache');
+  var _ = require('underscore');
+
 
 	var Fb = {
 		user: {},
@@ -11,12 +17,17 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
     var app_id = site.fb_app_id;
     var channel_url = site.fb_channel_url;
     var sdk_disabled = site.fb_sdk_disable;
+    if (!app_id) {
+      Debugger.log('Facebook app id not specified, STOP');
+      return false;
+    }
     Debugger.log('Initiliazing Facebook', 0);
     if (sdk_disabled == 'on') {
       Debugger.log('SDK loading disabled, wait for it to exist');
       this.sdk_check_count = 0;
       this.wait_for_fb(function() {
-        console.log('loaded');
+        Debugger.log('SDK loaded');
+        cb();
       });
     } else {
       $('body').prepend('<div id="fb-root"></div>');
@@ -99,16 +110,12 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
 
   Fb.get_user = function(cb) {
     var _this = this;
-    Debugger.log('Get Facebook user', 0);
-    Debugger.log('Querying Facebook');
+    Debugger.log('Not in cache, querying Facebook');
     return FB.api('/me', function(me) {
       Debugger.log('Response received, setting values');
-      _this.user.id = me.id;
-      _this.user.name = me.name;
-      _this.user.link = me.link;
-      _this.user.picture = "//graph.facebook.com/" + me.id + "/picture";
+      me.picture = "//graph.facebook.com/" + me.id + "/picture";
       Debugger.log('Finished');
-      return cb(_this.user);
+      return cb(me);
     });
   };
 
@@ -147,12 +154,28 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
       Debugger.log('Response received from Facebook');
       if (response.id) {
         Debugger.log("Read " + response.id + " posted to Facebook: SUCCESS");
-        Cache.refresh();
+        _this.get_article(function(article) {
+          if (!window._sr.activity.reads) {
+            window._sr.activity.reads = [];
+          }
+          window._sr.activity.reads.unshift(article);
+        });
       } else {
-        Debugger.log("Read posted to Facebook: FAILURE");
-        Debugger.log("Error message from Facebook: " + response.error.message + " ");
+        Debugger.log("Read posted to Facebook: FAILURE - "+response.error.message);
       }
       Debugger.log('Finished');
+    });
+  };
+
+  Fb.get_article = function(article_id, cb) {
+    Debugger.log('Getting article '+article_id);
+    return FB.api("/"+article_id, "get", function(response) {
+      if (response.error) {
+        Debugger('Failed to get article: '+response.error);
+        cb(false);
+      } else {
+        cb(response);
+      }
     });
   };
 
@@ -163,7 +186,11 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
       Debugger.log('Response received from Facebook');
       if (response === true) {
         Debugger.log('Read deleted from Facebook: SUCCESS');
-        Cache.refresh();
+        _.each(window._sr.activity.reads, function(read, key) {
+          if (read.id === id) {
+            delete(reads[key]);
+          }
+        });
       } else {
         Debugger.log('Read deleted from Facebook: FAILURE');
         Debugger.log('Error message from Facebook: '+response.error.message);
@@ -174,92 +201,68 @@ define(['require', 'app/helpers/debugger', 'app/helpers/cookie', 'app/models/cac
 
   Fb.get_friend_users = function(cb) {
     var _this = this;
-    Debugger.log('Get Facebook friends using the app', 0);
-    if (Cookie.exists('sr_friends_cache')) {
-      Debugger.log('Friends in cache, get from server');
-      Cache.get(_this.user.id, 'friends_cache', function(response) {
-        _this.friends = response;
-        if (cb !== null) cb(_this.friends);
-      });
-    } else {
-      Debugger.log('Friends not in cache, querying Facebook');
-      return FB.api('/me/friends?fields=name,installed', function(response) {
-        var friend, _i, _len, _ref;
-        Debugger.log('Response received, finding friend users');
-        _ref = response.data;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          friend = _ref[_i];
-          if (friend.installed === true) {
-            delete friend.installed;
-            _this.friends.push(friend);
-          }
+    return FB.api('/me/friends?fields=id,name,installed', function(response) {
+      Debugger.log('Response received, finding friend users');
+      var friends_who_use_the_app = [];
+      _.each(response.data, function(friend) {
+        if (friend.installed === true) {
+          delete friend.installed;
+          friends_who_use_the_app.push(friend);
         }
-        Debugger.log("" + _this.friends.length + " friends found");
-        Debugger.log('Finished');
-				Cache.save(_this.user.id, 'friends_cache', _this.friends, function() {
-          cb(_this.friends);
-        });
       });
-    }
+      Debugger.log(friends_who_use_the_app.length + " friends found");
+      Debugger.log('Finished');
+			cb(friends_who_use_the_app);
+    });
   };
 
   Fb.get_activity = function(cb) {
-    var batch_arr, user, _i, _len, _ref,
     _this = this;
-    Debugger.log('Getting activity of you and friends', 0);
-    if (Cookie.exists('sr_activity_cache')) {
-      Debugger.log('Activity in cache, get from server');
-      Cache.get(_this.user.id, 'activity_cache', function(response) {
-        _this.activity = response;
-        if (cb !== null) cb(_this.activity);
-      });
-    } else {
-      Debugger.log('Activity reads does not exist, create and fetch from Facebook');
-      
-      Debugger.log('Creating batch array');
-      batch_arr = [];
+    var batch_arr = [];
+    batch_arr.push({
+      method: "GET",
+      relative_url: "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
+    });
+
+    // Create batch array
+    _.each(window._sr.friends, function(friend) {
       batch_arr.push({
         method: "GET",
-        relative_url: "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
+        relative_url: friend.id + "/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
       });
-      _ref = this.friends;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        user = _ref[_i];
-        batch_arr.push({
-          method: "GET",
-          relative_url: "" + user.id + "/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
-        });
-      }
-      Debugger.log("Starting batch requests for the " + this.friends.length + " friends using this app");
-      return FB.api("/", "POST", {
-        batch: batch_arr
-      }, function(responses) {
-        var body, read, response, _j, _k, _len1, _len2, _ref1;
-        Debugger.log('Response received from Facebook');
-        _this.activity.reads = [];
-        Debugger.log('Adding reads to reads param array');
-        for (_j = 0, _len1 = responses.length; _j < _len1; _j++) {
-          response = responses[_j];
-          if (!response || !response.body) continue;
-          body = JSON.parse(response.body);
-          _ref1 = body.data;
-          for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
-            read = _ref1[_k];
-            _this.activity.reads.push(read);
-          }
-        }
-        Debugger.log('Sorting the reads by publish_time descending');
-        _this.activity.reads = _this.activity.reads.sort(function(a, b) {
-          a = new Date(a.publish_time);
-          b = new Date(b.publish_time);
-          return a>b ? -1 : a<b ? 1 : 0;
-        });
-        Debugger.log('Finished');
-        Cache.save(_this.user.id, 'activity_cache', _this.activity, function() {
-          cb(_this.activity);
+    });
+    Debugger.log("Starting batch requests for the " + window._sr.friends.length + " friends using this app");
+
+    // Do request
+    return FB.api("/", "POST", {
+      batch: batch_arr
+    }, function(responses) {
+      Debugger.log('Response received from Facebook');
+
+      // Build big array of reads
+      var reads = [];
+      // For each response (1 per friend)
+      _.each(responses, function(response) {
+        if (!response || !response.body) return;
+        var body = JSON.parse(response.body);
+        // For each friend read
+        _.each(body.data, function(read) {
+          reads.push(read);
         });
       });
-    }
+      Debugger.log('Sorting the reads by publish_time descending');
+      var sorted_reads = reads.sort(function(a, b) {
+        a = new Date(a.publish_time);
+        b = new Date(b.publish_time);
+        return a>b ? -1 : a<b ? 1 : 0;
+      });
+      Debugger.log('Finished');
+
+      var activity = {};
+      activity.reads = sorted_reads;
+      cb(activity);
+    });
+
   };
 
   return Fb;
