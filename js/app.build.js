@@ -22,7 +22,8 @@
     underscore: 'lib/underscore.min',
     ga: 'empty:',
     qunit: 'empty:',
-    text: 'lib/text'
+    text: 'lib/text',
+    jquery: 'lib/jquery'
   }
 
 })

@@ -2,6 +2,7 @@ define(function(require) {
 
   var Debugger  = require('app/helpers/debugger');
   var Cookie    = require('app/helpers/cookie');
+  var $         = require('jquery');
 
 
   var Cache = {};

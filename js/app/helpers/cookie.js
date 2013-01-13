@@ -18,7 +18,7 @@ define(['require'], function() {
     while (i < ARRcookies.length) {
       x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
       y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-      x = x.replace(/^\s+|\s+$/g, "");
+      x = x.replace(/^\s+|\s+jquery/g, "");
       if (x === c_name) {
         return unescape(y);
       }

@@ -5,7 +5,7 @@ define(function(require) {
   var Format     = require('app/helpers/single-format');
   var Analytics  = require('app/models/analytics');
   var SampleData = require('app/helpers/sample-data');
-
+  var $          = require('jquery');
 
 	var Single = {};
 

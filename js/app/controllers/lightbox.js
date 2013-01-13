@@ -6,6 +6,7 @@ define(function(require) {
   var Analytics        = require('app/models/analytics');
   var SampleData       = require('app/helpers/sample-data');
   var _                = require('underscore');
+  var $                = require('jquery');
 
   var LightboxHtml     = require('text!app/html/lightbox.html');
   var LightboxReadHtml = require('text!app/html/lightbox-read.html');
@@ -77,7 +78,8 @@ define(function(require) {
       if (SampleData.is_on()) {
         reads = SampleData.reads;
       } else {
-        reads = window._sr.activity.reads;
+        reads = Fb.group_reads(window._sr.activity.reads);
+        console.log(reads);
       }
       $('#sr_loading').hide();
       if (!reads || !reads.length) {

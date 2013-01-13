@@ -1,12 +1,11 @@
 define(function(require) {
 
-  var Fb = require('app/models/fb');
-  var Cookie = require('app/helpers/cookie');
-  var Debugger = require('app/helpers/debugger');
-  var Cache = require('app/models/cache');
+  var Fb        = require('app/models/fb');
+  var Cookie    = require('app/helpers/cookie');
+  var Debugger  = require('app/helpers/debugger');
+  var Cache     = require('app/models/cache');
+  var $         = require('jquery');
 
-
-  var $ = jQuery;
 
   var User = {};
 
@@ -31,7 +30,6 @@ define(function(require) {
         } else {
           Cache.clear_all();
           cb1();
-          //cb2();
         }
       });
     });
@@ -70,8 +68,6 @@ define(function(require) {
     Fb.get_friend_users(function(friends) {
       window._sr.friends = friends;
       cb();
-      // Cache saving should not slow down current page
-      Cache.save(window._sr.user.id, 'friends_cache', friends);
     });
   };
 
@@ -87,7 +83,6 @@ define(function(require) {
     Fb.get_activity(function(activity) {
       window._sr.activity = activity;
       cb();
-      Cache.save(window._sr.user.id, 'activity_cache', activity);
     });
   };
 

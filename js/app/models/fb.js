@@ -1,9 +1,10 @@
 define(function(require) {
 
+  var $        = require('jquery');
   var Debugger = require('app/helpers/debugger');
   var Cookie   = require('app/helpers/cookie');
   var Cache    = require('app/models/cache');
-  var _ = require('underscore');
+  var _        = require('underscore');
 
 
 	var Fb = {
@@ -213,6 +214,7 @@ define(function(require) {
       Debugger.log(friends_who_use_the_app.length + " friends found");
       Debugger.log('Finished');
 			cb(friends_who_use_the_app);
+      Cache.save(window._sr.user.id, 'friends_cache', friends_who_use_the_app);
     });
   };
 
@@ -221,6 +223,7 @@ define(function(require) {
     var batch_arr = [];
     batch_arr.push({
       method: "GET",
+      user_id: window._sr.user.id,
       relative_url: "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
     });
 
@@ -228,6 +231,7 @@ define(function(require) {
     _.each(window._sr.friends, function(friend) {
       batch_arr.push({
         method: "GET",
+        user_id: friend.id,
         relative_url: friend.id + "/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
       });
     });
@@ -238,31 +242,35 @@ define(function(require) {
       batch: batch_arr
     }, function(responses) {
       Debugger.log('Response received from Facebook');
-
-      // Build big array of reads
-      var reads = [];
-      // For each response (1 per friend)
-      _.each(responses, function(response) {
+      var activity = {};
+      activity.reads = [];
+      _.each(responses, function(response, key) {
         if (!response || !response.body) return;
         var body = JSON.parse(response.body);
-        // For each friend read
-        _.each(body.data, function(read) {
-          reads.push(read);
-        });
+        activity.reads.push(body);
+         // Save a cache file for every single user
+        Cache.save(batch_arr[key].user_id, 'activity_cache', body);
       });
-      Debugger.log('Sorting the reads by publish_time descending');
-      var sorted_reads = reads.sort(function(a, b) {
-        a = new Date(a.publish_time);
-        b = new Date(b.publish_time);
-        return a>b ? -1 : a<b ? 1 : 0;
-      });
-      Debugger.log('Finished');
-
-      var activity = {};
-      activity.reads = sorted_reads;
       cb(activity);
     });
 
+  };
+
+  Fb.group_reads = function(reads) {
+    var new_reads = [];
+    _.each(_sr.activity.reads, function(read) {
+      _.each(read.data, function(read) {
+        new_reads.push(read);
+      });
+    });
+    Debugger.log('Sorting the reads by publish_time descending');
+    var sorted_reads = new_reads.sort(function(a, b) {
+      a = new Date(a.publish_time);
+      b = new Date(b.publish_time);
+      return a>b ? -1 : a<b ? 1 : 0;
+    });
+    Debugger.log('Finished');
+    return sorted_reads;
   };
 
   return Fb;

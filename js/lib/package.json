@@ -1,8 +1,0 @@
-{
-  "volo": {
-    "dependencies": {
-      "underscore": "github:documentcloud/underscore/1.4.3",
-      "text": "github:requirejs/text/2.0.3"
-    }
-  }
-}

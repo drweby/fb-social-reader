@@ -70,7 +70,7 @@ class SR_Controller {
 
   // Enqueue scripts front-end
   function add_sr_scripts() {
-    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
+    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array(), FB_OG_CURRENT_VERSION);
     wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
     wp_enqueue_style( 'social-reader-style' );
@@ -190,9 +190,11 @@ class SR_Controller {
         }
         
         // Get activity info from cache
-        if (isset($_COOKIE['sr_activity_cached'])) {
-          $activity_cache = $this->get_cache($_COOKIE['sr_user_id'], 'activity_cache');
-         if ($activity_cache) { echo "\n"; ?>     window._sr.activity = <?php echo $activity_cache; ?>;<?php } 
+        if (isset($_COOKIE['sr_activity_cached']) and isset($_COOKIE['sr_friends_cached'])) {
+         // echo $friends_cache;
+         //$this->get_friends_activity_cache($friends_cache);
+          //$activity_cache = $this->get_cache($_COOKIE['sr_user_id'], 'activity_cache');
+          //if ($activity_cache) { echo "\n";    // window._sr.activity = <?php echo $activity_cache; 
         }
         // If javascript variables (user, activity) aren't set, then we'll query Facebook for them.
 
@@ -273,6 +275,18 @@ class SR_Controller {
       return false;
     }
   }
+
+  // Get activity caches - go through all the files with friends' activity and get the data out
+  function get_friends_activity_cache($friends_cache) {
+    $friends_cache_array = json_decode($friends_cache);
+    $activity = array();
+    foreach ($friends_cache_array as $friend) {
+      $activity[] = $this->get_cache($friend->id, 'activity');
+    }
+    print_r($activity);
+    echo json_encode($activity);
+  }
+
   
   // Add the fb meta into the head. Major kudos to Facebook Meta Tags plugin author Matt Say (shailan.com)
   function add_head_meta(){

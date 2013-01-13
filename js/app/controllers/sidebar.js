@@ -5,6 +5,7 @@ define(function(require) {
   var Lightbox    = require('app/controllers/lightbox');
   var Analytics   = require('app/models/analytics');
   var _           = require('underscore');
+  var $           = require('jquery');
 
   var SidebarHtmlLoggedIn = require('text!app/html/sidebar-logged-in.html');
   var SidebarHtmlLoggedOut = require('text!app/html/sidebar-logged-out.html');
