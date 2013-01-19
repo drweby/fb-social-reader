@@ -70,7 +70,7 @@ class SR_Controller {
 
   // Enqueue scripts front-end
   function add_sr_scripts() {
-    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
+    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', false, FB_OG_CURRENT_VERSION);
     wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
     wp_enqueue_style( 'social-reader-style' );
