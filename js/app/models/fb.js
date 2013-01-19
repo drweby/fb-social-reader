@@ -24,7 +24,7 @@ define(function(require) {
       return false;
     }
     Debugger.log('Initiliazing Facebook', 0);
-    if (sdk_disabled == 'on') {
+    if (sdk_disabled === true) {
       Debugger.log('SDK loading disabled, wait for it to exist');
       this.sdk_check_count = 0;
       this.wait_for_fb(function() {

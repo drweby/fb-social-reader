@@ -6,6 +6,7 @@ define(function(require) {
   var Analytics  = require('app/models/analytics');
   var SampleData = require('app/helpers/sample-data');
   var $          = require('jquery');
+  var Fb         = require('app/models/fb');
 
 	var Single = {};
 
@@ -21,12 +22,12 @@ define(function(require) {
       if (SampleData.is_on()) {
         reads = SampleData.reads.data;
       } else {
-        if (!activity.reads) {
+        if (!activity) {
           Debugger.log('No reads found');
           Debugger.log('Finished');
           return;
         }
-        reads = activity.reads;
+        reads = Fb.put_all_reads_in_one_array();
       }
       var single_reads = _.filter(reads, function(read) {
         var regex = new RegExp(window.location.pathname,"gi");
