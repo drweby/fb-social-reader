@@ -1,4 +1,4 @@
-# FB Social Reader version 1.6.0.1
+# FB Social Reader version 1.6.0.2
 
 Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.
 
@@ -37,5 +37,12 @@ Can be added to post pages by visiting the widgets page within the plugin settin
 ### Friends' activity 
 
 This widget is automatically added after the opening `<body>` tag by the plugin, and is opened when 'activity' is clicked on the sidebar widget.
+
+
+
+## Changelog
+
+### 1.6.0.2
+Fixed bugs, sped up plugin significantly, now using global window._sr
 
 
