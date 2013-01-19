@@ -12,7 +12,7 @@
   out: 'sr.min.js',
 
   // Comment out the below line to minify using UglifyJS
-  optimize: "none",
+  //optimize: "none",
 
   // Build from the app folder (relative to baseUrl)
   name: 'app',
