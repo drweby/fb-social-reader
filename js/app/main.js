@@ -1,6 +1,6 @@
 define(function (require) {
 
-  var $         = require('jquery');
+  var $         = require('lib/jquery');
   var Tests     = require('app/tests/main');
   var User      = require('app/models/user');
   var Analytics = require('app/models/analytics');

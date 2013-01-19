@@ -5,6 +5,7 @@ define(function(require) {
   var Cookie   = require('app/helpers/cookie');
   var Cache    = require('app/models/cache');
   var _        = require('underscore');
+  var JSON2    = require('json2');
 
 
 	var Fb = {
@@ -155,12 +156,7 @@ define(function(require) {
       Debugger.log('Response received from Facebook');
       if (response.id) {
         Debugger.log("Read " + response.id + " posted to Facebook: SUCCESS");
-        _this.get_article(function(article) {
-          if (!window._sr.activity.reads) {
-            window._sr.activity.reads = [];
-          }
-          window._sr.activity.reads.unshift(article);
-        });
+        _this.refresh_my_activity();
       } else {
         Debugger.log("Read posted to Facebook: FAILURE - "+response.error.message);
       }
@@ -168,15 +164,11 @@ define(function(require) {
     });
   };
 
-  Fb.get_article = function(article_id, cb) {
-    Debugger.log('Getting article '+article_id);
-    return FB.api("/"+article_id, "get", function(response) {
-      if (response.error) {
-        Debugger('Failed to get article: '+response.error);
-        cb(false);
-      } else {
-        cb(response);
-      }
+  Fb.refresh_my_activity = function() {
+    Debugger.log('Refreshing my activity from Facebook', 0);
+    return FB.api('me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from', function(response) {
+      window._sr.activity[0] = response;
+      Cache.save(window._sr.user.id, 'activity_cache', window._sr.activity[0]);
     });
   };
 
@@ -187,9 +179,10 @@ define(function(require) {
       Debugger.log('Response received from Facebook');
       if (response === true) {
         Debugger.log('Read deleted from Facebook: SUCCESS');
-        _.each(window._sr.activity.reads, function(read, key) {
-          if (read.id === id) {
-            delete(reads[key]);
+        _.each(window._sr.activity[0].data, function(read, key) {
+          if (read.id == id) {
+            delete(window._sr.activity[0].data[key]);
+            Cache.save(window._sr.user.id, 'activity_cache', window._sr.activity[0]);
           }
         });
       } else {
@@ -242,12 +235,11 @@ define(function(require) {
       batch: batch_arr
     }, function(responses) {
       Debugger.log('Response received from Facebook');
-      var activity = {};
-      activity.reads = [];
+      var activity = [];
       _.each(responses, function(response, key) {
         if (!response || !response.body) return;
         var body = JSON.parse(response.body);
-        activity.reads.push(body);
+        activity.push(body);
          // Save a cache file for every single user
         Cache.save(batch_arr[key].user_id, 'activity_cache', body);
       });
@@ -256,9 +248,9 @@ define(function(require) {
 
   };
 
-  Fb.group_reads = function(reads) {
+  Fb.put_all_reads_in_one_array = function(reads) {
     var new_reads = [];
-    _.each(_sr.activity.reads, function(read) {
+    _.each(window._sr.activity, function(read) {
       _.each(read.data, function(read) {
         new_reads.push(read);
       });

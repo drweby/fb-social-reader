@@ -38,7 +38,7 @@ define(function(require) {
   Lightbox.setup_listeners = function() {
     var _this = this;
     Debugger.log('Setup jQuery listener for close lightbox link click');
-    $('a#sr_close_lightbox').live('click', function() {
+    $('a#sr_close_lightbox').on('click', function() {
       return _this.close();
     });
   };
@@ -78,8 +78,7 @@ define(function(require) {
       if (SampleData.is_on()) {
         reads = SampleData.reads;
       } else {
-        reads = Fb.group_reads(window._sr.activity.reads);
-        console.log(reads);
+        reads = Fb.put_all_reads_in_one_array(window._sr.activity.reads);
       }
       $('#sr_loading').hide();
       if (!reads || !reads.length) {
@@ -133,6 +132,7 @@ define(function(require) {
       }
 
   };
+
 
   return Lightbox;
 

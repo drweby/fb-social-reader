@@ -70,7 +70,7 @@ class SR_Controller {
 
   // Enqueue scripts front-end
   function add_sr_scripts() {
-    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array(), FB_OG_CURRENT_VERSION);
+    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
     wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
     wp_enqueue_style( 'social-reader-style' );
@@ -191,10 +191,8 @@ class SR_Controller {
         
         // Get activity info from cache
         if (isset($_COOKIE['sr_activity_cached']) and isset($_COOKIE['sr_friends_cached'])) {
-         // echo $friends_cache;
-         //$this->get_friends_activity_cache($friends_cache);
-          //$activity_cache = $this->get_cache($_COOKIE['sr_user_id'], 'activity_cache');
-          //if ($activity_cache) { echo "\n";    // window._sr.activity = <?php echo $activity_cache; 
+          $activity_cache = $this->get_friends_activity_cache($friends_cache);
+          if ($activity_cache) { echo "\n"; ?>   window._sr.activity = <?php echo $activity_cache; ?>;<?php } 
         }
         // If javascript variables (user, activity) aren't set, then we'll query Facebook for them.
 
@@ -215,22 +213,22 @@ class SR_Controller {
 
   // Save user to cache and update auto sharing (only happens on first pageview of visit)
   function save_user($data) {
-    $user = $data['user'];
+    $user = json_decode(stripslashes($data['user']));
 
     // To see if the user has auto sharing on/off, see if there's a previous cache of the user 
-    $old_user_json = $this->get_cache($user['id'], 'user_cache');
+    $old_user_json = $this->get_cache($user->id, 'user_cache');
     if ($old_user_json == false) {
-      $user['is_auto_sharing'] = true;
+      $user->is_auto_sharing = true;
     } else {
-      $old_user = json_decode($old_user_json);
-      $user['is_auto_sharing'] = $old_user->is_auto_sharing;
+      $old_user = json_decode(urldecode($old_user_json));
+      $user->is_auto_sharing = $old_user['is_auto_sharing'];
     }
 
     // Save the user 
     $this->save_cache(array(
-      'fb_id' => $user['id'], 
+      'fb_id' => $user->id, 
       'field' => "user_cache",
-      'data' => $user
+      'data' => json_encode($user)
     ));
 
   }
@@ -239,14 +237,9 @@ class SR_Controller {
   // Save the user to the file cache. Echos json for front-end 
   function save_cache($data) {
     if (!isset($data['data'])) $data['data'] = '{}';
-    foreach ($data['data'] as $key => $item) {
-      if (is_string($item)) {
-        $data['data'][$key] = $this->convert_string_to_boolean($item);
-      }
-    }
-    $json_data = json_encode($data['data']);
+    $json_data = $data['data'];
     if ($this->SR->save_cache($data['fb_id'], $data['field'], $json_data)) {
-      echo stripslashes($json_data);
+      echo $json_data;
     } else {
       return 0;
     }
@@ -280,11 +273,14 @@ class SR_Controller {
   function get_friends_activity_cache($friends_cache) {
     $friends_cache_array = json_decode($friends_cache);
     $activity = array();
+    if (!$friends_cache_array) return '{}';
+    $activity[] = $this->get_cache($_COOKIE['sr_user_id'], 'activity_cache');
     foreach ($friends_cache_array as $friend) {
-      $activity[] = $this->get_cache($friend->id, 'activity');
+      $activity[] = $this->get_cache($friend->id, 'activity_cache');
     }
-    print_r($activity);
-    echo json_encode($activity);
+    //print_r($activity);
+    $json_arr = '['.implode(',', $activity).']';
+    return stripslashes($json_arr);
   }
 
   

@@ -46,6 +46,7 @@
 #sr_sidebar_logged_in img {
 	float:left;
 	margin-right:10px;
+	border:none;
 }
 #sr_sidebar_right {
 	margin-left:62px;
@@ -195,6 +196,7 @@ a#sr_close_lightbox {
 }
 #sr_lightbox #sr_lightbox_inner #sr_reads_empty {
 	padding:5px 10px;
+	display:none;
 }
 ul#sr_activity_tabs {
 	list-style-type:none;

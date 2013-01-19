@@ -1,0 +1,16 @@
+[16-Jan-2013 01:02:35 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[16-Jan-2013 01:52:39 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[16-Jan-2013 07:11:49 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[16-Jan-2013 10:03:27 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[16-Jan-2013 13:01:38 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[16-Jan-2013 16:05:07 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[16-Jan-2013 18:58:26 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[16-Jan-2013 21:54:43 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[17-Jan-2013 00:47:17 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[17-Jan-2013 19:58:18 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[17-Jan-2013 22:15:38 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[18-Jan-2013 06:58:59 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[18-Jan-2013 11:01:18 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14
+[18-Jan-2013 12:50:21 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[18-Jan-2013 16:20:31 America/New_York] PHP Fatal error:  Call to undefined function add_action() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/widget.php on line 9
+[18-Jan-2013 18:59:05 America/New_York] PHP Fatal error:  Call to undefined function plugin_dir_url() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/fb-og-actions.php on line 14

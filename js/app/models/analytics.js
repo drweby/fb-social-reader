@@ -3,7 +3,7 @@ define(function(require) {
   var Debugger  = require('app/helpers/debugger');
   var _         = require('underscore');
   var Listeners = require('app/models/analytics-listeners');
-  var $         = require('jquery');
+  var $         = require('lib/jquery');
 
 
   var Analytics = {
@@ -12,7 +12,7 @@ define(function(require) {
   };
 
   Analytics.init = function() {
-    var _this = this, user = window._sr.user, site = window._sr.site;
+    var _this = this, user = window._sr.user, site = window._sr.site;3
     Debugger.log('Starting analytics', 0);
     if (site.analytics_disabled === true) {
       Debugger.log('Analytics has been disabled on this site: STOP');
@@ -43,7 +43,7 @@ define(function(require) {
 
   Analytics.track_event = function(category, action, label) {
     Debugger.log('Tracking: '+ category+ ', ' + action + ', ' + label);
-    if (this.site.analytics_disabled == 'on') {
+    if (window._sr.site.analytics_disabled === true) {
       Debugger.log('Analytics has been disabled on this site: STOP');
       return false;
     }

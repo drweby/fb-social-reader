@@ -3,6 +3,7 @@ define(function(require) {
   var Debugger  = require('app/helpers/debugger');
   var Cookie    = require('app/helpers/cookie');
   var $         = require('jquery');
+  var JSON2     = require('json2');
 
 
   var Cache = {};
@@ -15,11 +16,11 @@ define(function(require) {
       type: "save_cache",
       fb_id: user_id,
       field: field,
-      data: data
-    }, function(data) {
+      data: JSON.stringify(data)
+    }).done(function( data ) {
+      console.log(data);
       if (data != '0') {
         Debugger.log(field+' saved successfully');
-        Cookie.set('sr_'+field+'d', 'true', null);
         Debugger.log('Finished');
         if (cb !== undefined) cb();
       } else {
@@ -33,13 +34,12 @@ define(function(require) {
   // We make our own custom method for saving the user because we need to deal with auto sharing in the user object.
   // Other saving just uses the Cache model.
   Cache.save_user = function(user, cb) {
-    var _this = this;
-    Debugger.log('Saving user', 0);
     return $.post(_sr_ajax.ajaxurl, {
       action: "_sr_ajax_hook",
       type: "save_user",
-      user: user
+      user: JSON.stringify(user)
     }, function(data) {
+      console.log(data);
       try {
         var obj = JSON.parse(data);
         if (obj) {

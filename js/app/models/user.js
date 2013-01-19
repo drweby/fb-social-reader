@@ -67,6 +67,7 @@ define(function(require) {
     // Get friends from Facebook and save to cache
     Fb.get_friend_users(function(friends) {
       window._sr.friends = friends;
+      Cookie.set('sr_friends_cached', 'true', null);
       cb();
     });
   };
@@ -82,6 +83,7 @@ define(function(require) {
     // Get activity from Facebook and save to cache
     Fb.get_activity(function(activity) {
       window._sr.activity = activity;
+      Cookie.set('sr_activity_cached', 'true', null);
       cb();
     });
   };

@@ -23,7 +23,8 @@
     ga: 'empty:',
     qunit: 'empty:',
     text: 'lib/text',
-    jquery: 'lib/jquery'
+    jquery: 'lib/jquery',
+    json2: 'lib/json2'
   }
 
 })

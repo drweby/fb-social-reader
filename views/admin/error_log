@@ -1,0 +1,12 @@
+[16-Jan-2013 14:28:24 America/New_York] PHP Fatal error:  Call to undefined function settings_fields() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/widgets.php on line 28
+[16-Jan-2013 15:04:15 America/New_York] PHP Fatal error:  Call to undefined function get_option() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/settings.php on line 16
+[16-Jan-2013 15:29:55 America/New_York] PHP Fatal error:  Call to undefined function get_option() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/setup-guide.php on line 23
+[16-Jan-2013 17:00:56 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[17-Jan-2013 01:02:59 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[17-Jan-2013 06:42:50 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[17-Jan-2013 13:29:21 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[17-Jan-2013 20:48:37 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[18-Jan-2013 11:54:10 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[18-Jan-2013 12:33:49 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[18-Jan-2013 18:58:06 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
+[18-Jan-2013 21:56:54 America/New_York] PHP Fatal error:  Call to undefined function get_posts() in /home/dwvucl/public_html/test/wp-content/plugins/social-reader-master/views/admin/sample-lightbox.php on line 21
