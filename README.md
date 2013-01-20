@@ -1,4 +1,4 @@
-# FB Social Reader version 1.6.0.3
+# FB Social Reader version 1.6.0.4
 
 Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.
 
@@ -18,6 +18,8 @@ Social Reader uses a widget-based implementation, using JavaScript to request da
 1. jQuery - set as a dependency within WordPress
 2. Underscore.js - compiled within the minified file
 3. Require.js - used to modularize and compile code
+4. JSON2 - used to allow JSON.stringify and JSON.parse to run on older browsers
+5. Facebook SDK - to communicate with Facebook
 
 ## Example usage 
 ### Sidebar 
@@ -41,6 +43,9 @@ This widget is automatically added after the opening `<body>` tag by the plugin,
 
 
 ## Changelog
+
+### 1.6.0.4
+Now loading jQuery and JSON2 from a CDN, also fixed caching syntax errors which resulted in the widgets not loading
 
 ### 1.6.0.3 
 Fixed a bug where the /cache file didn't exist, breaking the plugin

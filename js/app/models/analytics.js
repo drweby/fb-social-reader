@@ -3,7 +3,7 @@ define(function(require) {
   var Debugger  = require('app/helpers/debugger');
   var _         = require('underscore');
   var Listeners = require('app/models/analytics-listeners');
-  var $         = require('lib/jquery');
+  var $         = require('jquery');
 
 
   var Analytics = {

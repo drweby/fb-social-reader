@@ -13,11 +13,12 @@ requirejs.config({
   baseUrl: dir,
   paths: {
     app: dir+'/app',
-    underscore: dir+'/lib/underscore.min',
+    underscore: dir+'/lib/underscore-amd.min',
     ga: 'https://google-analytics.com/ga',
     text: dir+'/lib/text',
     jquery: dir+'/lib/jquery',
-    json2: dir+'/lib/json2'
+    jquery_cdn: 'https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min',
+    json2: 'http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.min'
   }
 });
 

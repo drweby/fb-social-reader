@@ -3,7 +3,7 @@ Contributors: chrisjhoughton
 Tags: facebook, fb social reader, open graph actions, social reader, wordpress social reader
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.6.0.3
+Stable tag: 1.6.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ Like and share buttons on your site require the user to click them to share the 
 6. User can delete reads they don't want shared
 
 == Changelog ==
+
+= 1.6.0.4 =
+Now loading jQuery and JSON2 from a CDN, also fixed caching syntax errors which resulted in the widgets not loading
 
 = 1.6.0.3 =
 Fixed a bug where the /cache file didn't exist, breaking the plugin

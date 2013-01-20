@@ -5,7 +5,7 @@
   // The path of the dev files (main shouild be directly underneath this)
     baseUrl: '.',
 
-    // Set a directory to move the build files to
+  // Set a directory to move the build files to
   //dir: "build",
 
   // Output everything to one minified file
@@ -19,12 +19,13 @@
 
   // Set paths for libs
   paths: {
-    underscore: 'lib/underscore.min',
-    ga: 'empty:',
-    qunit: 'empty:',
+    underscore: 'lib/underscore-amd.min',
     text: 'lib/text',
     jquery: 'lib/jquery',
-    json2: 'lib/json2'
+    ga: 'empty:',
+    qunit: 'empty:',
+    jquery_cdn: 'empty:',
+    json2: 'empty:'
   }
 
 })

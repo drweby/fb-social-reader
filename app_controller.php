@@ -192,7 +192,7 @@ class SR_Controller {
         // Get activity info from cache
         if (isset($_COOKIE['sr_activity_cached']) and isset($_COOKIE['sr_friends_cached'])) {
           $activity_cache = $this->get_friends_activity_cache($friends_cache);
-          if ($activity_cache) { echo "\n"; ?>   window._sr.activity = <?php echo $activity_cache; ?>;<?php } 
+          if ($activity_cache) { echo "\n"; ?>     window._sr.activity = <?php echo $activity_cache; ?>;<?php } 
         }
         // If javascript variables (user, activity) aren't set, then we'll query Facebook for them.
 
@@ -220,15 +220,15 @@ class SR_Controller {
     if ($old_user_json == false) {
       $user->is_auto_sharing = true;
     } else {
-      $old_user = json_decode(urldecode($old_user_json));
-      $user->is_auto_sharing = $old_user['is_auto_sharing'];
+      $old_user = json_decode($old_user_json);
+      $user->is_auto_sharing = $old_user->is_auto_sharing;
     }
 
     // Save the user 
     $this->save_cache(array(
       'fb_id' => $user->id, 
       'field' => "user_cache",
-      'data' => json_encode($user)
+      'data' => addslashes(json_encode($user))
     ));
 
   }
@@ -236,10 +236,9 @@ class SR_Controller {
 
   // Save the user to the file cache. Echos json for front-end 
   function save_cache($data) {
-    if (!isset($data['data'])) $data['data'] = '{}';
-    $json_data = $data['data'];
-    if ($this->SR->save_cache($data['fb_id'], $data['field'], $json_data)) {
-      echo $json_data;
+   if (!isset($data['data'])) $data['data'] = '{}';
+    if ($this->SR->save_cache($data['fb_id'], $data['field'], serialize($data['data']))) {
+      echo stripslashes($data['data']);
     } else {
       return 0;
     }
@@ -263,7 +262,9 @@ class SR_Controller {
       'field' => $field
     ));
     if ($result == true) {
-      return stripslashes($this->SR->$field);
+      @$contents = stripslashes(unserialize($this->SR->$field));
+      if (!$contents) return false;
+      return $contents;
     } else {
       return false;
     }

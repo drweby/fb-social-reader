@@ -18,7 +18,6 @@ define(function(require) {
       field: field,
       data: JSON.stringify(data)
     }).done(function( data ) {
-      console.log(data);
       if (data != '0') {
         Debugger.log(field+' saved successfully');
         Debugger.log('Finished');
@@ -39,7 +38,6 @@ define(function(require) {
       type: "save_user",
       user: JSON.stringify(user)
     }, function(data) {
-      console.log(data);
       try {
         var obj = JSON.parse(data);
         if (obj) {
