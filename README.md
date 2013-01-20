@@ -1,4 +1,4 @@
-# FB Social Reader version 1.6.0.2
+# FB Social Reader version 1.6.0.3
 
 Transform your Wordpress into a social reading experience. With Social Reader, your readers automatically share articles on your site they read to Facebook, and can see what their friends read too.
 
