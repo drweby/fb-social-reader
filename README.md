@@ -42,6 +42,9 @@ This widget is automatically added after the opening `<body>` tag by the plugin,
 
 ## Changelog
 
+### 1.6.0.3 
+Fixed a bug where the /cache file didn't exist, breaking the plugin
+
 ### 1.6.0.2
 Fixed bugs, sped up plugin significantly, now using global window._sr
 
