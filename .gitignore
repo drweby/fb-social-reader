@@ -3,3 +3,5 @@
 *.zip
 .svn/
 */.svn/
+
+cache/.svn/entries
