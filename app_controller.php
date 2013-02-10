@@ -24,7 +24,6 @@ class SR_Controller {
 
     // Enqueue scripts and css
     add_action('wp_enqueue_scripts', array($this, 'add_sr_scripts'));
-    add_filter( 'clean_url', array($this, 'fix_requirejs_script'), 11, 1 );
     add_action( 'wp_head', array($this, 'add_custom_css'));
 
     // Add server-side info to global
@@ -33,7 +32,6 @@ class SR_Controller {
     // Get ajax to work front end
     add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
     add_action( 'wp_ajax_nopriv__sr_ajax_hook', array($this, 'ajax')); // need this to serve non logged in users
-
 
     // Add stylesheet and scripts for admin
     add_action('admin_print_styles', array($this, 'add_admin_stylesheets'));
@@ -60,7 +58,6 @@ class SR_Controller {
   }
 
     
-
   /** Header stuff **/
 
   // Adds the doctype to the html
@@ -71,6 +68,7 @@ class SR_Controller {
   // Enqueue scripts front-end
   function add_sr_scripts() {
     wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', false, FB_OG_CURRENT_VERSION);
+    wp_enqueue_script('sr-min', FB_OG_PLUGIN_URL . 'js/sr.min.js', array('require'), FB_OG_CURRENT_VERSION);
     wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
     wp_enqueue_style( 'social-reader-style' );
@@ -79,23 +77,6 @@ class SR_Controller {
       wp_enqueue_style( 'qunit-css' );
       wp_enqueue_script('qunit-js', 'http://code.jquery.com/qunit/qunit-1.10.0.js', array('jquery'), FB_OG_CURRENT_VERSION);
     }
-  }
-
-  // Add on 'data-main' to load the main file asynchronously
-  function fix_requirejs_script( $url ) {
-      if ( strpos ($url, 'js/lib/require.js') ) { 
-        if (is_admin()) {
-          return "$url' data-main='".FB_OG_PLUGIN_URL."js/app.admin";
-        } else {
-          if (isset($_GET['sr_debug'])) {
-          return "$url' data-main='".FB_OG_PLUGIN_URL."js/app";
-          } else {
-            return "$url' data-main='".FB_OG_PLUGIN_URL."js/sr.min";
-          }         
-        }
-      } else {
-        return $url;
-      }
   }
 
   // Inject custom css 

@@ -60,7 +60,7 @@
 				<input type="checkbox" name="fb_og_analytics_disable" <?php if (get_option('fb_og_analytics_disable')) { ?>checked="checked"<?php } ?> />
 				<span class="description">We track how your readers use Social Reader on your site so we know what to improve on. Check to disable this.</span>
 			</td>
-			</tr>		
+			</tr>					
 
 			<?php // Restart setup guide link
 			if (get_option('fb_og_setup_closed', false)) { ?>
