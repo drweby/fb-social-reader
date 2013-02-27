@@ -35,7 +35,7 @@ class SR_Controller {
 
     // Add stylesheet and scripts for admin
     add_action('admin_print_styles', array($this, 'add_admin_stylesheets'));
-    add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_widget_scripts'));
+    add_action('admin_head', array($this, 'admin_enqueue_widget_scripts'));
     
     // Create admin menu
     add_action( 'admin_menu', array($this, 'admin_create_menu'));
@@ -475,11 +475,11 @@ class SR_Controller {
     $logout =  get_option('fb_og_logout', 'Logout');
     include(FB_OG_PLUGIN_PATH.'/views/admin/widgets.php');
   }
+
   function admin_enqueue_widget_scripts() {
-    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', array('jquery'), FB_OG_CURRENT_VERSION);
-    wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+    echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js" data-main="'.FB_OG_PLUGIN_URL.'js/app.admin"></script>';
   }
-  
+
   // Register admin settings
   function admin_register_settings() {
   

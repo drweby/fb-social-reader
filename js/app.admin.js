@@ -2,10 +2,11 @@
 // For any third party dependencies, like jQuery, place them in the lib folder.
 
 // Get absolute directory
-var appUrl = require.toUrl('app');
+var appUrl = require.toUrl('app.admin');
 var arr = appUrl.split('/');
 arr.pop();
 var dir = arr.join('/');
+
 
 // Configure loading modules from the lib directory,
 // except for 'app' ones, which are in a sibling
