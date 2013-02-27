@@ -3,7 +3,7 @@ Contributors: chrisjhoughton
 Tags: facebook, fb social reader, open graph actions, social reader, wordpress social reader
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.6.0.5
+Stable tag: 1.6.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ Like and share buttons on your site require the user to click them to share the 
 6. User can delete reads they don't want shared
 
 == Changelog ==
+
+
+= 1.6.0.6 =
+Added fix so setup guide works again.
 
 = 1.6.0.5 =
 Removed support for asynchronous file loading, as it breaks W3 Total Cache
