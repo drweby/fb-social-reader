@@ -5,7 +5,6 @@ define(function(require) {
   var Cookie   = require('app/helpers/cookie');
   var Cache    = require('app/models/cache');
   var _        = require('underscore');
-  var JSON2    = require('json2');
 
 
 	var Fb = {
@@ -168,7 +167,6 @@ define(function(require) {
     Debugger.log('Refreshing my activity from Facebook', 0);
     return FB.api('me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from', function(response) {
       window._sr.activity[0] = response;
-      Cache.save(window._sr.user.id, 'activity_cache', window._sr.activity[0]);
     });
   };
 
@@ -182,7 +180,6 @@ define(function(require) {
         _.each(window._sr.activity[0].data, function(read, key) {
           if (read.id == id) {
             delete(window._sr.activity[0].data[key]);
-            Cache.save(window._sr.user.id, 'activity_cache', window._sr.activity[0]);
           }
         });
       } else {
@@ -207,7 +204,6 @@ define(function(require) {
       Debugger.log(friends_who_use_the_app.length + " friends found");
       Debugger.log('Finished');
 			cb(friends_who_use_the_app);
-      Cache.save(window._sr.user.id, 'friends_cache', friends_who_use_the_app);
     });
   };
 
@@ -240,8 +236,6 @@ define(function(require) {
         if (!response || !response.body) return;
         var body = JSON.parse(response.body);
         activity.push(body);
-         // Save a cache file for every single user
-        Cache.save(batch_arr[key].user_id, 'activity_cache', body);
       });
       cb(activity);
     });

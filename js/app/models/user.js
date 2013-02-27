@@ -1,10 +1,10 @@
 define(function(require) {
 
+  var SR        = require('./global');
   var Fb        = require('app/models/fb');
   var Cookie    = require('app/helpers/cookie');
   var Debugger  = require('app/helpers/debugger');
   var Cache     = require('app/models/cache');
-  var $         = require('jquery');
 
 
   var User = {};
@@ -28,12 +28,11 @@ define(function(require) {
             });
           });
         } else {
-          Cache.clear_all();
           cb1();
         }
       });
     });
-  
+
   };
 
   User.get_user = function(cb) {
@@ -49,9 +48,7 @@ define(function(require) {
 
     // Get user from Facebook and ave the cache, updating auto sharing back end
     Fb.get_user(function(user) {
-      Cache.save_user(user, function() {
-        cb();
-      });
+      cb();
     });
 
   };

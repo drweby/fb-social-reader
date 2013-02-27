@@ -1,9 +1,9 @@
 define(function(require) {
 
+  var $         = require('jquery');
   var Debugger  = require('app/helpers/debugger');
   var _         = require('underscore');
   var Listeners = require('app/models/analytics-listeners');
-  var $         = require('jquery');
 
 
   var Analytics = {
@@ -12,7 +12,7 @@ define(function(require) {
   };
 
   Analytics.init = function() {
-    var _this = this, user = window._sr.user, site = window._sr.site;3
+    var _this = this, user = window._sr.user, site = window._sr.site;
     Debugger.log('Starting analytics', 0);
     if (site.analytics_disabled === true) {
       Debugger.log('Analytics has been disabled on this site: STOP');
@@ -20,7 +20,7 @@ define(function(require) {
     } else {
       Debugger.log('Analytics is enabled for this site');
     }
-  
+
     window._gaq = window._gaq || [];
     window._gaq.push(['sr._setAccount', 'UA-37231887-1']);
     Debugger.log('Setting custom variables');
@@ -51,7 +51,7 @@ define(function(require) {
   };
 
   Analytics.setup_listeners = function(type) {
-    
+
     // If analytics hasn't yet been initialized, add to queue to they run when it has
     if (this.initialized === false) {
       Debugger.log('Analytics not yet initialized, queue '+type);

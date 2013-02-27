@@ -1,11 +1,11 @@
 define(function(require) {
 
+  var $           = require('jquery');
   var Debugger    = require('app/helpers/debugger');
   var User        = require('app/models/user');
   var Lightbox    = require('app/controllers/lightbox');
   var Analytics   = require('app/models/analytics');
   var _           = require('underscore');
-  var $           = require('jquery');
 
   var SidebarHtmlLoggedIn = require('text!app/html/sidebar-logged-in.html');
   var SidebarHtmlLoggedOut = require('text!app/html/sidebar-logged-out.html');

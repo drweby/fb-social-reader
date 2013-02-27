@@ -1,12 +1,11 @@
 define(function(require) {
 
+  var $                = require('jquery');
   var Debugger         = require('app/helpers/debugger');
   var Fb               = require('app/models/fb');
   var Time             = require('app/helpers/time');
   var Analytics        = require('app/models/analytics');
-  var SampleData       = require('app/helpers/sample-data');
   var _                = require('underscore');
-  var $                = require('jquery');
 
   var LightboxHtml     = require('text!app/html/lightbox.html');
   var LightboxReadHtml = require('text!app/html/lightbox-read.html');
@@ -74,12 +73,7 @@ define(function(require) {
     var lightbox_html = lightbox_template(window._sr);
     $('#sr_lightbox_inner').html(lightbox_html);
       Debugger.log("Putting reads into the lightbox", 0);
-      var reads;
-      if (SampleData.is_on()) {
-        reads = SampleData.reads;
-      } else {
-        reads = Fb.put_all_reads_in_one_array(window._sr.activity.reads);
-      }
+      var reads = Fb.put_all_reads_in_one_array(window._sr.activity.reads);
       $('#sr_loading').hide();
       if (!reads || !reads.length) {
         Debugger.log('No reads found');
@@ -128,7 +122,6 @@ define(function(require) {
           });
         });
         return Debugger.log('Finished');
-             
       }
 
   };

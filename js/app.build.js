@@ -21,11 +21,8 @@
   paths: {
     underscore: 'lib/underscore-amd.min',
     text: 'lib/text',
-    jquery: 'lib/jquery',
     ga: 'empty:',
-    qunit: 'empty:',
-    jquery_cdn: 'empty:',
-    json2: 'empty:'
+    qunit: 'empty:'
   }
 
 })

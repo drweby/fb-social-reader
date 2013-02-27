@@ -1,11 +1,10 @@
 define(function(require) {
 
+  var $          = require('jquery');
   var _          = require('underscore');
   var Debugger   = require('app/helpers/debugger');
   var Format     = require('app/helpers/single-format');
   var Analytics  = require('app/models/analytics');
-  var SampleData = require('app/helpers/sample-data');
-  var $          = require('jquery');
   var Fb         = require('app/models/fb');
 
 	var Single = {};
@@ -18,17 +17,12 @@ define(function(require) {
       Debugger.log('#sr_friends_single not found, cannot load');
     } else {
       Debugger.log('#sr_friends_single found, start loading');
-      var reads;
-      if (SampleData.is_on()) {
-        reads = SampleData.reads.data;
-      } else {
-        if (!activity) {
-          Debugger.log('No reads found');
-          Debugger.log('Finished');
-          return;
-        }
-        reads = Fb.put_all_reads_in_one_array();
+      if (!activity) {
+        Debugger.log('No reads found');
+        Debugger.log('Finished');
+        return;
       }
+      var reads = Fb.put_all_reads_in_one_array();
       var single_reads = _.filter(reads, function(read) {
         var regex = new RegExp(window.location.pathname,"gi");
         if (!read.data || !read.data.article || !read.data.article.url) {

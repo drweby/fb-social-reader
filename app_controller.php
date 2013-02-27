@@ -23,8 +23,8 @@ class SR_Controller {
     add_action( 'wp_head', array($this, 'add_head_meta'));
 
     // Enqueue scripts and css
-    add_action('wp_enqueue_scripts', array($this, 'add_sr_scripts'));
-    add_action( 'wp_head', array($this, 'add_custom_css'));
+    add_action('wp_enqueue_scripts', array($this, 'sr_enqueue'));
+    add_action( 'wp_head', array($this, 'sr_head'));
 
     // Add server-side info to global
     add_action( 'wp_head', array($this, 'load_client_details'));
@@ -66,21 +66,22 @@ class SR_Controller {
   }
 
   // Enqueue scripts front-end
-  function add_sr_scripts() {
-    wp_enqueue_script('require', FB_OG_PLUGIN_URL . 'js/lib/require.js', false, FB_OG_CURRENT_VERSION);
-    wp_enqueue_script('sr-min', FB_OG_PLUGIN_URL . 'js/sr.min.js', array('require'), FB_OG_CURRENT_VERSION);
-    wp_localize_script( 'require', '_sr_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+  function sr_enqueue() {
     wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
     wp_enqueue_style( 'social-reader-style' );
-    if (isset($_GET['sr_tests'])) {
-      wp_register_style( 'qunit-css', 'http://code.jquery.com/qunit/qunit-1.10.0.css');
-      wp_enqueue_style( 'qunit-css' );
-      wp_enqueue_script('qunit-js', 'http://code.jquery.com/qunit/qunit-1.10.0.js', array('jquery'), FB_OG_CURRENT_VERSION);
-    }
   }
 
   // Inject custom css 
-  function add_custom_css() {
+  function sr_head() {
+
+    // Load in the 
+    if (isset($_GET['sr_debug'])) {
+      echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js" data-main="'.FB_OG_PLUGIN_URL.'js/app"></script>';
+    } else {
+      echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js"></script>';
+      echo '<script src="'.FB_OG_PLUGIN_URL.'js/sr.min.js"></script>';
+    }
+
     if (get_option('fb_og_custom_css') != '') {
       echo "<style type='text/css'>";
       echo get_option('fb_og_custom_css');
@@ -133,54 +134,23 @@ class SR_Controller {
   function load_client_details() { 
 
     // Get the client details
-    ?><script type='text/javascript'>
-      window._sr = {
-        'site': {
-          'fb_app_id': "<?php echo get_option('fb_og_app_id'); ?>",
-          'fb_channel_url': "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
-          'fb_sdk_disable': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
-          'login_meta': "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
-          'login_promo': "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
-          'logout': "<?php echo get_option('fb_og_logout', 'Logout'); ?>",
-          'auto_sharing_on': "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'); ?>",
-          'auto_sharing_off': "<?php echo get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'); ?>",
-          'activity': "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>",
-          'plugin_url': "<?php echo FB_OG_PLUGIN_URL; ?>",
-          'plugin_version': "<?php echo FB_OG_CURRENT_VERSION; ?>",
-          'analytics_disabled': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')); ?> 
-        }
+    ?>
+    <script type='text/javascript'>
+      window._sr_site = {
+        'fb_app_id': "<?php echo get_option('fb_og_app_id'); ?>",
+        'fb_channel_url': "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
+        'fb_sdk_disable': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
+        'login_meta': "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
+        'login_promo': "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
+        'logout': "<?php echo get_option('fb_og_logout', 'Logout'); ?>",
+        'auto_sharing_on': "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'); ?>",
+        'auto_sharing_off': "<?php echo get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'); ?>",
+        'activity': "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>",
+        'plugin_url': "<?php echo FB_OG_PLUGIN_URL; ?>",
+        'plugin_version': "<?php echo FB_OG_CURRENT_VERSION; ?>",
+        'analytics_disabled': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')); ?> 
       };
-      window._sr.page = {
-        "id": "<?php echo get_the_ID(); ?>",
-        "is_readable": <?php echo $this->is_readable(); ?> 
-      }<?php
-
-      // Get friendsinfo from cache
-      if (isset($_COOKIE['sr_user_id']) and is_numeric($_COOKIE['sr_user_id'])) { 
-
-        // Get user info from cache
-        if (isset($_COOKIE['sr_user_cached'])) {
-          $user_cache = $this->get_cache($_COOKIE['sr_user_id'], 'user_cache');
-          if ($user_cache) { echo "\n"; ?>      window._sr.user = <?php echo $user_cache; ?>;<?php }
-        }
-        
-        // Get friends info from cache
-        if (isset($_COOKIE['sr_friends_cached'])) {
-          $friends_cache = $this->get_cache($_COOKIE['sr_user_id'], 'friends_cache');
-          if ($friends_cache) { echo "\n"; ?>     window._sr.friends = <?php echo $friends_cache; ?>;<?php } 
-        }
-        
-        // Get activity info from cache
-        if (isset($_COOKIE['sr_activity_cached']) and isset($_COOKIE['sr_friends_cached'])) {
-          $activity_cache = $this->get_friends_activity_cache($friends_cache);
-          if ($activity_cache) { echo "\n"; ?>     window._sr.activity = <?php echo $activity_cache; ?>;<?php } 
-        }
-        // If javascript variables (user, activity) aren't set, then we'll query Facebook for them.
-
-      } 
-      ?>
-  
-</script>
+    </script>
   <?php }
 
   // Convert option to js bool

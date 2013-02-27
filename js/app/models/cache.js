@@ -1,9 +1,8 @@
 define(function(require) {
 
+  var $         = require('jquery');
   var Debugger  = require('app/helpers/debugger');
   var Cookie    = require('app/helpers/cookie');
-  var $         = require('jquery');
-  var JSON2     = require('json2');
 
 
   var Cache = {};

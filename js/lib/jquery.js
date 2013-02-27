@@ -1,6 +1,6 @@
 /*
-	Pull in jQuery from Google's CDN
+  Pull in jQuery from Google's CDN
 */
-define(['jquery_cdn'], function() {
-	return jQuery.noConflict(true);
+define(['https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'], function() {
+  return jQuery.noConflict(true);
 });
