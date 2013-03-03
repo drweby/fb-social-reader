@@ -4,23 +4,23 @@
     <div id='sr_sidebar_name'>
       <a target='blank' href="<%= user.link %>" ><%= user.name %></a>
     </div>
-    <div id='sr_sidebar_promo'><%= site.login_meta %></div>
-    <div id='sr_sidebar_logout'><a><%= site.logout %></a></div>
+    <div id='sr_sidebar_promo'><%= options.login_meta %></div>
+    <div id='sr_sidebar_logout'><a><%= options.logout %></a></div>
   </div>
   <div class='clear'>
   </div>
   <div id='sr_sidebar_bottom'>
-    <% if (user.is_auto_sharing) { %>
+    <% if (auto_sharing) { %>
       <div class='sr_sidebar_toggle sr_sidebar_toggled_on'>
-        <a title='Auto sharing to Facebook is enabled'><%= site.auto_sharing_on %></a>
+        <a title='Auto sharing to Facebook is enabled'><%= options.auto_sharing_on %></a>
       </div>
     <% } else { %>
       <div class='sr_sidebar_toggle sr_sidebar_toggled_off'>
-        <a title='Auto sharing to Facebook is disabled'><%= site.auto_sharing_off %></a>
+        <a title='Auto sharing to Facebook is disabled'><%= options.auto_sharing_off %></a>
       </div>
     <% } %>
     <div id='sr_sidebar_activity'>
-      <a><%= site.activity %></a>
+      <a><%= options.activity %></a>
     </div>
   </div>
 </div>

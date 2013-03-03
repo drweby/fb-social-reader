@@ -4,7 +4,7 @@ define(function() {
 
   Time.relative = function(time) {
     var elapsed, msPerDay, msPerHour, msPerMinute, msPerMonth, msPerYear, timestamp;
-    timestamp = new Date(time).getTime();
+    timestamp = (new Date(time)).getTime();
     msPerMinute = 60 * 1000;
     msPerHour = msPerMinute * 60;
     msPerDay = msPerHour * 24;

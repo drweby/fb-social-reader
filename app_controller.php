@@ -30,8 +30,8 @@ class SR_Controller {
     add_action( 'wp_head', array($this, 'load_client_details'));
 
     // Get ajax to work front end
-    add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
-    add_action( 'wp_ajax_nopriv__sr_ajax_hook', array($this, 'ajax')); // need this to serve non logged in users
+    // add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
+    // add_action( 'wp_ajax_nopriv__sr_ajax_hook', array($this, 'ajax')); // need this to serve non logged in users
 
     // Add stylesheet and scripts for admin
     add_action('admin_print_styles', array($this, 'add_admin_stylesheets'));
@@ -74,13 +74,13 @@ class SR_Controller {
   // Inject custom css 
   function sr_head() {
 
-    // Load in the 
+    // Load in the app in wp_head
     if (isset($_GET['sr_debug'])) {
-      echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js" data-main="'.FB_OG_PLUGIN_URL.'js/app"></script>';
+      $appPath = 'js/app';
     } else {
-      echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js"></script>';
-      echo '<script src="'.FB_OG_PLUGIN_URL.'js/sr.min.js"></script>';
+      $appPath = 'js/sr.min';
     }
+    echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js" data-main="'.FB_OG_PLUGIN_URL.$appPath.'" async defer></script>'."\n";
 
     if (get_option('fb_og_custom_css') != '') {
       echo "<style type='text/css'>";
@@ -136,20 +136,20 @@ class SR_Controller {
     // Get the client details
     ?>
     <script type='text/javascript'>
-      window._sr_site = {
-        'fb_app_id': "<?php echo get_option('fb_og_app_id'); ?>",
-        'fb_channel_url': "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
-        'fb_sdk_disable': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
-        'login_meta': "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
-        'login_promo': "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
-        'logout': "<?php echo get_option('fb_og_logout', 'Logout'); ?>",
-        'auto_sharing_on': "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'); ?>",
-        'auto_sharing_off': "<?php echo get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'); ?>",
-        'activity': "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>",
-        'plugin_url': "<?php echo FB_OG_PLUGIN_URL; ?>",
-        'plugin_version': "<?php echo FB_OG_CURRENT_VERSION; ?>",
-        'analytics_disabled': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')); ?> 
-      };
+    window._sr = {
+      "fb_app_id": "<?php echo get_option('fb_og_app_id'); ?>",
+      "fb_channel_url": "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
+      "fb_sdk_disabled": <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
+      "login_meta": "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
+      "login_promo": "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
+      "logout": "<?php echo get_option('fb_og_logout', 'Logout'); ?>",
+      "auto_sharing_on": "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'); ?>",
+      "auto_sharing_off": "<?php echo get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'); ?>",
+      "activity": "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>",
+      "plugin_url": "<?php echo FB_OG_PLUGIN_URL; ?>",
+      "plugin_version": "<?php echo FB_OG_CURRENT_VERSION; ?>",
+      "analytics_disabled": <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')); ?> 
+    };
     </script>
   <?php }
 
@@ -160,79 +160,6 @@ class SR_Controller {
     } else {
       return 'false';
     }
-  }
-
-  // Save user to cache and update auto sharing (only happens on first pageview of visit)
-  function save_user($data) {
-    $user = json_decode(stripslashes($data['user']));
-
-    // To see if the user has auto sharing on/off, see if there's a previous cache of the user 
-    $old_user_json = $this->get_cache($user->id, 'user_cache');
-    if ($old_user_json == false) {
-      $user->is_auto_sharing = true;
-    } else {
-      $old_user = json_decode($old_user_json);
-      $user->is_auto_sharing = $old_user->is_auto_sharing;
-    }
-
-    // Save the user 
-    $this->save_cache(array(
-      'fb_id' => $user->id, 
-      'field' => "user_cache",
-      'data' => addslashes(json_encode($user))
-    ));
-
-  }
-
-
-  // Save the user to the file cache. Echos json for front-end 
-  function save_cache($data) {
-   if (!isset($data['data'])) $data['data'] = '{}';
-    if ($this->SR->save_cache($data['fb_id'], $data['field'], serialize($data['data']))) {
-      echo stripslashes($data['data']);
-    } else {
-      return 0;
-    }
-  }
-
-  // Convert strings to booleans if true/false
-  function convert_string_to_boolean($str) {  
-    if ($str == 'true') {
-      return true;
-    } else if ($str == 'false') {
-      return false;
-    } else {
-      return $str;
-    }
-  }
-
-  // Get the user cache data
-  function get_cache($fb_id, $field) {
-    $result = $this->SR->get_cache(array(
-      'fb_id' => $fb_id,
-      'field' => $field
-    ));
-    if ($result == true) {
-      @$contents = stripslashes(unserialize($this->SR->$field));
-      if (!$contents) return false;
-      return $contents;
-    } else {
-      return false;
-    }
-  }
-
-  // Get activity caches - go through all the files with friends' activity and get the data out
-  function get_friends_activity_cache($friends_cache) {
-    $friends_cache_array = json_decode($friends_cache);
-    $activity = array();
-    if (!$friends_cache_array) return '{}';
-    $activity[] = $this->get_cache($_COOKIE['sr_user_id'], 'activity_cache');
-    foreach ($friends_cache_array as $friend) {
-      $activity[] = $this->get_cache($friend->id, 'activity_cache');
-    }
-    //print_r($activity);
-    $json_arr = '['.implode(',', $activity).']';
-    return stripslashes($json_arr);
   }
 
   
