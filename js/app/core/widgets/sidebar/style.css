@@ -1,0 +1,86 @@
+
+
+
+/* 
+  === Sidebar (not logged in) === 
+*/
+
+
+.logged_out {
+  text-align:center;
+  margin-top:10px;
+  margin-bottom:10px;
+  color:#333;
+  font-weight:bold;
+  margin-bottom:15px;
+  font-size:14px;
+}
+.logged_out .login a {
+  
+}
+
+
+/* 
+  === Sidebar (logged in) === 
+*/
+
+.logged_in {
+  margin-bottom:5px;
+  clear:both;
+}
+.logged_in img {
+  float:left;
+  margin-right:10px;
+  border:none;
+}
+.right {
+  margin-left:62px;
+}
+.logged_in .name {
+  font-weight:bold;
+  margin-bottom:4px;
+  font-size:14px;
+}
+.logged_in a {
+  font-weight:bold;
+  cursor:pointer;
+  color:#3B5998;
+  text-decoration:none;
+}
+.logged_in .toggle a {
+  margin-right:10px;
+}
+.logged_in .promo {
+  color:#777;
+  font-size:12px;
+  margin:2px 0 0 0;
+}
+.logged_in .logout {
+  margin-top:4px;
+}
+.logged_in .logout a {
+  font-weight:normal;
+}
+.logged_in .bottom {
+  margin:10px 0 0 0;
+}
+.logged_in .toggle {
+  display:inline-block;
+  padding-left:23px;
+  height:20px;
+} 
+.logged_in .toggled_on {
+  background:url(../images/fbpublishing.png) no-repeat;
+}
+.logged_in .toggled_off {
+  background:url(../images/fbnotpublishing.png) no-repeat;
+}
+.logged_in .toggle a {
+  padding:0px;
+}
+.logged_in .activity {
+  display:inline-block;
+}
+.logged_in .activity a {
+  display:inline;
+}

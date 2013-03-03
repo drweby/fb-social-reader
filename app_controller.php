@@ -80,7 +80,7 @@ class SR_Controller {
     } else {
       $appPath = 'js/sr.min';
     }
-    echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js" data-main="'.FB_OG_PLUGIN_URL.$appPath.'" async defer></script>'."\n";
+    echo '<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js" data-main="'.FB_OG_PLUGIN_URL.$appPath.'" async defer></script>'."\n";
 
     if (get_option('fb_og_custom_css') != '') {
       echo "<style type='text/css'>";
@@ -137,9 +137,13 @@ class SR_Controller {
     ?>
     <script type='text/javascript'>
     window._sr = {
-      "fb_app_id": "<?php echo get_option('fb_og_app_id'); ?>",
-      "fb_channel_url": "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
-      "fb_sdk_disabled": <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
+      "facebook": {
+        "app_id": "<?php echo get_option('fb_og_app_id'); ?>",
+        "channel_url": "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
+        "sdk_disabled": <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
+        "action_type": "news.reads"        
+      },
+
       "login_meta": "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
       "login_promo": "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
       "logout": "<?php echo get_option('fb_og_logout', 'Logout'); ?>",

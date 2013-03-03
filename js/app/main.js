@@ -7,8 +7,7 @@ define(function (require) {
 
   // replace $() with jquery() - all local
   $(document).ready(function() {
-    var user = new User();
-    user.start(function() {
+    User.start(function() {
       Widgets(['sidebar', 'lightbox', 'single']);
     });
   });

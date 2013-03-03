@@ -39,15 +39,15 @@ define(function(require) {
         (function(d, debug) {
           var id, js, ref;
           js = void 0;
-          id = "facebook-jssdk";
-          ref = d.getElementsByTagName("script")[0];
+          id = 'facebook-jssdk';
+          ref = d.getElementsByTagName('script')[0];
           if (d.getElementById(id)) {
             return;
           }
-          js = d.createElement("script");
+          js = d.createElement('script');
           js.id = id;
           js.async = true;
-          js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+          js.src = '//connect.facebook.net/en_US/all' + (debug ? '/debug' : '') + '.js';
           return ref.parentNode.insertBefore(js, ref);
         })(window.document, false);
       }
@@ -94,7 +94,7 @@ define(function(require) {
     get_user: function(cb) {
       var _this = this;
       FB.api('/me', function(me) {
-        me.picture = "//graph.facebook.com/" + me.id + "/picture";
+        me.picture = '//graph.facebook.com/' + me.id + '/picture';
         _this.set('user', me);
         cb();
       });
@@ -122,23 +122,23 @@ define(function(require) {
 
       var batch_arr = [];
       batch_arr.push({
-        method: "GET",
+        method: 'GET',
         user_id: this.get('user').id,
-        relative_url: "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
+        relative_url: 'me/'+this.get('action_type')+'?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from'
       });
 
       // Create batch array
       _.each(this.get_friends_appusers(), function(friend) {
         batch_arr.push({
-          method: "GET",
+          method: 'GET',
           user_id: friend.id,
-          relative_url: friend.id + "/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
+          relative_url: friend.id + '/'+_this.get('action_type')+'?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from'
         });
       });
 
       // Do request
 
-      FB.api("/", "POST", {
+      FB.api('/', 'POST', {
         batch: batch_arr
       }, function(responses) {
         var activity = [];
@@ -160,7 +160,7 @@ define(function(require) {
           cb();
         }
       }), {
-        scope: "publish_actions"
+        scope: 'publish_actions'
       });
     },
 
@@ -171,19 +171,19 @@ define(function(require) {
     },
 
     add_read: function(cb) {
-      FB.api("/me/news.reads?article=" + window.location.href, "post", function(response) {
+      FB.api('/me/'+this.get('action_type')+'?article=' + window.location.href, 'post', function(response) {
         cb((response.id) ? response.id : false);
       });
     },
 
     refresh_my_activity: function() {
-      FB.api('me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from', function(response) {
+      FB.api('me/'+this.get('action_type')+'?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from', function(response) {
         window._sr.activity[0] = response;
       });
     },
 
     delete_read: function(id, activity, cb) {
-      FB.api("/" + id, "delete", function(response) {
+      FB.api('/' + id, 'delete', function(response) {
         if (response === true) {
           _.each(activity[0].data, function(read, key) {
             if (read.id == id) {

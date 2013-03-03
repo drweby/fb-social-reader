@@ -7,8 +7,8 @@ define(function(require) {
       Widget           = require('../widget');
 
 
-  var LightboxHtml     = require('text!./lightbox.html');
-  var LightboxReadHtml = require('text!./lightbox-read.html');
+  var LightboxHtml     = require('tpl!./lightbox.html');
+  var LightboxReadHtml = require('tpl!./lightbox-read.html');
 
 
   return Widget.extend({

@@ -6,16 +6,10 @@ define(function(require) {
       Facebook  = require('../modules/facebook/fb');
 
 
-  return Backbone.Model.extend({
+  var User = Backbone.Model.extend({
 
     initialize: function() {
-      // Pass attributes to the Facebook object
-      var page = SR.get('options');
-      Facebook.set({
-        app_id: page.fb_app_id,
-        sdk_disabled: page.fb_sdk_disabled,
-        channel_url: page.fb_channel_url
-      });
+      Facebook.set(SR.get('options').facebook);
     },
 
     start: function(cb) {
@@ -23,24 +17,21 @@ define(function(require) {
 
       // Load the API, then get FB data
       Facebook.start(function() {
-        Facebook.is_logged_in(function(bool) {
+        Facebook.is_logged_in(function(is_logged_in) {
 
-          // Get the user, friends, and activity from Facebook, if cache hasn't been updated for a while
-          if (SR.get('is_cached_recently') === false) {
-            Facebook.get_data(function(user, friends, activity) {
-              SR.set({
-                user: user,
-                friends: friends,
-                activity: activity
+          if (is_logged_in) {
+            // Get the user, friends, and activity from Facebook, if cache hasn't been updated for a while
+            if (SR.get('is_cached_recently') === false) {
+              Facebook.get_data(function(user, friends, activity) {
+                SR.set({ user: user, friends: friends, activity: activity });
+                cb();
               });
+            } else {
               cb();
-            });
-          } else {
-            cb();
+            }
           }
 
         });
-
       });
 
     },
@@ -56,28 +47,20 @@ define(function(require) {
     //   return do_read;
     // },
 
-    // Use the global directly in the view
-    // set_auto_sharing: function(bool) {
-    //   SR.set('auto_sharing', bool);
-    // },
-
     login: function() {
       Facebook.login(function() {
         window.location.reload();
       });
     },
 
-    logout: function() {
+    logout: function(cb) {
       Facebook.logout(function() {
-        Cache.clear_all();
-        window.location.reload();
+        cb();
       });
     }
 
-
-
-
   });
 
+  return new User();
 
 });

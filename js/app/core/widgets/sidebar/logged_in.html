@@ -1,0 +1,26 @@
+<div class='logged_in'>
+  <a class='profile' target='blank' href='<%= user.link %>'><img src='<%= user.picture %>' width='50' height='50' alt='<%= user.name %>'/></a>
+  <div class='right'>
+    <div class='name'>
+      <a target='blank' href="<%= user.link %>" ><%= user.name %></a>
+    </div>
+    <div class='promo'><%= options.login_meta %></div>
+    <div class='logout'><a><%= options.logout %></a></div>
+  </div>
+  <div class='clear'>
+  </div>
+  <div class='bottom'>
+    <% if (auto_sharing) { %>
+      <div class='toggle toggled_on'>
+        <a><%= options.auto_sharing_on %></a>
+      </div>
+    <% } else { %>
+      <div class='toggle toggled_off'>
+        <a><%= options.auto_sharing_off %></a>
+      </div>
+    <% } %>
+    <div class='activity'>
+      <a><%= options.activity %></a>
+    </div>
+  </div>
+</div>
