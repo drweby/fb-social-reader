@@ -4,30 +4,26 @@ define(function (require) {
       _         = require('underscore'),
       $         = require('jquery');
 
+      SR        = require('../global');
+
   var GlobalCSS = require('tpl!./global.css');
 
   return Backbone.View.extend({
 
-    load: function() {
-      this.create_iframe();
+    create_iframe: function(css) {
+      var parameters = { 'border': 0 };
+      if (css !== undefined) parameters = _.extend(parameters, css);
+      var $iframe = $('<iframe />', parameters);
+      this.$container.prepend($iframe);
+      this.setElement($iframe.contents());
       this.load_css(GlobalCSS);
-    },
-
-    create_iframe: function() {
-      if (this.$container.html() === '') {
-        var $iframe = $('<iframe />', {
-          'border': 0
-        });
-        this.$container.html($iframe);
-        this.setElement($iframe.contents());
-      }
     },
 
     // Load a stylesheet to the iframe
     load_css: function(css) {
       var style = $('<style />', {
         type: 'text/css',
-        html: css()
+        html: css(SR.site)
       });
       this.$el.find('head').append(style);
     }

@@ -1,8 +1,6 @@
 define(function() {
 
-  var Time = {};
-
-  Time.relative = function(time) {
+  return function(time) {
     var elapsed, msPerDay, msPerHour, msPerMinute, msPerMonth, msPerYear, timestamp;
     timestamp = (new Date(time)).getTime();
     msPerMinute = 60 * 1000;
@@ -25,7 +23,5 @@ define(function() {
       return Math.round(elapsed / msPerYear) + " years ago";
     }
   };
-
-  return Time;
 
 });

@@ -1,0 +1,32 @@
+<ul class='tabs'>
+  <li class='everyone sr_active_tab'><a>Everyone</a></li>
+  <li class='me'><a>Just you</a></li>
+</ul>
+<div class='reads_list'>
+
+  <ul>
+    <% _.each(reads, function(read) { %>
+      <li id='read_<%= read.id %>'>
+        <a class='name' href='//facebook.com/<%= read.from.id %>' target='blank'>
+          <img class='story-img' src='https://graph.facebook.com/<%= read.from.id %>/picture' width='50' height='50' alt='<%= read.from.name %>' />
+        </a>
+        <div class='story-inner'>
+          <div class='story-title'>
+            <a class='name' href='//facebook.com/profile.php?id=<%= read.from.id %>' target='blank'><%= read.from.name %></a> 
+            read 
+            <a class='article' href='<%= read.data.article.url %>' target='blank'><%= read.data.article.title %></a>
+          </div>
+          <div class='story-meta'><%= read.relative_time %> <span class='sr_story_delete_text'>&middot; <a class='sr_story_delete'>Delete</a></span>
+          </div>
+        </div>
+        <div class='clear'></div>
+      </li>
+    <% }); %>
+  </ul>
+
+  <div class='reads_empty'>
+    None of your friends have read anything on this site yet.
+  </div>
+
+</div>
+

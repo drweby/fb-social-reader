@@ -22,16 +22,11 @@ class SR_Controller {
     // Add the fb meta into the head
     add_action( 'wp_head', array($this, 'add_head_meta'));
 
-    // Enqueue scripts and css
-    add_action('wp_enqueue_scripts', array($this, 'sr_enqueue'));
+    // Enqueue script
     add_action( 'wp_head', array($this, 'sr_head'));
 
     // Add server-side info to global
     add_action( 'wp_head', array($this, 'load_client_details'));
-
-    // Get ajax to work front end
-    // add_action( 'wp_ajax__sr_ajax_hook', array($this, 'ajax'));
-    // add_action( 'wp_ajax_nopriv__sr_ajax_hook', array($this, 'ajax')); // need this to serve non logged in users
 
     // Add stylesheet and scripts for admin
     add_action('admin_print_styles', array($this, 'add_admin_stylesheets'));
@@ -63,12 +58,6 @@ class SR_Controller {
   // Adds the doctype to the html
   function add_doctype( $output ) {
     return $output . ' xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"';
-  }
-
-  // Enqueue scripts front-end
-  function sr_enqueue() {
-    wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
-    wp_enqueue_style( 'social-reader-style' );
   }
 
   // Inject custom css 
@@ -133,27 +122,36 @@ class SR_Controller {
   // Send back server details to the client side
   function load_client_details() { 
 
+    
+    $sr = array(
+      "facebook" => array(
+        'app_id' => get_option('fb_og_app_id'),
+        'channel_url' => FB_OG_PLUGIN_URL.'channel.html',
+        'sdk_disabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')),
+        'action_type' => "news.reads"   
+      ),
+      "sidebar" => array(
+        "login_meta" => get_option('fb_og_login_meta', 'Logged in'),
+        "login_promo" => get_option('fb_og_login_promo', 'Log in and see what your friends are reading'),
+        "logout" => get_option('fb_og_logout', 'Logout'),
+        "auto_sharing_on" => get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'),
+        "auto_sharing_off" => get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'),
+        "activity" => get_option('fb_og_sidebar_activity', 'Activity')
+      ),
+      "lightbox" => array(
+        "title" => 'Recent activity'
+      ),
+      "site" => array( 
+        "plugin_url" => FB_OG_PLUGIN_URL,
+        "plugin_version" => FB_OG_CURRENT_VERSION,
+        "analytics_disabled" => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')) 
+      )
+    );
+
     // Get the client details
     ?>
     <script type='text/javascript'>
-    window._sr = {
-      "facebook": {
-        "app_id": "<?php echo get_option('fb_og_app_id'); ?>",
-        "channel_url": "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
-        "sdk_disabled": <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
-        "action_type": "news.reads"        
-      },
-
-      "login_meta": "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
-      "login_promo": "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
-      "logout": "<?php echo get_option('fb_og_logout', 'Logout'); ?>",
-      "auto_sharing_on": "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'); ?>",
-      "auto_sharing_off": "<?php echo get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'); ?>",
-      "activity": "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>",
-      "plugin_url": "<?php echo FB_OG_PLUGIN_URL; ?>",
-      "plugin_version": "<?php echo FB_OG_CURRENT_VERSION; ?>",
-      "analytics_disabled": <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')); ?> 
-    };
+      window._sr = <?php echo json_encode($sr); ?>
     </script>
   <?php }
 

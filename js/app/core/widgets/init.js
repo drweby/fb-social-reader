@@ -5,8 +5,8 @@ define(function (require) {
 
   var widgets = {
     'sidebar':  require('./sidebar/sidebar'),
-    'single':   require('./single/single'),
-    'lightbox': require('./lightbox/lightbox')
+    'single':   require('./single/single')
+    // 'lightbox': require('./lightbox/lightbox') // loaded in via sidebar
   };
 
   return function(widget_array) {

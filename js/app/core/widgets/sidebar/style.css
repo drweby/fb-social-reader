@@ -9,7 +9,6 @@
 .logged_out {
   text-align:center;
   margin-top:10px;
-  margin-bottom:10px;
   color:#333;
   font-weight:bold;
   margin-bottom:15px;
@@ -70,10 +69,10 @@
   height:20px;
 } 
 .logged_in .toggled_on {
-  background:url(../images/fbpublishing.png) no-repeat;
+  background:url(https://s3-eu-west-1.amazonaws.com/social-api/images/fbpublishing.png) no-repeat;
 }
 .logged_in .toggled_off {
-  background:url(../images/fbnotpublishing.png) no-repeat;
+  background:url(https://s3-eu-west-1.amazonaws.com/social-api/images/fbnotpublishing.png) no-repeat;
 }
 .logged_in .toggle a {
   padding:0px;

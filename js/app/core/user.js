@@ -9,7 +9,7 @@ define(function(require) {
   var User = Backbone.Model.extend({
 
     initialize: function() {
-      Facebook.set(SR.get('options').facebook);
+      Facebook.set(SR.get('facebook'));
     },
 
     start: function(cb) {
@@ -29,6 +29,8 @@ define(function(require) {
             } else {
               cb();
             }
+          } else {
+            debugger;
           }
 
         });

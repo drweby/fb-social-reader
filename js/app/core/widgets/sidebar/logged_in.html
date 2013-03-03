@@ -4,23 +4,23 @@
     <div class='name'>
       <a target='blank' href="<%= user.link %>" ><%= user.name %></a>
     </div>
-    <div class='promo'><%= options.login_meta %></div>
-    <div class='logout'><a><%= options.logout %></a></div>
+    <div class='promo'><%= sidebar.login_meta %></div>
+    <div class='logout'><a><%= sidebar.logout %></a></div>
   </div>
   <div class='clear'>
   </div>
   <div class='bottom'>
     <% if (auto_sharing) { %>
       <div class='toggle toggled_on'>
-        <a><%= options.auto_sharing_on %></a>
+        <a><%= sidebar.auto_sharing_on %></a>
       </div>
     <% } else { %>
       <div class='toggle toggled_off'>
-        <a><%= options.auto_sharing_off %></a>
+        <a><%= sidebar.auto_sharing_off %></a>
       </div>
     <% } %>
     <div class='activity'>
-      <a><%= options.activity %></a>
+      <a><%= sidebar.activity %></a>
     </div>
   </div>
 </div>

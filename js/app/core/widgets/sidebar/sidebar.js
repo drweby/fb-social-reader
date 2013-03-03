@@ -16,9 +16,10 @@ define(function(require) {
     initialize: function() {
       this.$container = $('#sr_sidebar_box');
       if (this.$container.length === 0) return;
-      this.load();
+      this.create_iframe( { id: 'sr_sidebar' });
       this.load_css(CSS);
       this.render();
+      this.lightbox = new Lightbox();
     },
 
     render: function() {
@@ -49,14 +50,14 @@ define(function(require) {
     toggle_auto_sharing: function(e) {
       var $toggle = $(e.currentTarget);
       var turn_auto_sharing = ($toggle.hasClass('toggled_on')) ? false : ($toggle.hasClass('toggled_off')) ? true : false;
-      var auto_sharing_text = (turn_auto_sharing === true) ? SR.get('options').auto_sharing_on : SR.get('options').auto_sharing_off;
+      var auto_sharing_text = (turn_auto_sharing === true) ? SR.get('sidebar').auto_sharing_on : SR.get('sidebar').auto_sharing_off;
       $toggle.toggleClass('toggled_on toggled_off');
       $toggle.find('a').text(auto_sharing_text);
       SR.set('auto_sharing', turn_auto_sharing);
     },
 
     show_lightbox: function() {
-      debugger;
+      this.lightbox.show();
     },
 
     logout: function() {

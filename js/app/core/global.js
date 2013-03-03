@@ -20,7 +20,6 @@ define(function (require) {
   var Global = Backbone.Model.extend({
 
     defaults: {
-      'options': {},
       'auto_sharing': true,
       'user': {},
       'activity': [],
@@ -57,7 +56,11 @@ define(function (require) {
 
     // Take details set previously (server side) and set the parameters. (Overrides cache)
     set_preset_values: function() {
-      this.set('options', _.clone(window._sr));
+      var _this = this;
+      var sr = _.clone(window._sr);
+      _.each(sr, function(option, key) {
+        _this.set(key, option);
+      });
     }
 
   });
