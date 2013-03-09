@@ -7,9 +7,13 @@ define(function (require) {
 
   // replace $() with jquery() - all local
   $(document).ready(function() {
-    User.start(function() {
-      Widgets(['sidebar', 'lightbox', 'single']);
-      User.queue_read();
+    User.start(function(logged_in) {
+      if (logged_in) {
+        Widgets(['sidebar', 'lightbox', 'single']);
+        User.queue_read();
+      } else {
+        Widgets(['sidebar']);
+      }
     });
   });
 

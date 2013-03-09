@@ -24,11 +24,12 @@ define(function(require) {
 
     render: function() {
       var html;
-      if (SR.get('user')) {
+      if (!_.isEmpty(SR.get('user'))) {
         var toggled_class = (SR.get('auto_sharing') === true) ? 'auto_sharing_on' : 'auto_sharing_off';
         html = LoggedInTpl(SR.attributes);
         this.$el.find('body').html(html);
       } else {
+        debugger;
         html = LoggedOutTpl(SR.attributes);
         this.$el.find('body').html(html);
       }

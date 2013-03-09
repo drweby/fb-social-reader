@@ -26,13 +26,13 @@ define(function(require) {
             if (SR.get('is_cached_recently') === false) {
               Facebook.get_data(function(user, friends, activity) {
                 SR.set({ user: user, friends: friends, activity: activity });
-                cb();
+                cb(true);
               });
             } else {
-              cb();
+              cb(true);
             }
           } else {
-            debugger;
+            cb(false);
           }
 
         });
