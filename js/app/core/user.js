@@ -5,6 +5,8 @@ define(function(require) {
   var SR        = require('./global'),
       Facebook  = require('../modules/facebook/fb');
 
+  var Sort      = require('./helpers/sort');
+
 
   var User = Backbone.Model.extend({
 
@@ -49,6 +51,16 @@ define(function(require) {
     //   return do_read;
     // },
 
+    put_all_reads_in_one_array: function(reads) {
+      var new_reads = [];
+      _.each(reads, function(read) {
+        _.each(read.data, function(read) {
+          new_reads.push(read);
+        });
+      });
+      return Sort(new_reads, 'desc', 'publish_time');
+    },
+
     login: function() {
       Facebook.login(function() {
         window.location.reload();
@@ -58,6 +70,24 @@ define(function(require) {
     logout: function(cb) {
       Facebook.logout(function() {
         cb();
+      });
+    },
+
+    delete_read: function(read_id, cb) {
+      Facebook.delete_read(read_id, function(response) {
+        if (response === true) {
+          var activity = SR.get('activity');
+          _.each(activity[0].data, function(story, index) {
+            if (story.id == read_id) {
+              activity[0].data.splice(index);
+            }
+          });
+          SR.set('activity', activity);
+          SR.trigger('change');   // force a change trigger (set doesn't listen to nested changes)
+          cb(true);
+        } else {
+          cb(false);
+        }
       });
     }
 

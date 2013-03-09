@@ -4,8 +4,6 @@ define(function(require) {
       _             = require('underscore'),
       Backbone      = require('backbone');
 
-  var Sort          = require('./sort');
-
 
   var Facebook = Backbone.Model.extend({
 
@@ -182,27 +180,10 @@ define(function(require) {
       });
     },
 
-    delete_read: function(id, activity, cb) {
+    delete_read: function(id, cb) {
       FB.api('/' + id, 'delete', function(response) {
-        if (response === true) {
-          _.each(activity[0].data, function(read, key) {
-            if (read.id == id) {
-              delete(window._sr.activity[0].data[key]);
-            }
-          });
-        }
-        cb();
+        cb(response);
       });
-    },
-
-    put_all_reads_in_one_array: function(reads) {
-      var new_reads = [];
-      _.each(reads, function(read) {
-        _.each(read.data, function(read) {
-          new_reads.push(read);
-        });
-      });
-      return Sort(new_reads, 'desc', 'publish_time');
     }
 
 

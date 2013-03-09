@@ -1,12 +1,11 @@
 <ul class='tabs'>
-  <li class='everyone sr_active_tab'><a>Everyone</a></li>
+  <li class='everyone active'><a>Everyone</a></li>
   <li class='me'><a>Just you</a></li>
 </ul>
 <div class='reads_list'>
-
   <ul>
     <% _.each(reads, function(read) { %>
-      <li id='read_<%= read.id %>'>
+      <li data-id='<%= read.id %>' data-from="<%= read.from_type %>">
         <a class='name' href='//facebook.com/<%= read.from.id %>' target='blank'>
           <img class='story-img' src='https://graph.facebook.com/<%= read.from.id %>/picture' width='50' height='50' alt='<%= read.from.name %>' />
         </a>
@@ -16,17 +15,19 @@
             read 
             <a class='article' href='<%= read.data.article.url %>' target='blank'><%= read.data.article.title %></a>
           </div>
-          <div class='story-meta'><%= read.relative_time %> <span class='sr_story_delete_text'>&middot; <a class='sr_story_delete'>Delete</a></span>
+          <div class='story-meta'>
+            <%= read.relative_time %> 
+            <% if (read.from_type == 'me') { %><span class='delete_text'>&middot; <a class='story_delete'>Delete</a></span><% } %>
           </div>
         </div>
         <div class='clear'></div>
       </li>
     <% }); %>
   </ul>
-
-  <div class='reads_empty'>
-    None of your friends have read anything on this site yet.
-  </div>
-
+  <% if (reads.length === 0) { %>
+    <div class='reads_empty'>
+      None of your friends have read anything on this site yet.
+    </div>
+  <% } %>
 </div>
 

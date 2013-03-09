@@ -22,7 +22,13 @@ body {
   position:absolute;
   overflow: hidden;
 }
-a.close {
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.close {
   position:absolute;
   font-weight:bold;
   color:#fff;
@@ -31,7 +37,7 @@ a.close {
   right:11px;
 }
 h3 {
-  margin:0px 0px 0 0px;
+  margin:0;
   border-bottom:1px solid #ccc;
   padding:4px 5px 4px 10px;
   font-size:18px;
@@ -50,11 +56,10 @@ h3 {
 }
 .reads_empty {
   padding:5px 10px;
-  display:none;
 }
 .tabs {
   list-style-type:none;
-  margin:0px 0px 0px 0px;
+  margin:0;
   padding:8px 15px;
   background:#f6f6f6;
   border-bottom:1px solid #ccc;
@@ -74,13 +79,13 @@ h3 {
 }
 .reads_list {
   overflow-y:auto;
-  margin:0px 0px 0 0;
+  margin:0;
   height:505px;
 }
 .reads_list ul {
   list-style-type:none;
   padding:10px 0 0 0;
-  margin:0px;
+  margin:0;
 }
 .reads_list ul li {
   border-bottom:1px solid #eee;
@@ -97,49 +102,49 @@ h3 {
 }
 .reads_list ul li .story-inner {
   margin:0 0 0 13px;
-  padding:0px;
+  padding:0;
   float:left;
   width:470px;
 }
 .reads_list ul li .story-inner .story-title {
-  margin:0px;
+  margin:0 0 10px 0;
 }
 .reads_list ul li .story-inner .story-title a {
   font-weight:bold;
 }
 .reads_list ul li .story-inner .story-meta {
   color:#777;
-  margin:0px 0 0 0;
+  margin:0;
   font-size:12px;
 }
-.reads_list ul li .story-inner .story-meta a.story-time {
+.reads_list ul li .story-inner .story-meta .story-time {
   color:#777;
 }
-.reads_list ul li.sr_friend_story .story-inner .story-meta .sr_story_delete_text {
+.reads_list ul .sr_friend_story .story-inner .story-meta .sr_story_delete_text {
   display:none;
 }
 .reads_list ul li .story-inner .story-like-arrow {
   display:block;
   height:5px;
   overflow:hidden;
-  background:url(../images/fbarrow.png) no-repeat 21px 0px;
+  background:url(../images/fbarrow.png) no-repeat 21px 0;
   margin:3px 0 0 0;
-  padding:0px;
+  padding:0;
 }
 .reads_list ul li .story-inner .story-likes {
   background:#edeff4 url(../images/fblike.png) no-repeat 6px 5px;
   font-size:12px;
   padding:5px 5px 5px 27px;
-  margin:0px 0 1px 0;
+  margin:0 0 1px 0;
 }
 .reads_list ul li .story-inner .story-comments {
   font-size:12px;
-  margin:0px 0 5px 0;
-  padding:0px;
+  margin:0 0 5px 0;
+  padding:0;
 }
 .reads_list ul li .story-inner .story-comments ul.comment-list {
-  margin:0px;
-  padding:0px;
+  margin:0;
+  padding:0;
 }
 .reads_list ul li .story-inner .story-comments ul.comment-list li {
   min-height:35px;
@@ -159,7 +164,7 @@ h3 {
 .reads_list ul li .story-inner .story-comments .new-comment {
   background:#edeff4;
   padding:5px;
-  margin:0px;
+  margin:0;
 }
 .reads_list ul li .story-inner .story-comments .new-comment img {
   float:left;
@@ -168,7 +173,7 @@ h3 {
 .reads_list ul li .story-inner .story-comments .new-comment input {
   color:#777;
   border:1px solid #BDC7D8;
-  margin:0px;
+  margin:0;
   padding:3px;
   width:415px;
 }

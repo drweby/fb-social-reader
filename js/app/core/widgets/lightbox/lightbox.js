@@ -1,20 +1,18 @@
 define(function (require) {
 
   var $                = require('jquery'),
-      Time             = require('./time'),
       _                = require('underscore'),
+      User             = require('../../user'),
       SR               = require('../../global'),
-      Facebook         = require('app/modules/facebook/fb'),
       Widget           = require('../widget'),
       RelativeTime     = require('./time');
 
-
   var CSS              = require('tpl!./style.css');
   var LightboxTpl      = require('tpl!./lightbox.html');
-  var LightboxReadsTpl = require('tpl!./read.html');
+  var LightboxReadsTpl = require('tpl!./reads.html');
 
 
-  return Widget.extend({
+  var Lightbox = Widget.extend({
 
     initialize: function() {
       this.$container = $('body');
@@ -48,7 +46,9 @@ define(function (require) {
     },
 
     events: {
-      "click .close": "close"
+      "click .close": "close",
+      "click .tabs li a": "switch_tab",
+      "click .story_delete": "delete_read"
     },
 
     close: function() {
@@ -64,9 +64,14 @@ define(function (require) {
     show_activity: function() {
 
       // Get reads
-      var reads = Facebook.put_all_reads_in_one_array(SR.get('activity'));
+      var reads = User.put_all_reads_in_one_array(SR.get('activity'));
       _.each(reads, function(read, key) {
         reads[key].relative_time = RelativeTime(reads[key].publish_time);
+        if (read.from.id == SR.get('user').id) {
+          reads[key].from_type = 'me';
+        } else {
+          reads[key].from_type = 'friend';
+        }
       });
       var readsHtml = LightboxReadsTpl(_.extend(SR.attributes, { 'reads': reads }));
 
@@ -74,40 +79,32 @@ define(function (require) {
       var html = LightboxTpl(_.extend(SR.attributes, { contents: readsHtml }));
       this.$el.find('body').html(html);
 
-
-
     },
 
-    switch_tab: function() {
-
-      //     $("#sr_activity_tabs a").on("click", function() {
-      //       $('#sr_activity_tabs li').removeClass('sr_active_tab');
-      //       $(this).closest('li').addClass('sr_active_tab');
-      //       if ($(this).closest('li').attr('id') === 'sr_lightbox_everyone') {
-      //         $('#sr_reads_list ul li').show();
-      //       } else if ($(this).closest('li').attr('id') === 'sr_lightbox_me') {
-      //         $('#sr_reads_list ul li.sr_friend_story').hide();
-      //       }
+    switch_tab: function(e) {
+      this.$el.find('.tabs li').removeClass('active');
+      var $new_active = $(e.currentTarget).closest('li').addClass('active');
+      if ($new_active.hasClass('me')) {
+        this.$el.find("[data-from='friend']").hide();
+      } else {
+        this.$el.find("[data-from='friend']").show();
+      }
     },
 
-    delete_read: function() {
-
-      //     });
-      //     $('.sr_story_delete').on("click", function() {
-      //       var read_id;
-      //       read_id = $(this).closest('li').attr('id').replace('sr_read_', '');
-      //       return Fb.delete_read(read_id, function(cb) {
-      //         return $("#sr_read_"+read_id).fadeOut(function() {
-      //           return $("#sr_read_"+read_id).remove();
-      //         });
-      //       });
-      //     });
-      //   }§
+    delete_read: function(e) {
+      $(e.currentTarget).text('Deleting...');
+      var $story = $(e.currentTarget).closest('li');
+      var read_id = $story.attr('data-id');
+      User.delete_read(read_id, function(response) {
+        if (response) {
+          $story.fadeOut(function() {
+            $story.remove();
+          });
+        }
+      });
     }
 
   });
-
-
 
 
   return Lightbox;
