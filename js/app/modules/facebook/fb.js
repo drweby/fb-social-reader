@@ -169,8 +169,27 @@ define(function(require) {
     },
 
     add_read: function(cb) {
+      var _this = this;
       FB.api('/me/'+this.get('action_type')+'?article=' + window.location.href, 'post', function(response) {
-        cb((response.id) ? response.id : false);
+        if (cb !== undefined) {
+          if (response.id) {
+            _this.get_read(response.id, function(read) {
+              cb(response);
+            });
+          } else {
+            cb(false);
+          }
+        }
+      });
+    },
+
+    get_read: function(id, cb) {
+      FB.api('/'+id, 'GET', function(response) {
+        if (!response.error) {
+          cb(response);
+        } else {
+          cb(false);
+        }
       });
     },
 

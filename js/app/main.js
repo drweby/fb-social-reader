@@ -9,6 +9,7 @@ define(function (require) {
   $(document).ready(function() {
     User.start(function() {
       Widgets(['sidebar', 'lightbox', 'single']);
+      User.queue_read();
     });
   });
 

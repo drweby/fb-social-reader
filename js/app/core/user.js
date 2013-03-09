@@ -41,15 +41,21 @@ define(function(require) {
     },
 
     // Queues read to Facebook. Returns true if queued, false if not.
-    // queue_read: function(cb) {
-    //   var do_read = SR.get('user').is_auto_sharing === true && SR.get('page').is_readable === true;
-    //   if (do_read) {
-    //     setTimeout(function() {
-    //       Facebook.add_read();
-    //     }, 10000);
-    //   }
-    //   return do_read;
-    // },
+    queue_read: function() {
+      if (SR.get('auto_sharing') === true && SR.get('site').page_readable == "true") {
+        setTimeout(function() {
+          Facebook.add_read(function(read) {
+            var activity = SR.get('activity');
+            activity[0].data.unshift(read);
+            SR.set('activity', activity);
+            SR.trigger('change'); // force change to save cache
+          });
+        }, 2000);
+        return true;
+      } else {
+        return false;
+      }
+    },
 
     put_all_reads_in_one_array: function(reads) {
       var new_reads = [];
@@ -83,7 +89,7 @@ define(function(require) {
             }
           });
           SR.set('activity', activity);
-          SR.trigger('change');   // force a change trigger (set doesn't listen to nested changes)
+          SR.trigger('change');   // force change to save cache
           cb(true);
         } else {
           cb(false);

@@ -144,7 +144,8 @@ class SR_Controller {
       "site" => array( 
         "plugin_url" => FB_OG_PLUGIN_URL,
         "plugin_version" => FB_OG_CURRENT_VERSION,
-        "analytics_disabled" => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')) 
+        "analytics_disabled" => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')),
+        "page_readable" => $this->is_readable()
       )
     );
 
