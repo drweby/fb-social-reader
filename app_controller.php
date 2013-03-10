@@ -25,9 +25,6 @@ class SR_Controller {
     // Enqueue script
     add_action( 'wp_head', array($this, 'sr_head'));
 
-    // Add server-side info to global
-    add_action( 'wp_head', array($this, 'load_client_details'));
-
     // Add stylesheet and scripts for admin
     add_action('admin_print_styles', array($this, 'add_admin_stylesheets'));
     add_action('admin_head', array($this, 'admin_enqueue_widget_scripts'));
@@ -63,19 +60,64 @@ class SR_Controller {
   // Inject custom css 
   function sr_head() {
 
-    // Load in the app in wp_head
-    if (isset($_GET['sr_debug'])) {
-      $appPath = 'js/app';
-    } else {
-      $appPath = 'js/sr.min';
-    }
-    echo '<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js" data-main="'.FB_OG_PLUGIN_URL.$appPath.'" async defer></script>'."\n";
+    echo "\n\n";
 
-    if (get_option('fb_og_custom_css') != '') {
-      echo "<style type='text/css'>";
-      echo get_option('fb_og_custom_css');
-      echo "</style>";
-    }
+    ?><!-- Start of FB Social Reader -->
+    <?php
+
+    // Set the various options in the global
+    $sr = array(
+      "facebook" => array(
+        'app_id' => get_option('fb_og_app_id'),
+        'channel_url' => FB_OG_PLUGIN_URL.'channel.html',
+        'sdk_disabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')),
+        'action_type' => "news.reads"   
+      ),
+      "sidebar" => array(
+        "login_meta" => get_option('fb_og_login_meta', 'Logged in'),
+        "login_promo" => get_option('fb_og_login_promo', 'Log in and see what your friends are reading'),
+        "logout" => get_option('fb_og_logout', 'Logout'),
+        "auto_sharing_on" => get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'),
+        "auto_sharing_off" => get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'),
+        "activity" => get_option('fb_og_sidebar_activity', 'Activity')
+      ),
+      "lightbox" => array(
+        "title" => 'Recent activity'
+      ),
+      "site" => array( 
+        "plugin_url" => FB_OG_PLUGIN_URL,
+        "plugin_version" => FB_OG_CURRENT_VERSION,
+        "analytics_disabled" => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')),
+        "page_readable" => $this->is_readable()
+      )
+    );
+
+    // Get the client details
+    ?><script type='text/javascript'>
+      window._sr = <?php echo json_encode($sr)."\n"; ?>
+      _sr.ready = function(cb) {
+        _sr.readyCallbacks = window._sr.readyCallbacks || [];
+        _sr.readyCallbacks.push(cb);
+      };
+    </script>
+    <?php
+        // Load in the app in wp_head
+        if (isset($_GET['sr_debug'])) {
+          $appPath = 'js/app.js';
+        } else {
+          $appPath = 'js/sr.min.js';
+        }
+    ?>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js" data-main="<?php echo FB_OG_PLUGIN_URL.$appPath; ?>"></script>
+    <!-- End of FB Social Reader -->
+
+    <script>
+      _sr.ready(function() {
+        alert('im amazing');
+      });
+    </script>
+
+  <?php 
   }
 
   // Setup auto read
@@ -119,42 +161,6 @@ class SR_Controller {
 
   }
 
-  // Send back server details to the client side
-  function load_client_details() { 
-
-    
-    $sr = array(
-      "facebook" => array(
-        'app_id' => get_option('fb_og_app_id'),
-        'channel_url' => FB_OG_PLUGIN_URL.'channel.html',
-        'sdk_disabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')),
-        'action_type' => "news.reads"   
-      ),
-      "sidebar" => array(
-        "login_meta" => get_option('fb_og_login_meta', 'Logged in'),
-        "login_promo" => get_option('fb_og_login_promo', 'Log in and see what your friends are reading'),
-        "logout" => get_option('fb_og_logout', 'Logout'),
-        "auto_sharing_on" => get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'),
-        "auto_sharing_off" => get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'),
-        "activity" => get_option('fb_og_sidebar_activity', 'Activity')
-      ),
-      "lightbox" => array(
-        "title" => 'Recent activity'
-      ),
-      "site" => array( 
-        "plugin_url" => FB_OG_PLUGIN_URL,
-        "plugin_version" => FB_OG_CURRENT_VERSION,
-        "analytics_disabled" => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')),
-        "page_readable" => $this->is_readable()
-      )
-    );
-
-    // Get the client details
-    ?>
-    <script type='text/javascript'>
-      window._sr = <?php echo json_encode($sr); ?>
-    </script>
-  <?php }
 
   // Convert option to js bool
   function convert_wp_option_to_bool_string($option) {

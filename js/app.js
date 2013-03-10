@@ -1,5 +1,6 @@
 // For any third party dependencies, like jQuery, place them in the lib folder.
 
+
 // Get absolute directory
 var appUrl = require.toUrl('app');
 var arr = appUrl.split('/');

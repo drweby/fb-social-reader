@@ -23,13 +23,20 @@ define(["backbone",
             // Get the user, friends, and activity from Facebook, if cache hasn't been updated for a while
             if (SR.get('is_cached_recently') === false) {
               Facebook.get_data(function(user, friends, activity) {
-                SR.set({ user: user, friends: friends, activity: activity });
+                SR.set({
+                  user: user,
+                  friends: friends,
+                  activity: activity,
+                  isReady: true
+                });
                 cb(true);
               });
             } else {
+              SR.set('isReady', true);
               cb(true);
             }
           } else {
+            SR.set('isReady', true);
             cb(false);
           }
 

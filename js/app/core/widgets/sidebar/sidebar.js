@@ -3,11 +3,8 @@ define(["jquery",
         "../widget",
         "../../user",
         "../lightbox/lightbox",
-        "../../global",
-        "tpl!./logged_in.html",
-        "tpl!./logged_out.html",
-        "tpl!./style.css"],
-        function($, _, Widget, User, Lightbox, SR, LoggedInTpl, LoggedOutTpl, CSS) {
+        "../../global"],
+        function($, _, Widget, User, Lightbox, SR) {
 
   var Sidebar = Widget.extend({
 
@@ -15,7 +12,7 @@ define(["jquery",
       this.$container = $('#sr_sidebar_box');
       if (this.$container.length === 0) return;
       this.create_iframe( { id: 'sr_sidebar' });
-      this.load_css(CSS);
+      // this.load_css(CSS);
       this.render();
       this.lightbox = new Lightbox();
     },
