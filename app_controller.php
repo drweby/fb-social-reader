@@ -111,12 +111,6 @@ class SR_Controller {
     <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.4/require.min.js" data-main="<?php echo FB_OG_PLUGIN_URL.$appPath; ?>"></script>
     <!-- End of FB Social Reader -->
 
-    <script>
-      _sr.ready(function() {
-        alert('im amazing');
-      });
-    </script>
-
   <?php 
   }
 

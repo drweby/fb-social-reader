@@ -8,7 +8,7 @@
 define(["underscore",
         "backbone",
         "../modules/cache",
-        "./template"],
+        "./widgets/template"],
         function (_, Backbone, Cache, Template) {
 
   // Create the cache
@@ -23,7 +23,8 @@ define(["underscore",
       'user': {},
       'activity': [],
       'friends': [],
-      'isReady': false
+      'isReady': false,
+      'readyCallbacks': []
     },
 
     initialize: function() {
@@ -51,7 +52,10 @@ define(["underscore",
     cache_on_change: function() {
       var _this = this;
       this.on('change', function() {
-        cache.save(_.omit(_this.attributes, ['is_cached', 'is_cached_recently', 'isReady', 'readyCallbacks']));
+        cache.save(_.omit(
+          _this.attributes,
+          ['is_cached', 'is_cached_recently', 'isReady', 'readyCallbacks']
+        ));
       });
     },
 

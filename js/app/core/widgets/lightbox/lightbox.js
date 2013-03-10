@@ -2,11 +2,11 @@ define(["jquery",
         "underscore",
         "../../user",
         "../../global",
-        "../widget",
+        "../template",
         "./time"],
-        function ($, _, User, SR, Widget, RelativeTime) {
+        function ($, _, User, SR, Template, RelativeTime) {
 
-  var Lightbox = Widget.extend({
+  var Lightbox = Template.extend({
 
     initialize: function() {
       this.$container = $('body');

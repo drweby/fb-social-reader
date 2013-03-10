@@ -1,8 +1,8 @@
 define(["jquery",
         "underscore",
-        "../widget",
+        "../template",
         "./format"],
-        function($, _, Widget, Format) {
+        function($, _, Template, Format) {
 
   var Single = Widget.extend({
 
