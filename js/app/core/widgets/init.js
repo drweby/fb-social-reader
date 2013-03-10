@@ -4,6 +4,7 @@ define(["underscore",
         "./single/single"],
       function (_, Sidebar, Single) {
 
+
   var widgets = {
     'sidebar':  Sidebar,
     'single':   Single

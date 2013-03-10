@@ -7,8 +7,9 @@
 */
 define(["underscore",
         "backbone",
-        "../modules/cache"],
-        function (_, Backbone, Cache) {
+        "../modules/cache",
+        "./template"],
+        function (_, Backbone, Cache, Template) {
 
   // Create the cache
   var cache = new Cache({
@@ -59,6 +60,14 @@ define(["underscore",
       _.each(sr, function(option, key) {
         _this.set(key, option);
       });
+    },
+
+    // Run a template
+    template: function(options) {
+      options = _.extend(options, {
+        plugin_url: this.get('site').plugin_url
+      });
+      new Template(options);
     }
 
   });
