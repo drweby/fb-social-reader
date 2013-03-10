@@ -1,11 +1,9 @@
-define(function(require) {
-
-  var Backbone  = require('backbone');
-
-  var SR        = require('./global'),
-      Facebook  = require('../modules/facebook/fb');
-
-  var Sort      = require('./helpers/sort');
+define(["backbone",
+        "underscore",
+        "./global",
+        "../modules/facebook/fb",
+        "./helpers/sort"],
+        function(Backbone, _, SR, Facebook, Sort) {
 
 
   var User = Backbone.Model.extend({

@@ -1,12 +1,6 @@
-define([
-	'require',
-	'app/admin/setup',
-	'app/admin/widgets'
-	], function (
-		require,
-		Setup,
-		Widgets
-	) {
+define(['app/admin/setup',
+				'app/admin/widgets'],
+				function (Setup, Widgets) {
 
 	$ = window.jQuery;
 

@@ -1,4 +1,5 @@
-define(['require', 'underscore'], function(require, _) {
+define(['underscore'],
+				function(_) {
 
 	var Format = {};
 

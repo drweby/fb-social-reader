@@ -1,8 +1,7 @@
-define(function (require) {
+define(["backbone"],
+        function (Backbone) {
 
-  var Backbone = require('backbone');
-
-  return Backbone.Model.extend({
+  var Cache = Backbone.Model.extend({
 
     // Check to see if the data is cached at all
     exists: function() {
@@ -44,5 +43,7 @@ define(function (require) {
     }
 
   });
+
+  return Cache;
 
 });

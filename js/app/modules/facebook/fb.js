@@ -1,11 +1,10 @@
-define(function(require) {
+define(["jquery",
+        "underscore",
+        "backbone"],
+        function($, _, Backbone) {
 
-  var $             = require('jquery'),
-      _             = require('underscore'),
-      Backbone      = require('backbone');
 
-
-  var Facebook = Backbone.Model.extend({
+  var FacebookModel = Backbone.Model.extend({
 
     start: function(cb) {
       var _this = this;
@@ -208,6 +207,7 @@ define(function(require) {
 
   });
 
-  return new Facebook();
+  var Facebook = new FacebookModel();
+  return Facebook;
 
 });

@@ -5,12 +5,10 @@
     - auto-saves to cache on change
     - gets data from cache if last saved within X mins
 */
-define(function (require) {
-
-  var _        = require('underscore'),
-      Backbone = require('backbone'),
-      Cache    = require('../modules/cache');
-
+define(["underscore",
+        "backbone",
+        "../modules/cache"],
+        function (_, Backbone, Cache) {
 
   // Create the cache
   var cache = new Cache({

@@ -1,7 +1,7 @@
 define(function() {
 
   // Sort an array (on basic level, or by sub key for array of objects)
-  return function(arr, order, sub_key) {
+  var Sort = function(arr, order, sub_key) {
     if (sub_key === undefined) {
       arr = arr.sort();
     } else {
@@ -13,5 +13,7 @@ define(function() {
     if ((order || 'asc') == 'desc') arr = arr.reverse();
     return arr;
   };
+
+  return Sort;
 
 });

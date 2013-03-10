@@ -1,6 +1,7 @@
 /*
-  Pull in jQuery from Google's CDN
+  Pull in jQuery from Google's CDN. If the shim init function actually worked, this wouldn't be needed.
 */
-define(['https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'], function() {
-  return jQuery.noConflict(true);
+define(['//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'], function() {
+  var $ = jQuery.noConflict(true);
+  return $;
 });

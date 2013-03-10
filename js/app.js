@@ -9,12 +9,28 @@ var dir = arr.join('/');
 // Configure loading modules from the lib directory,
 // except for 'app' ones, which are in a sibling
 // directory.
-requirejs.config({
+require.config({
   baseUrl: dir+'/lib',
   paths: {
-    app: dir+'/app',
-    ga: 'https://google-analytics.com/ga'
+    app: dir+'/app'
+    // jquery: "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min",
+    // underscore: "//dd6zx4ibq538k.cloudfront.net/static/lodash.min"
   }
+  // shim: {
+  //   jquery: {
+  //     exports: "jQuery",
+  //     init: function() {
+  //       debugger;
+  //       return window.$.noConflict(!0);
+  //     }
+  //   },
+  //   underscore: {
+  //     exports: "_",
+  //     init: function() {
+  //       return window._.noConflict();
+  //     }
+  //   }
+  // }
 });
 
 // Start loading the main app file. Put all of

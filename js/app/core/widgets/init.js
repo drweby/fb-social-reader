@@ -1,20 +1,23 @@
 // Module that takes an array of widgets and runs them
-define(function (require) {
-
-  var _       = require('underscore');
+define(["underscore",
+        "./sidebar/sidebar",
+        "./single/single"],
+      function (_, Sidebar, Single) {
 
   var widgets = {
-    'sidebar':  require('./sidebar/sidebar'),
-    'single':   require('./single/single')
+    'sidebar':  Sidebar,
+    'single':   Single
     // 'lightbox': require('./lightbox/lightbox') // loaded in via sidebar
   };
 
-  return function(widget_array) {
+  var Widgets = function(widget_array) {
     _.each(widget_array, function(key) {
       if (widgets[key] && _.isFunction(widgets[key])) {
         new widgets[key]();
       }
     });
   };
+
+  return Widgets;
 
 });

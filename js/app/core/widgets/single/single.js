@@ -1,12 +1,10 @@
-define(function(require) {
+define(["jquery",
+        "underscore",
+        "../widget",
+        "./format"],
+        function($, _, Widget, Format) {
 
-  var $          = require('jquery');
-  var _          = require('underscore');
-
-  var Widget     = require('../widget');
-  var Format     = require('./format');
-
-  return Widget.extend({
+  var Single = Widget.extend({
 
     initialize: function() {
       var user = window._sr.user, activity = window._sr.activity;
@@ -33,5 +31,7 @@ define(function(require) {
     }
 
   });
+
+  return Single;
 
 });

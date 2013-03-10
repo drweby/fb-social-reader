@@ -1,14 +1,12 @@
-define(function (require) {
+define(["jquery",
+        "underscore",
+        "backbone",
+        "../global",
+        "tpl!./global.css"],
+        function ($, _, Backbone, SR, GlobalCSS) {
 
-  var Backbone  = require('backbone'),
-      _         = require('underscore'),
-      $         = require('jquery');
 
-      SR        = require('../global');
-
-  var GlobalCSS = require('tpl!./global.css');
-
-  return Backbone.View.extend({
+  var Widget = Backbone.View.extend({
 
     create_iframe: function(css) {
       var parameters = { 'border': 0 };
@@ -29,5 +27,7 @@ define(function (require) {
     }
 
   });
+
+  return Widget;
 
 });

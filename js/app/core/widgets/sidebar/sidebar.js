@@ -1,17 +1,15 @@
-define(function(require) {
+define(["jquery",
+        "underscore",
+        "../widget",
+        "../../user",
+        "../lightbox/lightbox",
+        "../../global",
+        "tpl!./logged_in.html",
+        "tpl!./logged_out.html",
+        "tpl!./style.css"],
+        function($, _, Widget, User, Lightbox, SR, LoggedInTpl, LoggedOutTpl, CSS) {
 
-  var $            = require('jquery'),
-      Widget       = require('../widget');
-      User         = require('../../user'),
-      Lightbox     = require('../lightbox/lightbox'),
-      SR           = require('../../global');
-
-  var LoggedInTpl  = require('tpl!./logged_in.html');
-  var LoggedOutTpl = require('tpl!./logged_out.html');
-
-  var CSS          = require('tpl!./style.css');
-
-  return Widget.extend({
+  var Sidebar = Widget.extend({
 
     initialize: function() {
       this.$container = $('#sr_sidebar_box');
@@ -70,6 +68,6 @@ define(function(require) {
 
   });
 
-
+  return Sidebar;
 
 });

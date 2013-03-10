@@ -1,16 +1,13 @@
-define(function (require) {
-
-  var $                = require('jquery'),
-      _                = require('underscore'),
-      User             = require('../../user'),
-      SR               = require('../../global'),
-      Widget           = require('../widget'),
-      RelativeTime     = require('./time');
-
-  var CSS              = require('tpl!./style.css');
-  var LightboxTpl      = require('tpl!./lightbox.html');
-  var LightboxReadsTpl = require('tpl!./reads.html');
-
+define(["jquery",
+        "underscore",
+        "../../user",
+        "../../global",
+        "../widget",
+        "./time",
+        "tpl!./style.css",
+        "tpl!./lightbox.html",
+        "tpl!./reads.html"],
+        function ($, _, User, SR, Widget, RelativeTime, CSS, LightboxTpl, LightboxReadsTpl) {
 
   var Lightbox = Widget.extend({
 

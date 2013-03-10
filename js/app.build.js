@@ -5,15 +5,11 @@
   // The path of the dev files (main shouild be directly underneath this)
   baseUrl: '.',
 
-  preserveLicenseComments: false,
-
   // Output everything to one minified file
   out: 'sr.min.js',
 
-  // Comment out the below line to stop minifying using UglifyJS
-  //optimize: "none",
-
   // Build from the app folder (relative to baseUrl)
+  // name: 'app/main',
   name: 'app',
 
   // Set paths for libs
@@ -21,11 +17,31 @@
     jquery: 'lib/jquery',
     backbone: 'lib/backbone',
     underscore: 'lib/underscore',
-    text: 'lib/text',
     tpl: 'lib/tpl',
-    ga: 'empty:',
-    qunit: 'empty:'
-  }
+    ga: 'empty:'
+  },
+
+  preserveLicenseComments: false,
+
+  // onBuildWrite: function(id, path, contents) {
+  //   // Remove all the AMD/requirejs wrapping. Shamelessly
+  //   // poached from Modernizr.
+  //   if ((/define\((.|\n)*?\{/).test(contents)) {
+  //     contents = contents.replace(/define\((.|\n)*?\{/, '');
+
+  //     contents = contents.replace(/\}\);\s*?$/,'');
+
+  //     contents = contents.replace(/return.*[^return]*$/,'');
+  //   }
+  //   else if ((/require\([^\{]*?\{/).test(contents)) {
+  //     contents = contents.replace(/require[^\{]+\{/, '');
+  //     contents = contents.replace(/\}\);\s*$/,'');
+  //   }
+  //   return contents;
+  // },
+
+  // Comment out the below line to stop minifying using UglifyJS
+  optimize: "uglify"
 
 })
 
