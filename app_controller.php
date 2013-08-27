@@ -48,14 +48,6 @@ class SR_Controller {
 
     
   }
-  
-  
-  // Ajax handler
-  function ajax() {
-    $func = $_POST['type'];
-    if (method_exists($this, $func)) $this->$func($_POST);  
-    die();  // Required for wordpress ajax to work
-  }
 
     
   /** Header stuff **/
@@ -162,39 +154,6 @@ class SR_Controller {
     }
   }
 
-  // Save user to cache and update auto sharing (only happens on first pageview of visit)
-  function save_user($data) {
-    $user = json_decode(stripslashes($data['user']));
-
-    // To see if the user has auto sharing on/off, see if there's a previous cache of the user 
-    $old_user_json = $this->get_cache($user->id, 'user_cache');
-    if ($old_user_json == false) {
-      $user->is_auto_sharing = true;
-    } else {
-      $old_user = json_decode($old_user_json);
-      $user->is_auto_sharing = $old_user->is_auto_sharing;
-    }
-
-    // Save the user 
-    $this->save_cache(array(
-      'fb_id' => $user->id, 
-      'field' => "user_cache",
-      'data' => addslashes(json_encode($user))
-    ));
-
-  }
-
-
-  // Save the user to the file cache. Echos json for front-end 
-  function save_cache($data) {
-   if (!isset($data['data'])) $data['data'] = '{}';
-    if ($this->SR->save_cache($data['fb_id'], $data['field'], serialize($data['data']))) {
-      echo stripslashes($data['data']);
-    } else {
-      return 0;
-    }
-  }
-
   // Convert strings to booleans if true/false
   function convert_string_to_boolean($str) {  
     if ($str == 'true') {
@@ -205,36 +164,7 @@ class SR_Controller {
       return $str;
     }
   }
-
-  // Get the user cache data
-  function get_cache($fb_id, $field) {
-    $result = $this->SR->get_cache(array(
-      'fb_id' => $fb_id,
-      'field' => $field
-    ));
-    if ($result == true) {
-      @$contents = stripslashes(unserialize($this->SR->$field));
-      if (!$contents) return false;
-      return $contents;
-    } else {
-      return false;
-    }
-  }
-
-  // Get activity caches - go through all the files with friends' activity and get the data out
-  function get_friends_activity_cache($friends_cache) {
-    $friends_cache_array = json_decode($friends_cache);
-    $activity = array();
-    if (!$friends_cache_array) return '{}';
-    $activity[] = $this->get_cache($_COOKIE['sr_user_id'], 'activity_cache');
-    foreach ($friends_cache_array as $friend) {
-      $activity[] = $this->get_cache($friend->id, 'activity_cache');
-    }
-    //print_r($activity);
-    $json_arr = '['.implode(',', $activity).']';
-    return stripslashes($json_arr);
-  }
-
+  
   
   // Add the fb meta into the head. Major kudos to Facebook Meta Tags plugin author Matt Say (shailan.com)
   function add_head_meta(){
