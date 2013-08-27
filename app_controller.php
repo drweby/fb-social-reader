@@ -133,22 +133,27 @@ class SR_Controller {
   // Send back server details to the client side
   function load_client_details() { 
 
+    $dataLayer = array(
+      'fb_app_id' => get_option('fb_og_app_id'),
+      'fb_channel_url' => FB_OG_PLUGIN_URL.'channel.html',
+      'fb_sdk_disable' => $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')),
+      'login_meta' => get_option('fb_og_login_meta', 'Logged in'),
+      'login_promo' => get_option('fb_og_login_promo', 'Log in and see what your friends are reading'),
+      'logout' => get_option('fb_og_logout', 'Logout'),
+      'auto_sharing_on' => get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'),
+      'auto_sharing_off' => get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'),
+      'activity' => get_option('fb_og_sidebar_activity', 'Activity'),
+      'plugin_url' => FB_OG_PLUGIN_URL,
+      'plugin_version' => FB_OG_CURRENT_VERSION,
+      'analytics_disabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable'))
+    );
+
+
     // Get the client details
     ?>
     <script type='text/javascript'>
-      window._sr_site = {
-        'fb_app_id': "<?php echo get_option('fb_og_app_id'); ?>",
-        'fb_channel_url': "<?php echo FB_OG_PLUGIN_URL.'channel.html'; ?>",
-        'fb_sdk_disable': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')); ?>,
-        'login_meta': "<?php echo get_option('fb_og_login_meta', 'Logged in'); ?>",
-        'login_promo': "<?php echo get_option('fb_og_login_promo', 'Log in and see what your friends are reading'); ?>",
-        'logout': "<?php echo get_option('fb_og_logout', 'Logout'); ?>",
-        'auto_sharing_on': "<?php echo get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'); ?>",
-        'auto_sharing_off': "<?php echo get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'); ?>",
-        'activity': "<?php echo get_option('fb_og_sidebar_activity', 'Activity'); ?>",
-        'plugin_url': "<?php echo FB_OG_PLUGIN_URL; ?>",
-        'plugin_version': "<?php echo FB_OG_CURRENT_VERSION; ?>",
-        'analytics_disabled': <?php echo $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')); ?> 
+      window.SocialReader = {
+        dataLayer: <?php echo json_encode($dataLayer); ?>
       };
     </script>
   <?php }
