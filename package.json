@@ -1,0 +1,28 @@
+{
+  "name": "fb-social-reader",
+  "version": "2.0.0",
+  "description": "Transform your Wordpress into a social reading experience. ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisjhoughton/fb-social-reader.git"
+  },
+  "keywords": [
+    "wordpress",
+    "facebook",
+    "open",
+    "graph",
+    "social",
+    "reader"
+  ],
+  "author": "Chris Houghton",
+  "license": "GPLv2",
+  "readmeFilename": "README.md",
+  "gitHead": "61141f4db480ac8fdedb0f3093c8c9defac552a4",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.3"
+  }
+}

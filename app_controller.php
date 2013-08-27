@@ -67,6 +67,9 @@ class SR_Controller {
 
   // Enqueue scripts front-end
   function sr_enqueue() {
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script( 'underscore' );
+    wp_enqueue_script( 'backbone' );
     wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
     wp_enqueue_style( 'social-reader-style' );
   }
@@ -79,7 +82,7 @@ class SR_Controller {
       echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js" data-main="'.FB_OG_PLUGIN_URL.'js/app"></script>';
     } else {
       echo '<script src="'.FB_OG_PLUGIN_URL.'js/lib/require.js"></script>';
-      echo '<script src="'.FB_OG_PLUGIN_URL.'js/sr.min.js"></script>';
+      echo '<script src="'.FB_OG_PLUGIN_URL.'js/socialreader.min.js"></script>';
     }
 
     if (get_option('fb_og_custom_css') != '') {
@@ -134,27 +137,25 @@ class SR_Controller {
   function load_client_details() { 
 
     $dataLayer = array(
-      'fb_app_id' => get_option('fb_og_app_id'),
-      'fb_channel_url' => FB_OG_PLUGIN_URL.'channel.html',
-      'fb_sdk_disable' => $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')),
-      'login_meta' => get_option('fb_og_login_meta', 'Logged in'),
-      'login_promo' => get_option('fb_og_login_promo', 'Log in and see what your friends are reading'),
+      'appId' => get_option('fb_og_app_id'),
+      'channelUrl' => FB_OG_PLUGIN_URL.'channel.html',
+      'sdkDisabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_sdk_disable')),
+      'loginMeta' => get_option('fb_og_login_meta', 'Logged in'),
+      'loginPromo' => get_option('fb_og_login_promo', 'Log in and see what your friends are reading'),
       'logout' => get_option('fb_og_logout', 'Logout'),
-      'auto_sharing_on' => get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'),
-      'auto_sharing_off' => get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'),
+      'autoSharingOn' => get_option('fb_og_sidebar_publishing_on', 'Auto sharing on'),
+      'autoSharingOff' => get_option('fb_og_sidebar_publishing_off', 'Auto sharing off'),
       'activity' => get_option('fb_og_sidebar_activity', 'Activity'),
-      'plugin_url' => FB_OG_PLUGIN_URL,
-      'plugin_version' => FB_OG_CURRENT_VERSION,
-      'analytics_disabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable'))
+      'pluginUrl' => FB_OG_PLUGIN_URL,
+      'pluginVersion' => FB_OG_CURRENT_VERSION,
+      'analyticsDisabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable'))
     );
 
 
     // Get the client details
     ?>
     <script type='text/javascript'>
-      window.SocialReader = {
-        dataLayer: <?php echo json_encode($dataLayer); ?>
-      };
+      window.SocialReaderData = <?php echo json_encode($dataLayer); ?>;
     </script>
   <?php }
 
@@ -417,9 +418,6 @@ class SR_Controller {
   // Do a couple of checks to make sure everything is all wonderful and rosy for the plugin to work
   function admin_do_checks() {
     $errors = array();
-    if (!is_writable(FB_OG_PLUGIN_PATH.'/cache')) {
-      $errors[] = FB_OG_PLUGIN_URL.'cache is not writable. Please set folder permissions to 777 to use this plugin.';
-    }
     if (phpversion() < 5.2) {
       $errors[] = 'Your PHP version is '.phpversion().'. This plugin requires at least version 5.2.0 to run. Please update your PHP version.';
     }
