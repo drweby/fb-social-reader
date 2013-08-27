@@ -1,4 +1,6 @@
-define(function(require) {
+define(function (require) {
+
+  var Cache = require("./cache");
 
   var $ = jQuery;
 
@@ -94,8 +96,16 @@ define(function(require) {
 
     getUser: function(cb) {
       var self = this;
+
+      if (Cache.get("user")) {
+        self.set("user", Cache.get("user"));
+        self.trigger("fetch_user");
+        return;
+      } 
+
       FB.api("/me?fields=id,name", function(me) {
         me.picture = "//graph.facebook.com/" + me.id + "/picture";
+        Cache.set("user", me);
         self.set("user", me);
         self.trigger("fetch_user");
       });
@@ -103,6 +113,13 @@ define(function(require) {
 
     getFriends: function(cb) {
       var self = this;
+
+      if (Cache.get("friends")) {
+        self.set("friends", Cache.get("friends"));
+        self.trigger("fetch_friends");
+        return;
+      }
+
       FB.api("/me/friends?fields=id,name,installed", function(response) {
         var friendUsers = [];
         _.each(response.data, function(friend) {
@@ -111,6 +128,7 @@ define(function(require) {
             friendUsers.push(friend);
           }
         });
+        Cache.set("friends", friendUsers);
         self.set("friends", friendUsers);
         self.trigger("fetch_friends");
       });
@@ -118,6 +136,12 @@ define(function(require) {
 
     getActivity: function(cb) {
       self = this;
+
+      if (Cache.get("activity")) {
+        self.set("activity", Cache.get("activity"));
+        self.trigger("fetch_activity");
+        return;
+      }
 
       var batch_arr = [];
       batch_arr.push({
@@ -146,6 +170,7 @@ define(function(require) {
           activity.push(body);
         });
         var orderedActivity = self.putAllReadsInOneArray(activity);
+        Cache.set("activity", orderedActivity);
         self.set("activity", orderedActivity);
         self.trigger("fetch_activity");
       });
