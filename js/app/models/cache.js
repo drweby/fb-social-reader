@@ -5,6 +5,9 @@ define(function() {
 
   var Cache = Backbone.Model.extend({
 
+    // Cache life in seconds
+    maxAge: 10,
+
     initialize: function() {
       var self = this;
 
@@ -35,7 +38,10 @@ define(function() {
       var self = this;
       var data = JSON.parse(window.localStorage.getItem("SocialReaderCache"));
       _.each(data, function(value, key) {
-        self.set(value.key, value.data);
+        var oldestAllowedTime = (new Date()).getTime() - (self.maxAge * 1000);
+        if (value.updated > oldestAllowedTime) {
+          self.set(value.key, value.data);
+        }
       });
     }
 
