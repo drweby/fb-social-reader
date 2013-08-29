@@ -8,7 +8,7 @@ define([
 		Widgets
 	) {
 
-	$ = window.jQuery;
+	var $ = window.jQuery;
 
 	// jQuery should be in as a WP dependency already
 	$(document).ready(function() {

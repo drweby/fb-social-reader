@@ -56,48 +56,48 @@ module.exports = function(grunt) {
 
 
 
-    requirejs: {
-      compile: {
-        options: {
-          baseUrl: "src/js",
-          name: "app/main",
-          paths: {
-            app: "app",
-            underscore: "empty:",
-            require: "lib/require",
-            core_data: "lib/core_data"
-          },
-          out: "src/js/schema.min.js",
-          wrap: {
-            startFile: "src/js/start.frag",
-            endFile: "src/js/end.frag"
-          },
-          // optimize: "none",
-          uglify: "uglify2",
-          preserveLicenseComments: false,
-          onBuildWrite: function(id, path, contents) {
-            // Remove all the AMD/requirejs wrapping. Shamelessly
-            // poached from QTracker, who shamelessly poached it from Modernizr.
-            if ((/define\((.|\n)*?\{/).test(contents)) {
-              contents = contents.replace(/define\((.|\n)*?\{/, "");
-              contents = contents.replace(/\}\);\s*?$/,"");
-              contents = contents.replace(/return.*[^return]*$/,"");
-            }
-            else if ((/require\([^\{]*?\{/).test(contents)) {
-              contents = contents.replace(/require[^\{]+\{/, "");
-              contents = contents.replace(/\}\);\s*$/,"");
-            }
-            return contents;
-          }
-        }
-      }
-    },
+    // requirejs: {
+    //   compile: {
+    //     options: {
+    //       baseUrl: "src/js",
+    //       name: "app/main",
+    //       paths: {
+    //         app: "app",
+    //         underscore: "empty:",
+    //         require: "lib/require",
+    //         core_data: "lib/core_data"
+    //       },
+    //       out: "src/js/schema.min.js",
+    //       wrap: {
+    //         startFile: "src/js/start.frag",
+    //         endFile: "src/js/end.frag"
+    //       },
+    //       // optimize: "none",
+    //       uglify: "uglify2",
+    //       preserveLicenseComments: false,
+    //       onBuildWrite: function(id, path, contents) {
+    //         // Remove all the AMD/requirejs wrapping. Shamelessly
+    //         // poached from QTracker, who shamelessly poached it from Modernizr.
+    //         if ((/define\((.|\n)*?\{/).test(contents)) {
+    //           contents = contents.replace(/define\((.|\n)*?\{/, "");
+    //           contents = contents.replace(/\}\);\s*?$/,"");
+    //           contents = contents.replace(/return.*[^return]*$/,"");
+    //         }
+    //         else if ((/require\([^\{]*?\{/).test(contents)) {
+    //           contents = contents.replace(/require[^\{]+\{/, "");
+    //           contents = contents.replace(/\}\);\s*$/,"");
+    //         }
+    //         return contents;
+    //       }
+    //     }
+    //   }
+    // },
 
   });
 
   grunt.loadNpmTasks("grunt-contrib-jshint");
   // grunt.loadNpmTasks("grunt-contrib-qunit");
-  grunt.loadNpmTasks("grunt-contrib-requirejs");
+  // grunt.loadNpmTasks("grunt-contrib-requirejs");
 
   // Type `grunt` to lint and minify
   grunt.registerTask("default", ["jshint", "requirejs"]);

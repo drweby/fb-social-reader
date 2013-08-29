@@ -14,10 +14,13 @@ define(function (require) {
 
     user.on("change:profile", function() {
       // Run the sidebar
+      // new Sidebar({ model: user });
     });
 
     user.on("fetch_activity", function() {
       // Run the other stuff
+      // new Lightbox({ model: user });
+      // new Single({ model: user });
     });
 
   });

@@ -24,7 +24,7 @@ define(function() {
           data: value,
           updated: (new Date()).getTime()
         };
-        var cache = JSON.parse(window.localStorage.getItem("SocialReaderCache"));
+        var cache = JSON.parse(window.localStorage.getItem("SocialReaderCache")) || {};
         cache[key] = data;
         window.localStorage.setItem("SocialReaderCache", JSON.stringify(cache));
       }); 
@@ -36,7 +36,6 @@ define(function() {
       _.each(data, function(value, key) {
         self.set(value.key, value.data);
       });
-      debugger;
     }
 
   });

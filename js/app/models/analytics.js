@@ -5,7 +5,7 @@ define(function(require) {
   };
 
   Analytics.init = function() {
-    var _this = this, user = window._sr.user, site = window._sr.site;
+    var self = this;
 
     if (site.analytics_disabled === true) {
       return false;
@@ -18,15 +18,8 @@ define(function(require) {
 
     // Load script in after setting variables
     require(["ga"], function() {
-      _this.initialized = true;
+      self.initialized = true;
     });
-  };
-
-  Analytics.track_event = function(category, action, label) {
-    if (window._sr.site.analytics_disabled === true) {
-      return false;
-    }
-    window._gaq.push(["sr._trackEvent", category, action, label]);
   };
 
 
