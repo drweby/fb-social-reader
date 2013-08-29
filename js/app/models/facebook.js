@@ -98,17 +98,31 @@ define(function (require) {
       var self = this;
 
       if (Cache.get("user")) {
-        self.set("user", Cache.get("user"));
+        var me = Cache.get("user");
+        me.autoSharing = self.isAutoSharing();
+        self.set("user", me);
         self.trigger("fetch_user");
         return;
       } 
 
       FB.api("/me?fields=id,name", function(me) {
         me.picture = "//graph.facebook.com/" + me.id + "/picture";
+        me.autoSharing = self.isAutoSharing();
         Cache.set("user", me);
         self.set("user", me);
         self.trigger("fetch_user");
       });
+    },
+
+    isAutoSharing: function() {
+      var isAutoSharing = Cache.get("autoSharing");
+      if (!isAutoSharing) {
+        Cache.set({
+          autoSharing: true
+        }, { persistent: true });
+        isAutoSharing = true;
+      }
+      return isAutoSharing;
     },
 
     getFriends: function(cb) {
