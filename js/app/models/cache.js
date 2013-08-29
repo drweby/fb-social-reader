@@ -11,11 +11,12 @@ define(function() {
       // Get the data from localStorage and set it as properties of the model
       this.fetch();
 
-      this.on("change", function(e) {
+      this.on("change", function() {
         self.save();
       });
     },
 
+    // Updates cache key with the thing that's just changed
     save: function() {
       var self = this;
       _.each(this.changed, function (value, key) {
