@@ -7,6 +7,19 @@ define(function (require) {
 
     defaults: {},
 
+    initialize: function() {
+
+      // Cache when auto sharing changes
+      this.on("change:autoSharing", function() {
+        debugger;
+        Cache.set(
+          { autoSharing: this.get("autoSharing") },
+          { persistent: true }
+        );
+      });      
+
+    },
+
     isLoggedIn: function(cb) {
       var self = this;
       FB.getLoginStatus(function(response) {
@@ -34,13 +47,11 @@ define(function (require) {
 
     isAutoSharing: function() {
       var isAutoSharing = Cache.get("autoSharing");
-      if (!isAutoSharing) {
-        Cache.set({
-          autoSharing: true
-        }, { persistent: true });
-        isAutoSharing = true;
+      if (isAutoSharing === undefined) {
+        this.set({ "autoSharing": true });
+      } else {
+        this.set({ "autoSharing": isAutoSharing }, { silent: true });
       }
-      return isAutoSharing;
     },
 
     fetch: function() {
@@ -49,7 +60,7 @@ define(function (require) {
 
       if (Cache.get("user")) {
         var me = Cache.get("user");
-        me.autoSharing = self.isAutoSharing();
+        self.isAutoSharing();
         self.set(me);
         self.trigger("fetch");
         return;
@@ -57,7 +68,7 @@ define(function (require) {
 
       FB.api("/me?fields=id,name", function(me) {
         me.picture = "//graph.facebook.com/" + me.id + "/picture";
-        me.autoSharing = self.isAutoSharing();
+        self.isAutoSharing();
         me.link = "//facebook.com/profile.php?id="+me.id;
         Cache.set({ "user": me });
         self.set(me);

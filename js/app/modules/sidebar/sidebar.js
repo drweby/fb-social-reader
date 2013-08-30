@@ -41,19 +41,33 @@ define(function (require) {
         $iframe.contents().find("head").append("<style type='text/css'>"+SidebarCSS+"</style>");
         $iframe.contents().find("body").html(html);  
         $sidebar.fadeIn();   
+        self.listen();
       }).appendTo($sidebar);
       
     },
 
-    toggle_auto_sharing: function(obj) {
-      if (obj.attr("class").match(/sr_sidebar_toggled_on/)) {
-        obj.removeClass("sr_sidebar_toggled_on");
-        obj.addClass("sr_sidebar_toggled_off");
-        User.set_auto_sharing(false);
-      } else if (obj.attr("class").match(/sr_sidebar_toggled_off/)) {
-        obj.removeClass("sr_sidebar_toggled_off");
-        obj.addClass("sr_sidebar_toggled_on");
-        User.set_auto_sharing(true);
+    listen: function() {
+      var self = this;
+      $iframe = $(this.ui.sidebar).find("iframe").contents();
+
+      // Activity 
+      $iframe.find(".activity a").on("click", function() {
+        self.trigger("activity_click");
+      });
+
+      // Auto sharing
+      $iframe.find(".auto-sharing-toggle").on("click", function() {
+        self.toggleAutoSharing($(this));
+      });
+    },
+
+    toggleAutoSharing: function($toggle) {
+      if ($toggle.hasClass("auto-sharing-toggled-on")) {
+        $toggle.removeClass("auto-sharing-toggled-on").addClass("auto-sharing-toggled-off");
+        this.model.user.set("autoSharing", false);
+      } else {
+        $toggle.removeClass("auto-sharing-toggled-off").addClass("auto-sharing-toggled-on");
+        this.model.user.set("autoSharing", true);
       }
     }
 
