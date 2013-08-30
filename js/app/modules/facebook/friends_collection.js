@@ -22,7 +22,7 @@ define(function (require) {
             friends.push(friend);
           }
         });
-        Cache.set("friends", friends);
+        Cache.set({ "friends": friends });
         self.trigger("fetch", friends);
       });
     }

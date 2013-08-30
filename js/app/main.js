@@ -21,7 +21,7 @@ define(function (require) {
     });
 
     fb.on("fetch_activity", function() {
-      // debugger;
+      debugger;
     });
 
     fb.fetch();

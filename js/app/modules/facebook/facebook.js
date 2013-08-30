@@ -112,20 +112,21 @@ define(function (require) {
       });
 
       // Get both the user and friends, get activity afterwards
-      // var iterate = _.after(2, function() {
-      //   self.fetchActivity();
-      //   self.activity.on("fetch", function() {
-      //     self.trigger("fetch_activity");
-      //   });
-      // });
+      var iterate = _.after(2, function() {
+        // self.fetchActivity();
+        // self.activity.on("fetch", function() {
+        //   self.trigger("fetch_activity");
+        // });
+      });
       self.user.on("fetch", function() {
         self.trigger("fetch_user");
-        // iterate();
+        iterate();
       });
-      // self.friends.on("fetch", function() {
-      //   self.trigger("fetch_friends");
-      //   iterate();
-      // });
+      self.friends.on("fetch", function() {
+        debugger;
+        self.trigger("fetch_friends");
+        iterate();
+      });
 
     }
 
