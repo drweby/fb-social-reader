@@ -64,7 +64,7 @@
 					<p><span style="font-weight:bold;">Go to your <a href="<?php echo get_bloginfo('url'); ?>/wp-admin/widgets.php">widgets page</a></span> and add the widget "FB Social Reader Sidebar" to your sidebar.</p>
 					<p><span style="font-weight:bold;">OR</span></p>
 					<p>Copy and paste the below to your theme:</p>
-					<textarea>&lt;div id=&quot;sr_sidebar_box&quot;&gt;&lt;/div&gt;</textarea>
+					<textarea>&lt;div class=&quot;sr_sidebar_box&quot;&gt;&lt;/div&gt;</textarea>
 				</div>
 				
 			</form>

@@ -2,13 +2,16 @@ define(function (require) {
 
   var Global      = require("../global/global");
   var SidebarTpl  = require("tpl!./sidebar.html");
+  var GenericCSS  = require("tpl!../../../../css/generic.css")();
+  var SidebarCSS  = require("tpl!../../../../css/sidebar.css")({ pluginUrl: Global.get("pluginUrl") });
+
   var $ = window.jQuery;
 
 
   var Sidebar = Backbone.View.extend({
 
     ui: {
-      sidebar: "#sr_sidebar_box"
+      sidebar: ".sr_sidebar_box"
     },
 
     initialize: function(options) {
@@ -24,7 +27,22 @@ define(function (require) {
       var site = Global.toJSON();
       var attributes = _.extend(site, user);
       var html = SidebarTpl(attributes);
-      $(this.ui.sidebar).html(html).fadeIn();
+
+      var self = this;
+      var $sidebar = $(this.ui.sidebar);
+      $iframe = $("<iframe/>", {
+        border: "0",
+        css: {
+          "border": "0px"
+        }
+      });
+      $iframe.load(function() {
+        $iframe.contents().find("head").append("<style type='text/css'>"+GenericCSS+"</style>");
+        $iframe.contents().find("head").append("<style type='text/css'>"+SidebarCSS+"</style>");
+        $iframe.contents().find("body").html(html);  
+        $sidebar.fadeIn();   
+      }).appendTo($sidebar);
+      
     },
 
     toggle_auto_sharing: function(obj) {
@@ -38,7 +56,6 @@ define(function (require) {
         User.set_auto_sharing(true);
       }
     }
-
 
   });
 

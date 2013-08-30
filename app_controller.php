@@ -70,8 +70,6 @@ class SR_Controller {
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'underscore' );
     wp_enqueue_script( 'backbone' );
-    wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/style.css');
-    wp_enqueue_style( 'social-reader-style' );
   }
 
   // Inject custom css 
@@ -85,11 +83,6 @@ class SR_Controller {
       echo '<script src="'.FB_OG_PLUGIN_URL.'js/socialreader.min.js"></script>';
     }
 
-    if (get_option('fb_og_custom_css') != '') {
-      echo "<style type='text/css'>";
-      echo get_option('fb_og_custom_css');
-      echo "</style>";
-    }
   }
 
   // Setup auto read
