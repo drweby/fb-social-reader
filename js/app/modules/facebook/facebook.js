@@ -11,7 +11,7 @@ define(function (require) {
     initialize: function() {
       this.user     = new UserModel();
       this.friends  = new FriendsCollection();
-      this.activity = new ActivityCollection();
+      this.activity = new ActivityCollection([], { user: this.user, friends: this.friends });
       this.loadSdk();
     },
 
@@ -113,17 +113,16 @@ define(function (require) {
 
       // Get both the user and friends, get activity afterwards
       var iterate = _.after(2, function() {
-        // self.fetchActivity();
-        // self.activity.on("fetch", function() {
-        //   self.trigger("fetch_activity");
-        // });
+        self.activity.on("fetch", function() {
+          self.trigger("fetch_activity");
+        });
+        self.activity.fetch();
       });
       self.user.on("fetch", function() {
         self.trigger("fetch_user");
         iterate();
       });
       self.friends.on("fetch", function() {
-        debugger;
         self.trigger("fetch_friends");
         iterate();
       });

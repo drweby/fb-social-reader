@@ -4,6 +4,11 @@ define(function (require) {
 
   var ActivityCollection = Backbone.Collection.extend({
 
+    initialize: function(models, options) {
+      this.user = options.user;
+      this.friends = options.friends;
+    },
+
     fetch: function() {
 
       self = this;
@@ -17,12 +22,12 @@ define(function (require) {
       var batch_arr = [];
       batch_arr.push({
         method: "GET",
-        user_id: this.get("user").id,
+        user_id: this.user.get("id"),
         relative_url: "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from"
       });
 
       // Create batch array
-      _.each(this.get("friends"), function(friend) {
+      this.friends.each(function(friend) {
         batch_arr.push({
           method: "GET",
           user_id: friend.id,
@@ -40,15 +45,14 @@ define(function (require) {
           var body = JSON.parse(response.body);
           activity.push(body);
         });
-        var orderedActivity = self.putAllReadsInOneArray(activity);
-        Cache.set("activity", orderedActivity);
-        self.trigger("fetch", orderedActivity);
+        Cache.set({ "activity": activity });
+        self.trigger("fetch");
       });
 
     },
 
 
-    putAllReadsInOneArray: function(reads) {
+    getOrderedActivity: function(reads) {
       var new_reads = [];
       _.each(reads, function(read) {
         _.each(read.data, function(read) {
@@ -64,11 +68,10 @@ define(function (require) {
     },
 
 
-    addRead: function() {
+    addAction: function(type) {
       var self = this;
-      FB.api("/me/news.reads?article=" + window.location.href, "post", function(response) {
-        var result = (response.id) ? response.id : false;
-        self.trigger("add_read", result);
+      FB.api("/me/"+type+"?article=" + window.location.href, "post", function(response) {
+        self.trigger("add_action", response);
       });
     },
 
