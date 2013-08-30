@@ -1,6 +1,7 @@
 define(function (require) {
 
   var Cache = require("./cache");
+  
 
   var ActivityCollection = Backbone.Collection.extend({
 

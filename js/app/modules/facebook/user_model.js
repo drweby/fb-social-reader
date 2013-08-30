@@ -11,7 +11,7 @@ define(function (require) {
       var self = this;
       FB.getLoginStatus(function(response) {
         var loginStatus = (response.status === "connected") ? true : false;
-        self.set("isLoggedIn", loginStatus);
+        self.set("loggedIn", loginStatus);
         self.trigger("is_logged_in");
       });
     },
@@ -58,6 +58,7 @@ define(function (require) {
       FB.api("/me?fields=id,name", function(me) {
         me.picture = "//graph.facebook.com/" + me.id + "/picture";
         me.autoSharing = self.isAutoSharing();
+        me.link = "//facebook.com/profile.php?id="+me.id;
         Cache.set({ "user": me });
         self.set(me);
         self.trigger("fetch");

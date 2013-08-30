@@ -1,0 +1,38 @@
+<% if (loggedIn) { %>
+
+  <div id='sr_sidebar_logged_in'>
+    <a id='sr_sidebar_img' target='blank' href='<%= link %>'><img src='<%= picture %>' width='50' height='50' alt='<%= name %>'/></a>
+    <div id='sr_sidebar_right'>
+      <div id='sr_sidebar_name'>
+        <a target='blank' href="<%= link %>" ><%= name %></a>
+      </div>
+      <div id='sr_sidebar_promo'><%= loginMeta %></div>
+      <div id='sr_sidebar_logout'><a><%= logout %></a></div>
+    </div>
+    <div class='clear'>
+    </div>
+    <div id='sr_sidebar_bottom'>
+      <% if (autoSharing) { %>
+        <div class='sr_sidebar_toggle sr_sidebar_toggled_on'>
+          <a title='Auto sharing to Facebook is enabled'><%= autoSharingOn %></a>
+        </div>
+      <% } else { %>
+        <div class='sr_sidebar_toggle sr_sidebar_toggled_off'>
+          <a title='Auto sharing to Facebook is disabled'><%= autoSharingOff %></a>
+        </div>
+      <% } %>
+      <div id='sr_sidebar_activity'>
+        <a><%= activity %></a>
+      </div>
+    </div>
+  </div>
+
+<% } else { %>
+
+  <div id='sr_sidebar_logged_out'>
+    <p><%= loginPromo %></p>
+    <a id='sr_sidebar_login'><img src='<%= pluginUrl %>/images/facebooklogin.jpg' width='180' height='40'/></a>
+  </div>
+
+<% } %>
+

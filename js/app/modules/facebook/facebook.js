@@ -103,7 +103,7 @@ define(function (require) {
 
       // Get user and friends
       self.user.on("is_logged_in", function () {
-        if (self.user.get("isLoggedIn")) {
+        if (self.user.get("loggedIn")) {
           self.user.fetch();
           self.friends.fetch();
         } else {

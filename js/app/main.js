@@ -5,7 +5,7 @@ define(function (require) {
   var Facebook = require("./modules/facebook/facebook");
 
   // var Analytics = require("app/models/analytics");
-  // var Sidebar   = require("app/controllers/sidebar");
+  var Sidebar   = require("./modules/sidebar/sidebar");
   // var Lightbox  = require("app/controllers/lightbox");
   // var Single    = require("app/controllers/single");
 
@@ -16,12 +16,11 @@ define(function (require) {
     var fb = new Facebook(Global.pick("appId", "channelUrl", "sdkDisabled"));
 
     fb.on("fetch_user", function() {
-      debugger;
-      // new Sidebar({ facebook: fb });
+      new Sidebar({ facebook: fb });
     });
 
     fb.on("fetch_activity", function() {
-      debugger;
+      // debugger;
     });
 
     fb.fetch();
