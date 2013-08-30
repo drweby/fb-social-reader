@@ -1,0 +1,24 @@
+
+body {
+  font-family: arial;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.light {
+  background: white;
+}
+
+a {
+  color: #3B5998;
+  cursor:pointer;
+  text-decoration: none;
+  font-weight:bold;
+}
+
+a:hover {
+  text-decoration:underline;
+}
+
+

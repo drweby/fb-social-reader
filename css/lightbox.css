@@ -1,0 +1,198 @@
+/* 
+  === Lightbox widget  === 
+*/
+
+#sr_lightbox {
+  height: 580px;
+  width:580px;
+  background: url(../images/borderbg.png) repeat;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+  position: fixed;
+  margin: 0 0 0 -290px;
+  padding:10px;
+  top:50px;
+  left:50%;
+  right:0px;
+  bottom:0px;
+  z-index: 99999;
+}
+#sr_lightbox #sr_lightbox_inner {
+  background:white;
+  display: block;
+  width:580px;
+  height:580px;
+  overflow:hidden;
+}
+#sr_lightbox #sr_lightbox_inner a {
+  text-decoration: none;
+}
+#sr_lightbox #sr_lightbox_inner a:hover {
+  text-decoration: underline;
+}
+a#sr_close_lightbox {
+  position:absolute;
+  font-weight:bold;
+  color:#fff;
+  font-size:14px;
+  margin:8px 10px 0 0;
+  top:10px;
+  right:11px;
+}
+#sr_lightbox #sr_lightbox_inner h3 {
+  margin:0px 0px 0 0px;
+  border-bottom:1px solid #ccc;
+  padding:4px 5px 4px 10px;
+  font-size:18px;
+  background:#6D84B4;
+  border:1px solid #3B5998;
+  font-weight:bold;
+  color:#fff;
+}
+#sr_lightbox #sr_lightbox_inner #sr_loading {
+  margin:75px 278px 50px 278px;
+  width:24px;
+  height:24px;
+  position:relative;
+}
+#sr_lightbox #sr_lightbox_inner #sr_reads_empty {
+  padding:5px 10px;
+  display:none;
+}
+ul#sr_activity_tabs {
+  list-style-type:none;
+  margin:0px 0px 0px 0px;
+  padding:5px 10px;
+  background:#f6f6f6;
+  border-bottom:1px solid #ccc;
+  display:none;
+}
+ul#sr_activity_tabs li {
+  font-size:16px;
+}
+ul#sr_activity_tabs li {
+  display:inline;
+  margin-right:15px;
+}
+ul#sr_activity_tabs li.sr_active_tab a {
+  font-weight:bold;
+  color:#333;
+  cursor:text;
+}
+ul#sr_activity_tabs li.active_tab a:hover {
+  text-decoration:none;
+}
+#sr_reads_list {
+  overflow-y:auto;
+  margin:0px 0px 0 0;
+  height:505px;
+  display:none;
+}
+#sr_reads_list ul {
+  list-style-type:none;
+  padding:10px 0 0 0;
+  margin:0px;
+}
+#sr_reads_list ul li {
+  border-bottom:1px solid #eee;
+  padding:5px 10px 10px 10px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+#sr_reads_list ul li .story-img {
+  width:50px;
+  height:50px;
+  float:left;
+  display:block;
+  margin:2px 0 0 0;
+}
+#sr_reads_list  ul li .story-inner {
+  margin:0 0 0 13px;
+  padding:0px;
+  float:left;
+  width:470px;
+}
+#sr_reads_list  ul li .story-inner .story-title {
+  margin:0px;
+}
+#sr_reads_list  ul li .story-inner .story-title a {
+  font-weight:bold;
+}
+#sr_reads_list ul li .story-inner .story-meta {
+  color:#777;
+  margin:0px 0 0 0;
+  font-size:12px;
+}
+#sr_reads_list ul li .story-inner .story-meta a.story-time {
+  color:#777;
+}
+#sr_reads_list ul li.sr_friend_story .story-inner .story-meta .sr_story_delete_text {
+  display:none;
+}
+#sr_reads_list  ul li .story-inner .story-like-arrow {
+  display:block;
+  height:5px;
+  overflow:hidden;
+  background:url(../images/fbarrow.png) no-repeat 21px 0px;
+  margin:3px 0 0 0;
+  padding:0px;
+}
+#sr_reads_list  ul li .story-inner .story-likes {
+  background:#edeff4 url(../images/fblike.png) no-repeat 6px 5px;
+  font-size:12px;
+  padding:5px 5px 5px 27px;
+  margin:0px 0 1px 0;
+}
+#sr_reads_list  ul li .story-inner .story-comments {
+  font-size:12px;
+  margin:0px 0 5px 0;
+  padding:0px;
+}
+#sr_reads_list  ul li .story-inner .story-comments ul.comment-list {
+  margin:0px;
+  padding:0px;
+}
+#sr_reads_list  ul li .story-inner .story-comments ul.comment-list li {
+  min-height:35px;
+  padding:5px;
+  background:#edeff4;
+  margin:0 0 1px 0;
+  font-size:12px;
+}
+#sr_reads_list  ul li .story-inner .story-comments ul.comment-list li img {
+  float:left;
+  margin-right:7px;
+}
+#sr_reads_list  ul li .story-inner .story-comments ul.comment-list li .comment-meta {
+  color:#777;
+  margin:4px 0 0 0;
+}
+#sr_reads_list  ul li .story-inner .story-comments .new-comment {
+  background:#edeff4;
+  padding:5px;
+  margin:0px;
+}
+#sr_reads_list  ul li .story-inner .story-comments .new-comment img {
+  float:left;
+  margin-right:7px;
+}
+#sr_reads_list  ul li .story-inner .story-comments .new-comment input {
+  color:#777;
+  border:1px solid #BDC7D8;
+  margin:0px;
+  padding:3px;
+  width:415px;
+}
+input.input-pending {
+  background:#eee;
+  color:#777 !important;
+}
+
+#noReadsMessage {
+  margin:10px;
+}
+.sr_clear {
+  clear: both;
+}
