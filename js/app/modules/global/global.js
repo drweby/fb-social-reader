@@ -5,7 +5,7 @@ define(function (require) {
 
 
   var Global = Backbone.Model.extend({
-
+    
     initialize: function() {
       this.set(window.SocialReaderData);
       delete window.SocialReaderData;
@@ -13,7 +13,6 @@ define(function (require) {
 
   });
 
-  window.SocialReader = new Global();
-  return window.SocialReader;
+  return new Global();
   
 });

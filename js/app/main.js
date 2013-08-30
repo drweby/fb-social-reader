@@ -1,6 +1,9 @@
 define(function (require) {
 
-  var User      = require("app/models/user");
+
+  var Global   = require("./modules/global/global");
+  var Facebook = require("./modules/facebook/facebook");
+
   // var Analytics = require("app/models/analytics");
   // var Sidebar   = require("app/controllers/sidebar");
   // var Lightbox  = require("app/controllers/lightbox");
@@ -10,18 +13,18 @@ define(function (require) {
 
   jQuery(function() {
 
-    var user = User;
+    var fb = new Facebook(Global.pick("appId", "channelUrl", "sdkDisabled"));
 
-    user.on("change:profile", function() {
-      // Run the sidebar
-      // new Sidebar({ model: user });
+    fb.on("fetch_user", function() {
+      debugger;
+      // new Sidebar({ facebook: fb });
     });
 
-    user.on("fetch_activity", function() {
-      // Run the other stuff
-      // new Lightbox({ model: user });
-      // new Single({ model: user });
+    fb.on("fetch_activity", function() {
+      // debugger;
     });
+
+    fb.fetch();
 
   });
 

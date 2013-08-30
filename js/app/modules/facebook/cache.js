@@ -1,5 +1,3 @@
-
-
 /*
   Caching module with localStorage
 */
@@ -15,11 +13,6 @@ define(function() {
 
       // Get the data from localStorage and set it as properties of the model
       this.fetch();
-
-      this.on("change", function(e) {
-        self.save();
-      });
-
     },
 
     set: function(obj, options) {
@@ -29,13 +22,15 @@ define(function() {
         self.trigger("change:"+key);
       });
       var persistent = (options && options.persistent) ? true : false;
-      self.save(persistent);
+
+      // Auto-save to localStorage when changed
+      self.save(obj, persistent);
     },
 
     // Updates cache key with the thing that's just changed
-    save: function(persistent) {
+    save: function(obj, persistent) {
       var self = this;
-      _.each(this.changed, function (value, key) {
+      _.each(obj, function (value, key) {
         var data = {
           key: key,
           data: value,
