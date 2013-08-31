@@ -11,6 +11,7 @@ define(function (require) {
   var Sidebar = Backbone.View.extend({
 
     ui: {
+      login: ".login",
       sidebar: ".sr_sidebar_box",
       activityLink: ".activity a",
       autoSharingToggle: ".auto-sharing-toggle",
@@ -51,6 +52,11 @@ define(function (require) {
       var self = this;
       $iframe = $(this.ui.sidebar).find("iframe").contents();
 
+      // Login
+      $iframe.find(this.ui.login).on("click", function() {
+        self.login();
+      });
+
       // Activity 
       $iframe.find(this.ui.activityLink).on("click", function() {
         self.trigger("show_activity");
@@ -63,10 +69,20 @@ define(function (require) {
 
       // Logout
       $iframe.find(this.ui.logout).on("click", function() {
-        self.model.user.on("logout", function() {
-          window.location.reload();
-        }).logout();
+        self.logout();
       });
+    },
+
+    login: function() {
+      this.model.user.on("login", function() {
+        window.location.reload();
+      }).login();
+    },
+
+    logout: function() {
+      this.model.user.on("logout", function() {
+        window.location.reload();
+      }).logout();
     },
 
     toggleAutoSharing: function($toggle) {
