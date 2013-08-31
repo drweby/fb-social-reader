@@ -302,11 +302,11 @@ class SR_Controller {
     }
     $post_id = get_the_ID();
     if (in_array(get_post_type($post_id), $types_publishing) and get_post_status($post_id) == 'publish') {    
-      // Add before or after content
+      $html = '<div class="sr-single-reads" style="max-height: 75px;"></div>';
       if (get_option('fb_og_friends_read_auto_add_content') == 'before') {
-        $content = '<div class="sr-single-reads"></div>'. $content;
+        $content = $html . $content;
       } elseif (get_option('fb_og_friends_read_auto_add_content') == 'after') {
-        $content = $content . '<div class="sr-single-reads"></div>';
+        $content = $content . $html;
       }
     }
     return $content;
