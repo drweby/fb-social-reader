@@ -1,16 +1,20 @@
-<h3>Recent activity</h3>
-<a id="sr_close_lightbox">Close</a>
-<div id="sr_loading">
-  <img src="<%= site.plugin_url %>/images/ajax-loader.gif" alt="Loading...">
-</div>
-<ul id="sr_activity_tabs">
-  <li id="sr_lightbox_everyone" class="sr_active_tab"><a>Everyone</a></li>
-  <li id="sr_lightbox_me"><a>Just you</a></li>
-</ul>
-<div id="sr_reads_list">
-  <ul>
-  </ul>
-  <div class="activity_empty">
-    None of your friends have read anything on this site yet.
+<div id="sr_lightbox_inner">
+
+  <h3>Recent activity</h3>
+  <a class="close-lightbox">Close</a>
+  <div class="loading">
+    <img src="<%= pluginUrl %>/images/ajax-loader.gif" alt="Loading...">
   </div>
+  <ul class="activity-tabs">
+    <li class="everyone active"><a>Everyone</a></li>
+    <li class="me"><a>Just you</a></li>
+  </ul>
+  <div class="reads-list">
+    <ul>
+    </ul>
+    <div class="activity-empty">
+      None of your friends have read anything on this site yet.
+    </div>
+  </div>
+
 </div>

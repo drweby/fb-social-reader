@@ -1,6 +1,6 @@
 define(function (require) {
 
-  var Global      = require("../global/global");
+  var Global      = require("../../global");
   var SidebarTpl  = require("tpl!./sidebar.html");
   var GenericCSS  = require("tpl!../../../../css/generic.css")();
   var SidebarCSS  = require("tpl!../../../../css/sidebar.css")({ pluginUrl: Global.get("pluginUrl") });
@@ -13,7 +13,8 @@ define(function (require) {
     ui: {
       sidebar: ".sr_sidebar_box",
       activityLink: ".activity a",
-      autoSharingToggle: ".auto-sharing-toggle"
+      autoSharingToggle: ".auto-sharing-toggle",
+      logout: ".logout"
     },
 
     initialize: function(options) {
@@ -32,9 +33,8 @@ define(function (require) {
       var self = this;
       var $sidebar = $(this.ui.sidebar);
       $iframe = $("<iframe/>", {
-        border: "0",
         css: {
-          "border": "0px"
+          "border": 0
         }
       });
       $iframe.load(function() {
@@ -53,12 +53,19 @@ define(function (require) {
 
       // Activity 
       $iframe.find(this.ui.activityLink).on("click", function() {
-        self.trigger("activity_click");
+        self.trigger("show_activity");
       });
 
       // Auto sharing
       $iframe.find(this.ui.autoSharingToggle).on("click", function() {
         self.toggleAutoSharing($(this));
+      });
+
+      // Logout
+      $iframe.find(this.ui.logout).on("click", function() {
+        self.model.user.on("logout", function() {
+          window.location.reload();
+        }).logout();
       });
     },
 

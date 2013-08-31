@@ -1,6 +1,7 @@
 define(function(require) {
 
-  var Format = require("app/helpers/single-format");
+  var Format = require("./format");
+  var $      = window.jQuery;
 
   var SingleReads = Backbone.View.extend({
 
@@ -8,7 +9,7 @@ define(function(require) {
       single: ".sr_friends_single"
     },
 
-    initialize: function() {
+    initialize: function(options) {
       this.model = options.facebook;
     },
 
