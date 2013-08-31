@@ -11,7 +11,6 @@ define(function (require) {
 
       // Cache when auto sharing changes
       this.on("change:autoSharing", function() {
-        debugger;
         Cache.set(
           { autoSharing: this.get("autoSharing") },
           { persistent: true }

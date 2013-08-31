@@ -19,8 +19,8 @@ define(function(require) {
   
         var friendsWhoReadThis = this.model.activity.getFriendsWhoDidThis("news.reads", "article", window.location.pathname);
 
-        var names_str = Format.names_list(user, single_reads);
-        var images_str = Format.thumbs_list(user, single_reads);
+        var names_str = Format.names_list(user, friendsWhoReadThis);
+        var images_str = Format.thumbs_list(user, friendsWhoReadThis);
         var html = names_str + images_str;
         $("#sr_friends_single").html(html).fadeIn();
 
@@ -31,11 +31,5 @@ define(function(require) {
 
   return SingleReads;
 
-
-  Single.load = function() {
-
-  };
-
-  return Single;
 
 });
