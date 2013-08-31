@@ -11,7 +11,9 @@ define(function (require) {
   var Sidebar = Backbone.View.extend({
 
     ui: {
-      sidebar: ".sr_sidebar_box"
+      sidebar: ".sr_sidebar_box",
+      activityLink: ".activity a",
+      autoSharingToggle: ".auto-sharing-toggle"
     },
 
     initialize: function(options) {
@@ -50,12 +52,12 @@ define(function (require) {
       $iframe = $(this.ui.sidebar).find("iframe").contents();
 
       // Activity 
-      $iframe.find(".activity a").on("click", function() {
+      $iframe.find(this.ui.activityLink).on("click", function() {
         self.trigger("activity_click");
       });
 
       // Auto sharing
-      $iframe.find(".auto-sharing-toggle").on("click", function() {
+      $iframe.find(this.ui.autoSharingToggle).on("click", function() {
         self.toggleAutoSharing($(this));
       });
     },

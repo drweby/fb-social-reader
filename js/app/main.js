@@ -1,7 +1,7 @@
 define(function (require) {
 
 
-  var Global   = require("./modules/global/global");
+  var Global   = require("./global");
   var Facebook = require("./modules/facebook/facebook");
 
   // var Analytics = require("app/models/analytics");
@@ -16,7 +16,7 @@ define(function (require) {
     var fb = new Facebook(Global.pick("appId", "channelUrl", "sdkDisabled"));
 
     // The three view modules
-    var sidebar     = new Sidebar({ facebook: fb });
+    var sidebar     = new Sidebar({ facebook: fb, global: Global });
     var singleReads = new SingleReads({ facebook: fb });
     var lightbox    = new Lightbox({ facebook: fb });
 

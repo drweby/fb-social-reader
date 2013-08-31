@@ -1,6 +1,6 @@
 define(function(require) {
 
-  var Format     = require("app/helpers/single-format");
+  var Format = require("app/helpers/single-format");
 
   var SingleReads = Backbone.View.extend({
 
