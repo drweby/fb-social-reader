@@ -1,9 +1,11 @@
 define(function (require) {
 
-  var Cache = require("./cache");
-  
+  var Cache         = require("./cache");
+  var ActivityModel = require("./activity_model");
 
   var ActivityCollection = Backbone.Collection.extend({
+
+    model: ActivityModel,
 
     initialize: function(models, options) {
       this.user = options.user;
@@ -14,9 +16,11 @@ define(function (require) {
 
       self = this;
 
+      // TODO: CHECK CACHING
       var activity = Cache.get("activity");
       if (activity) {
-        self.trigger("fetch", activity);
+        self.add(activity);
+        self.trigger("fetch");
         return;
       }
 
@@ -40,32 +44,31 @@ define(function (require) {
       FB.api("/", "POST", {
         batch: batch_arr
       }, function(responses) {
-        var activity = [];
         _.each(responses, function(response, key) {
           if (!response || !response.body) return;
           var body = JSON.parse(response.body);
-          activity.push(body);
+          self.add(body);
         });
-        Cache.set({ "activity": activity });
+        Cache.set({ "activity": self.toJSON() });
         self.trigger("fetch");
       });
 
     },
 
 
-    getOrderedActivity: function(reads) {
-      var new_reads = [];
-      _.each(reads, function(read) {
-        _.each(read.data, function(read) {
-          new_reads.push(read);
+    getOrderedActivity: function() {
+      var newActions = [];
+      this.each(function(action) {
+        _.each(action.get("data"), function(actionData) {
+          newActions.push(actionData);
         });
       });
-      var sorted_reads = new_reads.sort(function(a, b) {
+      var sortedActions = newActions.sort(function(a, b) {
         a = new Date(a.publish_time);
         b = new Date(b.publish_time);
         return a>b ? -1 : a<b ? 1 : 0;
       });
-      return sorted_reads;
+      return sortedActions;
     },
 
 
@@ -74,6 +77,25 @@ define(function (require) {
       FB.api("/me/"+type+"?article=" + window.location.href, "post", function(response) {
         self.trigger("add_action", response);
       });
+    },
+
+    // Get friends who "did" something on a url, e.g. 
+    // getFriendsWhoDid("news.reads", "article", window.location.pathname)
+    getFriendsWhoDidThis: function(actionType, objectType, url) {
+      var allActions = this.getOrderedActivity();
+
+      // TODO: ADD CHECK FOR actionType
+      var singleActions = _.filter(allActions, function(action) {
+        var regex = new RegExp(window.location.pathname,"gi");
+        if (!read.data || !read.data[objectType] || !read.data[objectType].url) {
+          return false;
+        }
+        if (regex.test(read.data[objectType].url)) {
+          return true;
+        }
+      });
+
+      return singleActions;
     },
 
     refreshMyActivity: function() {

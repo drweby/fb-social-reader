@@ -15,12 +15,22 @@ define(function (require) {
 
     var fb = new Facebook(Global.pick("appId", "channelUrl", "sdkDisabled"));
 
+    // The three view modules
+    var sidebar     = new Sidebar({ facebook: fb });
+    var singleReads = new SingleReads({ facebook: fb });
+    var lightbox    = new Lightbox({ facebook: fb });
+
     fb.on("fetch_user", function() {
-      new Sidebar({ facebook: fb });
+      sidebar.render();
     });
 
     fb.on("fetch_activity", function() {
-      // debugger;
+      singleReads.render();
+      
+    });
+
+    sidebar.on("activity_click", function() {
+      // lightbox.render();
     });
 
     fb.fetch();

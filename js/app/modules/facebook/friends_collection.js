@@ -1,29 +1,31 @@
 define(function (require) {
 
-  var Cache = require("./cache");
+  var Cache       = require("./cache");
+  var FriendModel = require("./friend_model");
 
 
   var FriendsCollection = Backbone.Collection.extend({
 
+    model: FriendModel,
+
     fetch: function() {
       var self = this;
 
+      // TODO: CHECK CACHING
       var friends = Cache.get("friends");
       if (friends) {
-        self.trigger("fetch", friends);
+        self.add(friends);
+        self.trigger("fetch");
         return;
       }
 
       FB.api("/me/friends?fields=id,name,installed", function(response) {
         var friends = [];
         _.each(response.data, function(friend) {
-          if (friend.installed === true) {
-            delete friend.installed;
-            friends.push(friend);
-          }
+          self.add(friend);
         });
-        Cache.set({ "friends": friends });
-        self.trigger("fetch", friends);
+        Cache.set({ "friends": self.toJSON() });
+        self.trigger("fetch");
       });
     }
 

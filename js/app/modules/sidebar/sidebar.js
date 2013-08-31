@@ -16,17 +16,16 @@ define(function (require) {
 
     initialize: function(options) {
       this.model = options.facebook;
-      if ($(this.ui.sidebar).length === 0 || !this.model) {
-        return;
-      }
-      this.render();
     },
 
     render: function() {
+      if ($(this.ui.sidebar).length === 0 || !this.model) {
+        return;
+      }
+
       var user = this.model.user.toJSON();
       var site = Global.toJSON();
-      var attributes = _.extend(site, user);
-      var html = SidebarTpl(attributes);
+      var html = SidebarTpl(_.extend(site, user));
 
       var self = this;
       var $sidebar = $(this.ui.sidebar);
