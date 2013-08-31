@@ -33,6 +33,7 @@ define(function (require) {
 
       // Create batch array
       this.friends.each(function(friend) {
+        if (!friend.get("installed")) return;
         batch_arr.push({
           method: "GET",
           user_id: friend.id,
@@ -87,10 +88,10 @@ define(function (require) {
       // TODO: ADD CHECK FOR actionType
       var singleActions = _.filter(allActions, function(action) {
         var regex = new RegExp(window.location.pathname,"gi");
-        if (!read.data || !read.data[objectType] || !read.data[objectType].url) {
+        if (!action.data || !action.data[objectType] || !action.data[objectType].url) {
           return false;
         }
-        if (regex.test(read.data[objectType].url)) {
+        if (regex.test(action.data[objectType].url)) {
           return true;
         }
       });

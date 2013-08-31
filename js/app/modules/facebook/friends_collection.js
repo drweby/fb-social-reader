@@ -9,6 +9,7 @@ define(function (require) {
     model: FriendModel,
 
     fetch: function() {
+
       var self = this;
 
       // TODO: CHECK CACHING

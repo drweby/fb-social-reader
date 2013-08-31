@@ -3,32 +3,21 @@
   === Single friends who read this === 
 */ 
 
-#sr_friends_single {
-  display:none;
+.read_names  {
+  margin:0 0 3px 0;
+  padding:0;
 }
-#sr_friends_single .sr_read_names  {
-  margin:0px 0 3px 0;
-  padding:0px;
-}
-#sr_friends_single .sr_read_names a {
+.read_names a {
   text-decoration: none;
 }
-#sr_friends_single .sr_read_names a:hover {
+.read_names a:hover {
   text-decoration: underline;
 }
-#sr_friends_single .sr_read_thumbs a {
-  line-height:1 !important;
-  font-size:11px !important;
+.read_thumbs a {
+  line-height:1;
+  font-size:11px;
 }
-#sr_friends_single a {
-  position:relative;
-  cursor:pointer;
-  display:inline-block;
-  margin:0px;
-  font-weight:bold;
-  color:#3B5998;
-}
-#sr_friends_single a img {
+a img {
   margin:3px 4px 0 0;
   border:none;
 }

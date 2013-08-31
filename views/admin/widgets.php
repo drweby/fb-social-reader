@@ -23,7 +23,7 @@
 		
 		<div class="fb-og-widget-editor">
 
-			<form method="post" action="options.php">
+			<form method="post">
 				
 				<?php settings_fields( 'fb-og-sidebar-widget-group' ); ?>
 				
