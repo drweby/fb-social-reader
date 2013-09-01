@@ -23,9 +23,7 @@ a:hover {
   position: relative;
   background: #ffffff;
   border: 1px solid #aaaaaa;
-  width: 320px;
-  height: 250px;
-  max-height: 250px;
+  height: 270px;
   margin-top: 10px;
   -moz-box-shadow: 2px 2px 5px #b9b9b9;
   -webkit-box-shadow: 2px 2px 5px #b9b9b9;
@@ -57,7 +55,7 @@ a:hover {
 }
 h3 {
   font-size: 12px;
-  margin: 0 0 15px 0;
+  margin: 0 0 0 0;
   padding: 8px 10px;
   border-bottom: 1px solid #eee;
   /*background: #f6f6f6;*/
@@ -68,8 +66,10 @@ p {
 }
 ul {
   list-style-type: none;
-  padding: 0;
-  margin: 10px 0;
+  padding: 10px 0 0 0;
+  margin: 0;
+  max-height: 230px;
+  overflow-y: auto;
 }
 ul li:hover {
   background: #f6f6f6;

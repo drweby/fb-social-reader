@@ -25,13 +25,15 @@ define(function (require) {
 
       self.$iframe = $("<iframe/>", {
         "class": "sr-my-reads",
+        "scrolling": "no",
         css: {
           "border": 0,
           "position": "absolute",
           "z-index": 99,
           "width": "340px",
           "height": "300px",
-          "display": "none"
+          "display": "none",
+          "overflow": "hidden"
         }
       });
 

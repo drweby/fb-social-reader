@@ -1,7 +1,7 @@
 define(function(require) {
 
   var Format         = require("./format");
-  var SingleReadsCSS = require("tpl!../../../../css/single-reads.css")();
+  var SingleReadsCSS = require("tpl!../../../../css/single_reads.css")();
   var $              = window.jQuery;
 
 
