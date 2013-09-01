@@ -16,13 +16,13 @@ define( 'FB_OG_CURRENT_VERSION', '1.6.0.6' );
 define( 'FB_OG_PLUGIN_PATH', plugin_dir_path(__FILE__ ));
 
 // Include the model 
-include_once ('app_model.php');
+include_once ('public/app_model.php');
 
 // Include the controllers
-include_once ('app_controller.php');
+include_once ('public/app_controller.php');
 
 // Include widget
-include('widget.php');
+include('public/widget.php');
 
 
 // Create the controller - this is what runs everything else

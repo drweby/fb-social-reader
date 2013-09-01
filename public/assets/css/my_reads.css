@@ -1,0 +1,81 @@
+body {
+  font-family: arial;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+}
+.light {
+  background: white;
+}
+a {
+  color: #3B5998;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+a:hover {
+  text-decoration: underline;
+}
+.clear {
+  clear: both;
+}
+.my-reads {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #aaaaaa;
+  width: 320px;
+  height: 250px;
+  max-height: 250px;
+  margin-top: 10px;
+  -moz-box-shadow: 2px 2px 5px #b9b9b9;
+  -webkit-box-shadow: 2px 2px 5px #b9b9b9;
+  box-shadow: 2px 2px 5px #b9b9b9;
+}
+.my-reads:after,
+.my-reads:before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.my-reads:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: #fff;
+  border-width: 6px;
+  left: 290px;
+  margin-left: -6px;
+}
+.my-reads:before {
+  border-color: rgba(170, 170, 170, 0);
+  border-bottom-color: #aaaaaa;
+  border-width: 7px;
+  left: 290px;
+  margin-left: -7px;
+}
+h3 {
+  font-size: 12px;
+  margin: 0 0 15px 0;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  /*background: #f6f6f6;*/
+
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+ul li a {
+  display: block;
+  padding: 8px 10px;
+}
+ul li a:hover {
+  background: #f6f6f6;
+}
+ul li a:hover .cross {
+  /*background: url*/
+
+}

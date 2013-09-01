@@ -13,6 +13,53 @@ module.exports = function(grunt) {
         "js/app/*.js",
         "js/app/*/*.js"
       ]
+    },
+
+    less: {
+      development: {
+        options: {
+          paths: ["public/assets/less"]
+        },
+        files: {
+          "public/assets/css/admin.css": "public/assets/less/admin.less",
+          "public/assets/css/generic.css": "public/assets/less/generic.less",
+          "public/assets/css/my_reads.css": "public/assets/less/my_reads.less",
+          "public/assets/css/sidebar.css": "public/assets/less/sidebar.less",
+          "public/assets/css/single_reads.css": "public/assets/less/single_reads.less",
+          "public/assets/css/top.css": "public/assets/less/top.less"
+        }
+      },
+      production: {
+        options: {
+          paths: ["public/assets/less"],
+          yuicompress: true
+        },
+        files: {
+          "public/assets/css/admin.css": "public/assets/less/admin.less",
+          "public/assets/css/generic.css": "public/assets/less/generic.less",
+          "public/assets/css/my_reads.css": "public/assets/less/my_reads.less",
+          "public/assets/css/sidebar.css": "public/assets/less/sidebar.less",
+          "public/assets/css/single_reads.css": "public/assets/less/single_reads.less",
+          "public/assets/css/top.css": "public/assets/less/top.less"
+        }
+      }
+    },
+
+    watch: {
+      less: {
+        files: ["public/assets/less/*.less"],
+        tasks: ["less:development"],
+        options: {
+          spawn: false,
+        },
+      }
+      // scripts: {
+      //   files: ["public/assets/js/*.js", "public/assets/js/app/*.js"],
+      //   tasks: ["requirejs"],
+      //   options: {
+      //     spawn: false,
+      //   },
+      // }
     }
 
     // qunit: {
@@ -96,6 +143,9 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks("grunt-contrib-less");
+
   // grunt.loadNpmTasks("grunt-contrib-qunit");
   // grunt.loadNpmTasks("grunt-contrib-requirejs");
 
