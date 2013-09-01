@@ -68,14 +68,24 @@ ul {
   padding: 0;
   margin: 10px 0;
 }
-ul li a {
-  display: block;
-  padding: 8px 10px;
-}
-ul li a:hover {
+ul li:hover {
   background: #f6f6f6;
 }
-ul li a:hover .cross {
-  /*background: url*/
-
+ul li:hover .remove {
+  background: url("<%= pluginUrl %>public/assets/images/fbremove.png") no-repeat;
+  height: 16px;
+  width: 16px;
+  display: block;
+  float: right;
+  opacity: 0.4;
+  cursor: pointer;
+  margin: 7px 5px 0 0;
+}
+ul li:hover .remove:hover {
+  opacity: 0.7;
+}
+ul li a {
+  float: left;
+  max-width: 300px;
+  padding: 8px 10px;
 }

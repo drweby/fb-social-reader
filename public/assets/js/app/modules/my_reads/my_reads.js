@@ -1,7 +1,8 @@
 define(function (require) {
 
+  var Global      = require("../../global");
   var MyReadsTpl  = require("tpl!./my_reads.html");
-  var MyReadsCSS  = require("tpl!../../../../css/my_reads.css")();
+  var MyReadsCSS  = require("tpl!../../../../css/my_reads.css")({ pluginUrl: Global.get("pluginUrl") });
 
 
   var $ = window.jQuery;
