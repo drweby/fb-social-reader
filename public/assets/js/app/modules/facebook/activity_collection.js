@@ -62,7 +62,8 @@ define(function (require) {
           var body = JSON.parse(response.body);
           dataArr.push(body);
         });
-        var orderedActivity = self.getOrderedActivity(dataArr);
+        var flattenedData = self.flattenFbData();
+        var orderedActivity = self.getOrderedActivity(flattenedData);
         self.add(orderedActivity);
         Cache.set({ "activity": self.toJSON() });
         self.trigger("fetch");
@@ -70,15 +71,18 @@ define(function (require) {
 
     },
 
-
-    getOrderedActivity: function(dataArr) {
-      var newActions = [];
+    flattenFbData: function(dataArr) {
+      var flattened = [];
       _.each(dataArr, function(action) {
         _.each(action.data, function(actionData) {
-          newActions.push(actionData);
+          flattened.push(actionData);
         });
       });
-      var sortedActions = newActions.sort(function(a, b) {
+      return flattened;
+    },
+
+    getOrderedActivity: function(actions) {
+      var sortedActions = actions.sort(function(a, b) {
         a = new Date(a.publish_time);
         b = new Date(b.publish_time);
         return a>b ? -1 : a<b ? 1 : 0;
@@ -86,11 +90,13 @@ define(function (require) {
       return sortedActions;
     },
 
-
     addAction: function(type) {
       var self = this;
       FB.api("/me/"+type+"?article=" + window.location.href, "post", function(response) {
-        self.trigger("add_action", response);
+      // FB.api("/me/"+type+"?article=" + "http://socialreader-staging.eu01.aws.af.cm/2013/09/01/hello-world/", "post", function(response) {
+        // self.trigger("add_action", response);
+        // self.add()
+        // var activity = self.getOrderedActivity();
       });
     },
 
@@ -122,17 +128,6 @@ define(function (require) {
         jsonArr.push(item.toJSON());
       });     
       return jsonArr;
-    },
-
-    refreshMyActivity: function() {
-      FB.api(
-        "me/news.reads?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from", 
-        function(response) {
-
-          // var currentActivity = 
-
-        }
-      );
     },
 
     deleteAction: function(id) {
