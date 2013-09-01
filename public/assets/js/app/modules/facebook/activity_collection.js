@@ -1,5 +1,6 @@
 define(function (require) {
 
+  var Global        = require("../../global");
   var Cache         = require("./cache");
   var ActivityModel = require("./activity_model");
 
@@ -67,8 +68,7 @@ define(function (require) {
           dataArr.push(body);
         });
         var flattenedData = self.flattenFbData(dataArr);
-        var orderedActivity = self.getOrderedActivity(flattenedData);
-        self.add(orderedActivity, { silent: true });
+        self.add(flattenedData, { silent: true });
         self.saveCache();
         self.trigger("fetch");
       });
@@ -85,24 +85,11 @@ define(function (require) {
       return flattened;
     },
 
-    getOrderedActivity: function(actions) {
-      var sortedActions = actions.sort(function(a, b) {
-        a = new Date(a.publish_time);
-        b = new Date(b.publish_time);
-        return a>b ? -1 : a<b ? 1 : 0;
-      });
-      return sortedActions;
+    // Order by publish time descending
+    comparator: function(action) {
+      return - action.get("publish_time");
     },
 
-    addAction: function(type) {
-      var self = this;
-      FB.api("/me/"+type+"?article=" + window.location.href, "post", function(response) {
-      // FB.api("/me/"+type+"?article=" + "http://socialreader-staging.eu01.aws.af.cm/2013/09/01/hello-world/", "post", function(response) {
-        // self.trigger("add_action", response);
-        // self.add()
-        // var activity = self.getOrderedActivity();
-      });
-    },
 
     // Get friends who "did" something on a url, e.g. 
     // getFriendsWhoDid("news.reads", "article", window.location.pathname)
@@ -132,6 +119,39 @@ define(function (require) {
         jsonArr.push(item.toJSON());
       });     
       return jsonArr;
+    },
+
+    addRead: function() {
+      var self = this;
+      if (Global.get("isPost") === false) {
+        return;
+      }
+      setTimeout(function() {
+        self.addAction("news.reads");
+      }, 10000);
+    },
+
+    addAction: function(type) {
+      var self = this;
+      FB.api(
+        "/me/"+type+"?article=" + window.location.href,
+        "post",
+        function(response) {
+          if (response.id) {
+            FB.api(
+              response.id + "?fields=id,comment_info,comments,comment_info,likes,like_info,data,publish_time,from",
+              "get",
+              function (response) {
+                self.add(response);
+              }
+            );
+          }
+        }
+      );
+    },
+
+    getActionDetails: function() {
+
     },
 
     deleteAction: function(id) {

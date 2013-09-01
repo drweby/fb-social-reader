@@ -99,6 +99,7 @@ define(function (require) {
       // Check we're logged in after SDK loads
       self.on("sdk_loaded", function() {
         self.user.isLoggedIn();
+        self.activity.addRead();
       });
 
       // Get user and friends

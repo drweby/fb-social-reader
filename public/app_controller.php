@@ -143,7 +143,8 @@ class SR_Controller {
       'activity' => get_option('fb_og_sidebar_activity', 'Activity'),
       'pluginUrl' => FB_OG_PLUGIN_URL,
       'pluginVersion' => FB_OG_CURRENT_VERSION,
-      'analyticsDisabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable'))
+      'analyticsDisabled' => $this->convert_wp_option_to_bool_string(get_option('fb_og_analytics_disable')),
+      'isPost' => $this->is_post()
     );
 
 
@@ -153,6 +154,20 @@ class SR_Controller {
       window.SocialReaderData = <?php echo json_encode($dataLayer); ?>;
     </script>
   <?php }
+
+
+  /**
+   * Get the site details for the data layer.
+   *
+   */
+  public function is_post() {
+    if (is_single() and get_post_type() === "post") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   // Convert option to js bool
   function convert_wp_option_to_bool_string($option) {

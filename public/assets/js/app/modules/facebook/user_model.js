@@ -8,7 +8,7 @@ define(function (require) {
     defaults: {},
 
     initialize: function() {
-
+      
       // Cache when auto sharing changes
       this.on("change:autoSharing", function() {
         Cache.set(

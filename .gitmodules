@@ -1,0 +1,3 @@
+[submodule "public/lib/data_layer"]
+	path = public/lib/data_layer
+	url = git@github.com:chrisjhoughton/wordpress-datalayer.git
