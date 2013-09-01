@@ -10,6 +10,17 @@ define(function (require) {
     initialize: function(models, options) {
       this.user = options.user;
       this.friends = options.friends;
+      this.autoCache();
+    },
+
+    autoCache: function() { 
+      var self = this;
+      this.on("add", function() {
+        Cache.set({ "activity": self.toJSON() });
+      });
+      this.on("remove", function() {
+        Cache.set({ "activity": self.toJSON() });
+      });
     },
 
     fetch: function() {
@@ -19,7 +30,7 @@ define(function (require) {
       // TODO: CHECK CACHING
       var activity = Cache.get("activity");
       if (activity) {
-        self.add(activity);
+        self.add(activity, { silent: true });
         self.trigger("fetch");
         return;
       }
@@ -129,7 +140,6 @@ define(function (require) {
       FB.api("/" + id, "delete", function(response) {
         if (response === true) {
           self.remove(id);
-          Cache.set({ "activity": self.toJSON() });
         }
       });
     }

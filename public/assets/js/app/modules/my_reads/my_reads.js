@@ -44,9 +44,11 @@ define(function (require) {
     },
 
     setFramePosition: function() {
+      var sidebarOffset  = $(this.ui.sidebar).offset();
+      var activityOffset = $(this.ui.sidebar).contents().find(".activity").offset();
       this.$iframe.css({
-        "top": $(this.ui.sidebar).offset().top + 78 + "px",
-        "left": $(this.ui.sidebar).offset().left - 148 + "px"
+        "top": sidebarOffset.top + activityOffset.top + 15 + "px",
+        "left": sidebarOffset.left + activityOffset.left - 257 + "px"
       });
     },
 
@@ -66,7 +68,9 @@ define(function (require) {
 
         self.model.activity.deleteAction(id);
         self.model.activity.on("remove", function() {
-          $li.remove();
+          $li.fadeOut("fast", function() {
+            $li.remove();
+          });
         });
                 
       });
