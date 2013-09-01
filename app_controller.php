@@ -70,6 +70,8 @@ class SR_Controller {
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'underscore' );
     wp_enqueue_script( 'backbone' );
+    wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/top.css');
+    wp_enqueue_style( 'social-reader-style' );
   }
 
   // Inject custom css 
@@ -302,7 +304,7 @@ class SR_Controller {
     }
     $post_id = get_the_ID();
     if (in_array(get_post_type($post_id), $types_publishing) and get_post_status($post_id) == 'publish') {    
-      $html = '<div class="sr-single-reads" style="max-height: 75px;"></div>';
+      $html = '<div class="sr-single-reads"></div>';
       if (get_option('fb_og_friends_read_auto_add_content') == 'before') {
         $content = $html . $content;
       } elseif (get_option('fb_og_friends_read_auto_add_content') == 'after') {

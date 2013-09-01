@@ -35,7 +35,7 @@ class Fb_Og_Sidebar_Widget extends WP_Widget {
 	}
 	
 	function widget($args, $instance) { 
-		?><div class="sr_sidebar_box"></div><?php 
+		?><div class="sr-sidebar-box"></div><?php 
 	}
 
 	function form( $instance ) {

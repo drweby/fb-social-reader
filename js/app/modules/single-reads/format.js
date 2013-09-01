@@ -1,6 +1,6 @@
 define(function (require) {
 
-	var	NameTpl = require("tpl!./format_name.tpl");
+	var	NameTpl = require("tpl!./format_name.html");
 
 
 	var Format = Backbone.Model.extend({

@@ -1,0 +1,15 @@
+<div class="my-reads">
+  <h3>Recent activity</h3>
+
+  <ul>
+  <% _.each(activity, function (item) { %>
+    <li>
+      <a href="<%= item.data.article.url %>" target="parent">
+        <%= item.data.article.title %>
+      </a>
+    </li>
+  <% }); %>
+  </ul>
+
+</div>
+

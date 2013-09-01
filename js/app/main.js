@@ -6,7 +6,7 @@ define(function (require) {
 
   // var Analytics = require("app/models/analytics");
   var Sidebar     = require("./modules/sidebar/sidebar");
-  // var Lightbox  = require("app/controllers/lightbox");
+  var MyReads     = require("./modules/my_reads/my_reads");
   var SingleReads = require("./modules/single-reads/single");
 
 
@@ -17,9 +17,9 @@ define(function (require) {
 
     // The three view modules
     var sidebar     = new Sidebar({ facebook: fb, global: Global });
+    var myReads     = new MyReads({ facebook: fb });
     var singleReads = new SingleReads({ facebook: fb });
-    // var lightbox    = new Lightbox({ facebook: fb });
-
+    
 
     // Sidebar init
     fb.user.on("is_logged_in", function() {
@@ -32,8 +32,14 @@ define(function (require) {
     });
 
     // Sidebar actions
-    sidebar.on("activity_click", function() {
-      
+    sidebar.on("afterShow", function() {
+      myReads.render();
+    });
+    sidebar.on("show_activity", function() {
+      myReads.show();
+    });
+    sidebar.on("hide_activity", function() {
+      myReads.hide();
     });
 
     

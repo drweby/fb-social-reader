@@ -12,7 +12,7 @@ define(function (require) {
 
     ui: {
       login: ".login",
-      sidebar: ".sr_sidebar_box",
+      sidebar: ".sr-sidebar-box",
       activityLink: ".activity a",
       autoSharingToggle: ".auto-sharing-toggle",
       logout: ".logout"
@@ -32,8 +32,11 @@ define(function (require) {
       var html = SidebarTpl(_.extend(site, user));
 
       var self = this;
+
+      self.trigger("beforeShow");
       var $sidebar = $(this.ui.sidebar);
       $iframe = $("<iframe/>", {
+        "class": "sr-sidebar",
         css: {
           "border": 0
         }
@@ -42,7 +45,9 @@ define(function (require) {
         $iframe.contents().find("head").append("<style type='text/css'>"+GenericCSS+"</style>");
         $iframe.contents().find("head").append("<style type='text/css'>"+SidebarCSS+"</style>");
         $iframe.contents().find("body").html(html);  
-        $sidebar.fadeIn();   
+        $sidebar.fadeIn(function() {
+          self.trigger("afterShow");
+        });   
         self.listen();
       }).appendTo($sidebar);
       
@@ -57,11 +62,6 @@ define(function (require) {
         self.login();
       });
 
-      // Activity 
-      $iframe.find(this.ui.activityLink).on("click", function() {
-        self.trigger("show_activity");
-      });
-
       // Auto sharing
       $iframe.find(this.ui.autoSharingToggle).on("click", function() {
         self.toggleAutoSharing($(this));
@@ -71,6 +71,39 @@ define(function (require) {
       $iframe.find(this.ui.logout).on("click", function() {
         self.logout();
       });
+
+      this.handleActivityShow();
+    },
+
+    handleActivityShow: function() {
+      var self = this;
+      var showTimeout, hideTimeout;
+
+      // Activity link
+      var $activity = $(this.ui.sidebar).find("iframe").contents().find(this.ui.activityLink);
+      $activity.on("mouseover", function() {
+        clearTimeout(hideTimeout);
+        showTimeout = setTimeout(function() {
+          self.trigger("show_activity");
+        }, 500);
+      });
+      $activity.on("mouseout", function() {
+        clearTimeout(showTimeout);
+        hideTimeout = setTimeout(function() {
+          self.trigger("hide_activity");
+        }, 500);
+      });
+
+      // My reads box (needs live events as doesn't exist when this function runs)
+      $(document).on("mouseover", ".sr-my-reads", function() {
+        clearTimeout(hideTimeout);
+      });
+      $(document).on("mouseout", ".sr-my-reads", function() {
+        hideTimeout = setTimeout(function() {
+          self.trigger("hide_activity");
+        }, 500);
+      });
+
     },
 
     login: function() {

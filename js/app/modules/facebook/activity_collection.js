@@ -45,11 +45,14 @@ define(function (require) {
       FB.api("/", "POST", {
         batch: batch_arr
       }, function(responses) {
+        var dataArr = [];
         _.each(responses, function(response, key) {
           if (!response || !response.body) return;
           var body = JSON.parse(response.body);
-          self.add(body);
+          dataArr.push(body);
         });
+        var orderedActivity = self.getOrderedActivity(dataArr);
+        self.add(orderedActivity);
         Cache.set({ "activity": self.toJSON() });
         self.trigger("fetch");
       });
@@ -57,10 +60,10 @@ define(function (require) {
     },
 
 
-    getOrderedActivity: function() {
+    getOrderedActivity: function(dataArr) {
       var newActions = [];
-      this.each(function(action) {
-        _.each(action.get("data"), function(actionData) {
+      _.each(dataArr, function(action) {
+        _.each(action.data, function(actionData) {
           newActions.push(actionData);
         });
       });
@@ -83,10 +86,9 @@ define(function (require) {
     // Get friends who "did" something on a url, e.g. 
     // getFriendsWhoDid("news.reads", "article", window.location.pathname)
     getFriendsWhoDidThis: function(actionType, objectType, url) {
-      var allActions = this.getOrderedActivity();
 
       // TODO: ADD CHECK FOR actionType
-      var singleActions = _.filter(allActions, function(action) {
+      var singleActions = this.filter(function(action) {
         var regex = new RegExp(window.location.pathname,"gi");
         if (!action.data || !action.data[objectType] || !action.data[objectType].url) {
           return false;
@@ -97,6 +99,18 @@ define(function (require) {
       });
 
       return singleActions;
+    },
+
+    getUserActivity: function(userId) {
+      var activity = this.filter(function(action) {
+        return (action.get("from").id === userId);
+      });
+      // because toJSON doesn't work here
+      var jsonArr = [];
+      _.each(activity, function (item) {
+        jsonArr.push(item.toJSON());
+      });     
+      return jsonArr;
     },
 
     refreshMyActivity: function() {
