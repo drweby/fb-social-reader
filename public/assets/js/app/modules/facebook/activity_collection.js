@@ -13,21 +13,25 @@ define(function (require) {
       this.autoCache();
     },
 
+    // Auto cache when articles are added/removed
     autoCache: function() { 
       var self = this;
       this.on("add", function() {
-        Cache.set({ "activity": self.toJSON() });
+        self.saveCache();
       });
       this.on("remove", function() {
-        Cache.set({ "activity": self.toJSON() });
+        self.saveCache();
       });
+    },
+
+    saveCache: function() {
+      Cache.set({ "activity": this.toJSON() });
     },
 
     fetch: function() {
 
       self = this;
 
-      // TODO: CHECK CACHING
       var activity = Cache.get("activity");
       if (activity) {
         self.add(activity, { silent: true });
@@ -62,10 +66,10 @@ define(function (require) {
           var body = JSON.parse(response.body);
           dataArr.push(body);
         });
-        var flattenedData = self.flattenFbData();
+        var flattenedData = self.flattenFbData(dataArr);
         var orderedActivity = self.getOrderedActivity(flattenedData);
-        self.add(orderedActivity);
-        Cache.set({ "activity": self.toJSON() });
+        self.add(orderedActivity, { silent: true });
+        self.saveCache();
         self.trigger("fetch");
       });
 
