@@ -63,6 +63,9 @@ h3 {
   /*background: #f6f6f6;*/
 
 }
+p {
+  margin: 0 10px;
+}
 ul {
   list-style-type: none;
   padding: 0;

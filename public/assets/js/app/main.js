@@ -41,7 +41,6 @@ define(function (require) {
     sidebar.on("hide_activity", function() {
       myReads.hide();
     });
-
     
     fb.on("fetch_activity", function() {
       singleReads.render();

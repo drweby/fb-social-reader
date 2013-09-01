@@ -70,7 +70,7 @@ class SR_Controller {
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'underscore' );
     wp_enqueue_script( 'backbone' );
-    wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'css/top.css');
+    wp_register_style( 'social-reader-style', FB_OG_PLUGIN_URL.'public/assets/css/top.css');
     wp_enqueue_style( 'social-reader-style' );
   }
 

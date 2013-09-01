@@ -1,17 +1,25 @@
 <div class="my-reads">
   <h3>Recent activity</h3>
 
-  <ul>
-  <% _.each(activity, function (item) { %>
-    <li>
-      <a href="<%= item.data.article.url %>" target="parent">
-        <%= item.data.article.title %>
-      </a>
-      <i class="remove"></i>
-      <div class="clear"></div>
-    </li>
-  <% }); %>
-  </ul>
+  <% if (activity.length) { %>
+
+    <ul>
+    <% _.each(activity, function (item) { %>
+      <li data-id="<%= item.id %>">
+        <a href="<%= item.data.article.url %>" target="parent">
+          <%= item.data.article.title %>
+        </a>
+        <i class="remove"></i>
+        <div class="clear"></div>
+      </li>
+    <% }); %>
+    </ul>
+
+  <% } else { %>
+
+    <p>You haven't read anything on this site yet.</p>
+
+  <% } %>
 
 </div>
 

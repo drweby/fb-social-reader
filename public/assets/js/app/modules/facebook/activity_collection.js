@@ -124,17 +124,13 @@ define(function (require) {
       );
     },
 
-    deleteRead: function(id, cb) {
+    deleteAction: function(id) {
       var self = this;
       FB.api("/" + id, "delete", function(response) {
         if (response === true) {
-          _.each(window._sr.activity[0].data, function(read, key) {
-            if (read.id == id) {
-
-            }
-          });
+          self.remove(id);
+          Cache.set({ "activity": self.toJSON() });
         }
-        cb();
       });
     }
 

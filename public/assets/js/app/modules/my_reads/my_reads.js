@@ -11,7 +11,8 @@ define(function (require) {
 
     ui: {
       sidebarWrapper: ".sr-sidebar-box",
-      sidebar: ".sr-sidebar-box .sr-sidebar"
+      sidebar: ".sr-sidebar-box .sr-sidebar",
+      removeButton: ".remove"
     },
 
     initialize: function(options) {
@@ -56,14 +57,35 @@ define(function (require) {
       this.$iframe.contents().find("body").html(html);
     },
 
+    listen: function() {
+      var self = this;
+      this.$iframe.contents().find(this.ui.removeButton).on("click", function() {
+
+        var $li = $(this).closest("li");
+        var id = $li.data("id");
+
+        self.model.activity.deleteAction(id);
+        self.model.activity.on("remove", function() {
+          $li.remove();
+        });
+                
+      });
+    },
+
+    stopListening: function() {
+      this.$iframe.contents().find(this.ui.removeButton).off("click");
+    },
+
     show: function() {
       this.setContent();
       this.setFramePosition();
       this.$iframe.show();
+      this.listen();
     },
 
     hide: function() {
       this.$iframe.hide();
+      this.stopListening();
     }
 
   });
